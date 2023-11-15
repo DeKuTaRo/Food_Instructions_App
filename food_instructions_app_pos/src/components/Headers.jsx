@@ -7,9 +7,17 @@ import React from "react";
 
 function Headers() {
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, mb: 2, borderBottom: "1px solid #ccc" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        mt: 2,
+        mb: 2,
+        borderBottom: "1px solid #ccc",
+      }}>
+      {/* Drawer */}
       <Box sx={{ display: "flex" }}>
-        <Link to={"/cuisine/Italian"}>
+        <Link to={"/about"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>About</Box>
         </Link>
         <Link to={"/cuisine/Italian"}>
@@ -18,10 +26,12 @@ function Headers() {
         <Link to={"/cuisine/Italian"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>About</Box>
         </Link>
-        <Link to={"/cuisine/Italian"}>
-          <Box sx={{ p: 1, fontSize: "0.8rem" }}>About</Box>
+        <Link to={"/login"}>
+          <Box sx={{ p: 1, fontSize: "0.8rem" }}>Login</Box>
         </Link>
       </Box>
+
+      {/* Accordion */}
       <Box sx={{ display: "flex" }}>
         <Link to={"/cuisine/Italian"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>

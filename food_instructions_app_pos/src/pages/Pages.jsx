@@ -6,6 +6,7 @@ import Recipe from "./Recipe";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Login from "./Login/Login";
+import ForgotPassword from "./Login/ForgotPassword";
 
 function Pages() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function Pages() {
 
         {/* Login page */}
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </AnimatePresence>
   );
