@@ -1,4 +1,4 @@
-"# Food_Instructions_App" 
+"# Food_Instructions_App"
 
 npx express-generator food_instructions_app_api
 npx create-react-app food_instructions_app_pos
@@ -6,12 +6,12 @@ npx create-react-app food_instructions_app_pos
 Run nodejs folder backend
 cd food_instructions_app_api
 npm i
-SET DEBUG=food_instructions_app_api:* & npm start
-
+SET DEBUG=food_instructions_app_api:\* & npm start
 
 Run reactjs folder frontend
 cd food_instructions_app_pos
 npm i
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -83,3 +83,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+Website template : https://www.justonecookbook.com/
