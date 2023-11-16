@@ -1,65 +1,100 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import "@splidejs/react-splide/css";
+import "@splidejs/react-splide/css/skyblue";
+import "@splidejs/react-splide/css/sea-green";
+
+import React from "react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 function Cuisine() {
-  // const [cuisine, setCuisine] = useState([]);
-  // let params = useParams();
+  const cardRef = useRef(null);
+  useEffect(() => {
+    if (cardRef.current) {
+      const maxHeight = Math.max(
+        ...Array.from(cardRef.current.children).map((child) => {
+          return child.children[0].offsetHeight;
+        })
+      );
 
-  // useEffect(() => {
-  //   getCuisine(params.type);
-  // }, [params.type]);
-
-  // const getCuisine = async (name) => {
-  //   const data = await fetch(
-  //     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`
-  //   );
-  //   const recipes = await data.json();
-
-  //   setCuisine(recipes.results);
-  // };
-
+      Array.from(cardRef.current.children).forEach((child) => {
+        child.children[0].style.height = `${maxHeight}px`;
+      });
+    }
+  }, []);
   return (
-    <Grid animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 } } >
-      <Card>
-        <Link to={"/recipe/123"}>
-          <img src="https://spoonacular.com/recipeImages/652696-556x370.jpg" alt="Mushroom Spinach Soup" />
-          <h4>Mushroom Spinach Soup</h4>
-        </Link>
-      </Card>
-      {/* {cuisine.map((item) => {
-        return (
-          <Card key={item.id}>
-            <Link to={"/recipe/" + item.id}>
-              <img src={item.image} alt={item.title} />
-              <h4>{item.title}</h4>
-            </Link>
-          </Card>
-        );
-      })} */}
-    </Grid>
+    <Box sx={{ margin: "3rem 0rem" }}>
+      <Grid container spacing={2} ref={cardRef}>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ maxHeight: 620 }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={
+                "https://www.justonecookbook.com/wp-content/uploads/2019/11/Smoke-Miso-Butter-Turkey-Breast-5496-2-Holiday-II-1-533x800.jpg"
+              }
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Our Best Holiday Recipes for The Unforgettable Feast
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ maxHeight: 620 }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={"https://www.justonecookbook.com/wp-content/uploads/2019/10/Miso-Chicken-2-IV-533x800.jpg"}
+              width="100%"
+              height="450px"
+              objectfit="cover"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                20 Best Japanese Chicken Recipes for Dinner
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ maxHeight: 620 }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={"https://www.justonecookbook.com/wp-content/uploads/2023/04/Vegetarian-Ramen-7133-IV-533x800.jpg"}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Easy and Authentic Ramen Recipes You Can Make at Home{" "}
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ maxHeight: 620 }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={
+                "https://www.justonecookbook.com/wp-content/uploads/2021/10/Sweet-Potato-Rice-2091-III-533x800.jpg"
+              }
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Japanese Sweet Potato Rice さつまいもご飯{" "}
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
-
-const Grid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  grid-gap: 3em;
-`;
-
-const Card = styled.div`
-  img {
-    width: 100%;
-    border-radius: 2rem;
-  }
-  a {
-    text-decoration: none;
-  }
-  h4 {
-    text-align: center;
-    padding: 1rem;
-  }
-`;
 
 export default Cuisine;

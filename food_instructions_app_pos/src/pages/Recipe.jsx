@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 import { useParams } from "react-router-dom";
 
 import React from "react";
@@ -25,12 +25,12 @@ function Recipe() {
   // }, [params.name]);
 
   return (
-    <DetailWrapper>
+    <div>
       <div>
         <h2>Mushroom Spinach Soup</h2>
         <img src="https://spoonacular.com/recipeImages/652696-556x370.jpg" alt="Mushroom Spinach Soup" />
       </div>
-      <Info>
+      <div>
         <div>
           {/* <Button
             className={activeTab === "instructions" ? "active" : ""}
@@ -67,81 +67,81 @@ function Recipe() {
           })}
         </ul> */}
         {/* )} */}
-      </Info>
-    </DetailWrapper>
+      </div>
+    </div>
   );
 }
 
-const DetailWrapper = styled.div`
-  margin-top: 5rem;
-  margin-bottom: 5rem;
-  display: flex;
-  flex-wrap: wrap;
+// const DetailWrapper = styled.div`
+//   margin-top: 5rem;
+//   margin-bottom: 5rem;
+//   display: flex;
+//   flex-wrap: wrap;
 
-  .active {
-    background: linear-gradient(35deg, #494949, #313131);
-    color: white;
-  }
+//   .active {
+//     background: linear-gradient(35deg, #494949, #313131);
+//     color: white;
+//   }
 
-  img {
-    border-radius: 2rem;
-  }
+//   img {
+//     border-radius: 2rem;
+//   }
 
-  h2 {
-    margin-bottom: 2rem;
-  }
+//   h2 {
+//     margin-bottom: 2rem;
+//   }
 
-  li {
-    font-size: 1.2rem;
-    line-height: 1.8rem;
-    margin-top: 0.5rem;
-  }
+//   li {
+//     font-size: 1.2rem;
+//     line-height: 1.8rem;
+//     margin-top: 0.5rem;
+//   }
 
-  ul {
-    margin-top: 2rem;
-  }
+//   ul {
+//     margin-top: 2rem;
+//   }
 
-  @media only screen and (max-width: 768px) {
-    padding: 0 2rem;
+//   @media only screen and (max-width: 768px) {
+//     padding: 0 2rem;
 
-    img {
-      width: 100%;
-    }
-  }
-`;
+//     img {
+//       width: 100%;
+//     }
+//   }
+// `;
 
-const Button = styled.button`
-  padding: 1rem 2rem;
-  color: #313131;
-  background: white;
-  border: 2px solid black;
-  margin-right: 2rem;
-  font-weight: 600;
-  border-radius: 2rem;
-  cursor: pointer;
+// const Button = styled.button`
+//   padding: 1rem 2rem;
+//   color: #313131;
+//   background: white;
+//   border: 2px solid black;
+//   margin-right: 2rem;
+//   font-weight: 600;
+//   border-radius: 2rem;
+//   cursor: pointer;
 
-  @media only screen and (max-width: 768px) {
-    margin: auto;
-  }
-`;
+//   @media only screen and (max-width: 768px) {
+//     margin: auto;
+//   }
+// `;
 
-const Info = styled.div`
-  margin-left: 4rem;
+// const Info = styled.div`
+//   margin-left: 4rem;
 
-  h3 {
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
+//   h3 {
+//     font-size: 1rem;
+//     line-height: 1.5rem;
+//   }
 
-  @media only screen and (max-width: 768px) {
-    margin: 2rem 0;
+//   @media only screen and (max-width: 768px) {
+//     margin: 2rem 0;
 
-    div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-`;
+//     div {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//     }
+//   }
+// `;
 
 export default Recipe;

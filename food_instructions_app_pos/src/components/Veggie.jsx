@@ -1,140 +1,97 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-
+import { useEffect, useRef } from "react";
 import "@splidejs/react-splide/css";
 import "@splidejs/react-splide/css/skyblue";
 import "@splidejs/react-splide/css/sea-green";
 
-import { Link } from "react-router-dom";
-
 import React from "react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 function Veggie() {
-  // const [veggie, setVeggie] = useState([]);
+  const cardRef = useRef(null);
+  useEffect(() => {
+    if (cardRef.current) {
+      const maxHeight = Math.max(
+        ...Array.from(cardRef.current.children).map((child) => {
+          return child.children[0].offsetHeight;
+        })
+      );
 
-  // useEffect(() => {
-  //   getVeggie();
-  // }, []);
-
-  // const getVeggie = async () => {
-  //   //   const check = localStorage.getItem("veggie");
-
-  //   //   if (check) {
-  //   // setVeggie(JSON.parse(check));
-  //   //   } else {
-  //   const api = await fetch(
-  //     `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=10&tags=vegetarian`
-  //   );
-  //   const data = await api.json();
-
-  //   console.log(data);
-
-  //   localStorage.setItem("veggie", JSON.stringify(data.recipes));
-
-  //   setVeggie(data.recipes);
-  //   //   }
-  // };
-
+      Array.from(cardRef.current.children).forEach((child) => {
+        child.children[0].style.height = `${maxHeight}px`;
+      });
+    }
+  }, [cardRef]);
   return (
-    <div>
-      <Wrapper>
-        <h3>Our Vegetarian Picks</h3>
-        <Splide
-          options={{
-            perPage: 4,
-            arrows: false,
-            pagination: true,
-            drag: "free",
-            gap: "3rem",
-            breakpoints: {
-              768: {
-                perPage: 3,
-                gap: "2rem",
-              },
-              576: {
-                perPage: 2,
-                gap: "1rem",
-              },
-            },
-          }}>
-          <SplideSlide>
-            <Link to={"/recipe/123"}>
-              <Card>
-                <p>Mushroom Spinach Soup</p>
-                <img src="https://spoonacular.com/recipeImages/652696-556x370.jpg" alt="Mushroom Spinach Soup" />
-                <Gradient />
-              </Card>
-            </Link>
-          </SplideSlide>
-          {/* {veggie.map((recipe) => {
-            return (
-              <SplideSlide key={recipe.id}>
-                <Link to={"/recipe/" + recipe.id}>
-                  <Card>
-                    <p>{recipe.title}</p>
-                    <img src={recipe.image} alt={recipe.title} />
-                    <Gradient />
-                  </Card>
-                </Link>
-              </SplideSlide>
-            ); */}
-          {/* })} */}
-        </Splide>
-      </Wrapper>
-    </div>
+    <Box sx={{ margin: "3rem 0rem" }}>
+      <Grid container spacing={2} ref={cardRef}>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ boxShadow: " 0 0 10px 0 rgba(50, 50, 50, .15)", backgroundColor: "white" }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={
+                "https://www.justonecookbook.com/wp-content/uploads/2019/11/Smoke-Miso-Butter-Turkey-Breast-5496-2-Holiday-II-1-533x800.jpg"
+              }
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Our Best Holiday Recipes for The Unforgettable Feast
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ boxShadow: " 0 0 10px 0 rgba(50, 50, 50, .15)", backgroundColor: "white" }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={"https://www.justonecookbook.com/wp-content/uploads/2019/10/Miso-Chicken-2-IV-533x800.jpg"}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                20 Best Japanese Chicken Recipes for Dinner
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ boxShadow: " 0 0 10px 0 rgba(50, 50, 50, .15)", backgroundColor: "white" }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={"https://www.justonecookbook.com/wp-content/uploads/2023/04/Vegetarian-Ramen-7133-IV-533x800.jpg"}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Easy and Authentic Ramen Recipes You Can Make at Home{" "}
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <Card sx={{ boxShadow: " 0 0 10px 0 rgba(50, 50, 50, .15)", backgroundColor: "white" }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={
+                "https://www.justonecookbook.com/wp-content/uploads/2021/10/Sweet-Potato-Rice-2091-III-533x800.jpg"
+              }
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "700" }}>
+                Japanese Sweet Potato Rice さつまいもご飯{" "}
+              </Typography>
+            </CardContent>
+          </Card>{" "}
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
-
-const Wrapper = styled.div`
-  margin: 4rem 0rem;
-`;
-
-const Card = styled.div`
-  min-height: 25rem;
-  border-radius: 1rem;
-  overflow: hidden;
-  position: relative;
-
-  img {
-    border-radius: 2rem;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  p {
-    position: absolute;
-    z-index: 10;
-    left: 50%;
-    bottom: 0%;
-    transform: translate(-50%, 0%);
-    color: white;
-    width: 100%;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1rem;
-    height: 40%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  @media only screen and (max-width: 768px) {
-    min-height: 15rem;
-  }
-  @media only screen and (max-width: 576px) {
-    min-height: 10rem;
-  }
-`;
-
-const Gradient = styled.div`
-  z-index: 3;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
-`;
 
 export default Veggie;

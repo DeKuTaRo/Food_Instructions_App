@@ -26,7 +26,7 @@ function Headers() {
         <Link to={"/cuisine/Italian"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>About</Box>
         </Link>
-        <Link to={"/login"}>
+        <Link to={"/login-plus"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>Login</Box>
         </Link>
       </Box>

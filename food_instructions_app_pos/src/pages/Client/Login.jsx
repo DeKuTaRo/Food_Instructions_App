@@ -7,7 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 
-function Login() {
+function LoginClient() {
   return (
     <div>
       <header>
@@ -51,4 +51,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginClient;

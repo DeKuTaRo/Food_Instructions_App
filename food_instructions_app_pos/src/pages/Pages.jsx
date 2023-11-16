@@ -5,12 +5,13 @@ import Searched from "./Searched";
 import Recipe from "./Recipe";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import Login from "./Login/Login";
-import ForgotPassword from "./Login/ForgotPassword";
+import LoginClient from "./Client/Login";
+import ForgotPassword from "./Client/ForgotPassword";
+
+import Dashboard from "./Admin/Dashboard";
 
 function Pages() {
   const location = useLocation();
-
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -20,8 +21,11 @@ function Pages() {
         <Route path="/recipe/:name" element={<Recipe />} />
 
         {/* Login page */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Admin */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </AnimatePresence>
   );
