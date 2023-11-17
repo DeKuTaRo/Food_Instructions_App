@@ -8,8 +8,8 @@ import { AnimatePresence } from "framer-motion";
 import LoginClient from "./Client/Login";
 import ForgotPassword from "./Client/ForgotPassword";
 
+import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
-
 function Pages() {
   const location = useLocation();
   return (
@@ -25,6 +25,7 @@ function Pages() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Admin */}
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </AnimatePresence>

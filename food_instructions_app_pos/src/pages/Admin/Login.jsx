@@ -7,13 +7,9 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
-function LoginClient() {
+function Login() {
   return (
-    <div style={{ margin: "0% 10%" }}>
-      <Headers />
-      <NavBar />
+    <div>
       <Box
         sx={{
           backgroundImage: `url(${bgImage})`,
@@ -21,15 +17,12 @@ function LoginClient() {
           backgroundPosition: "left top",
           padding: "3rem 0",
           margin: "0 auto 1.25rem",
-          position: "absolute",
-          left: "-10%",
-          right: "-10%",
         }}></Box>
-      <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "10rem" }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
         <GiKnifeFork style={{ fontSize: "6rem" }} />
 
         <Box sx={{ pl: 3 }}>
-          <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700 }}>Login</Box>
+          <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700 }}>Login ADMIN</Box>
           <Box sx={{ mt: 8 }}>
             <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
             <p>Enter your username and password below.</p>
@@ -49,8 +42,16 @@ function LoginClient() {
           </Box>
         </Box>
       </Box>
+      <Box
+        sx={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundRepeat: "repeat",
+          backgroundPosition: "left top",
+          padding: "3rem 0",
+          margin: "0 auto 1.25rem",
+        }}></Box>
     </div>
-  );
+  ); 
 }
 
-export default LoginClient;
+export default Login;
