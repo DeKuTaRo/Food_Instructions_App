@@ -34,7 +34,7 @@ function Login() {
               <p>Password</p>
               <TextField id="outlined-basic" label="Password" variant="outlined" />
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex",flexDirection:"column", alignItems: "center", justifyContent: "space-between" }}>
               <FormControlLabel control={<Checkbox defaultChecked />} label="Remember me" />{" "}
               <Button variant="outlined">Login</Button>
               <Link href={"/forgot-password"}>Forgot password</Link>
