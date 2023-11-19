@@ -10,6 +10,7 @@ import ForgotPassword from "./Client/ForgotPassword";
 
 import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
+import UserAccount from "../pages/Admin/Pages/UserAccount/UserAccount";
 function Pages() {
   const location = useLocation();
   return (
@@ -27,6 +28,7 @@ function Pages() {
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/user-account" element={<UserAccount />} />
       </Routes>
     </AnimatePresence>
   );
