@@ -14,7 +14,7 @@ import UserAccount from "../pages/Admin/Pages/UserAccount/UserAccount";
 function Pages() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait">   
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/cuisine/:type" element={<Cuisine />} />

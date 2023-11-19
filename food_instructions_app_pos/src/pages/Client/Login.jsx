@@ -28,42 +28,62 @@ function LoginClient() {
       <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "10rem" }}>
         <GiKnifeFork style={{ fontSize: "6rem" }} />
 
-        <Box sx={{ pl: 3 ,
-          width:"100%"  
-          }}>
-          <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700,margin:"32px 0px",fontSize:"40px" }}>Login</Box>
-          <div style={{ fontSize:"40px"}}>
-          <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
-          <p>Enter your username and password below.</p>
+        <Box sx={{ pl: 3, width: "100%" }}>
+          <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700, margin: "32px 0px" }}>Login</Box>
+          <div style={{ fontSize: "40px" }}>
+            <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
+            <p>Enter your username and password below.</p>
           </div>
-       
-          <Box sx={{display:"flex",alignItems:"center" ,width:"88%"}}>
 
-         
-          <Box sx={{ mt: 8, 
-           display:"flex",        
-           flexDirection:"column"
-           }}>
-            
-           
-            <div style={{ display: "flex", alignItems: "center", gap:"96px", margin:"12px 0px", fontSize: "28px", fontWeight:"bold" }}>
-              <p>Username</p>
-              <TextField  fullWidth id="outlined-basic" label="Username" variant="outlined" />
-            </div>
-            <div style={{display: "flex", alignItems: "center", gap:"100px", margin:"12px 0px", fontSize: "28px", fontWeight:"bold" }}>
-              <p>Password</p>
-              <TextField fullWidth  id="outlined-basic" label="Password" variant="outlined" />
-            </div>
-            <div style={{ display: "flex",flexDirection:"column", alignItems:"flex-start",gap:"16px", margin:"12px 0px"}}>
-              <div style={{display:"flex" , gap:"94px " ,alignItems:"center",width:"100%" ,marginLeft:"-16px"}}>
-                <FormControlLabel  color="success" labelPlacement="start" label="Remember me" control={<Checkbox defaultChecked />}  />{" "}
-                <Button variant="outlined">Login</Button>
+          <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
+            <Box sx={{ mt: 8, display: "flex", flexDirection: "column" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "96px",
+                  margin: "12px 0px",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                }}>
+                <p>Username</p>
+                <TextField fullWidth id="outlined-basic" label="Username" variant="outlined" />
               </div>
-              
-              <Link style={{marginLeft:"232px"}} href={"/forgot-password"}>Forgot password</Link>
-           
-            
-            </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "100px",
+                  margin: "12px 0px",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                }}>
+                <p>Password</p>
+                <TextField fullWidth id="outlined-basic" label="Password" variant="outlined" />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  gap: "16px",
+                  margin: "12px 0px",
+                }}>
+                <div
+                  style={{ display: "flex", gap: "94px ", alignItems: "center", width: "100%", marginLeft: "-16px" }}>
+                  <FormControlLabel
+                    color="success"
+                    labelPlacement="start"
+                    label="Remember me"
+                    control={<Checkbox defaultChecked />}
+                  />{" "}
+                  <Button variant="outlined">Login</Button>
+                </div>
+
+                <Link style={{ marginLeft: "232px" }} href={"/forgot-password"}>
+                  Forgot password
+                </Link>
+              </div>
             </Box>
           </Box>
         </Box>

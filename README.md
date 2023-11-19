@@ -6,7 +6,7 @@ npx create-react-app food_instructions_app_pos
 Run nodejs folder backend
 cd food_instructions_app_api
 npm i
-SET DEBUG=food_instructions_app_api:\* & npm start
+SET DEBUG=food_instructions_app_api:* & npm start
 
 Run reactjs folder frontend
 cd food_instructions_app_pos

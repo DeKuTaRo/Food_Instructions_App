@@ -6,8 +6,81 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      axios
+        .post("http://localhost:5000/account/login", formData)
+        .then((res) => {
+          console.log("res = ", res);
+          if (!res.data.status) {
+            toast.error(res.data.msg.vn, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+          } else {
+            toast.success(res.data.msg.vn, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            navigate("/dashboard");
+          }
+        })
+        .catch((err) => {
+          toast.error(err.response.msg.vn, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        });
+
+      // console.log("Form submitted:", response);
+      // Handle success or any further action here
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      // Handle error here
+    }
+  };
+
   return (
     <div>
       <Box
@@ -26,19 +99,42 @@ function Login() {
           <Box sx={{ mt: 8 }}>
             <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
             <p>Enter your username and password below.</p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <p>Username</p>
-              <TextField id="outlined-basic" label="Username" variant="outlined" />
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <p>Password</p>
-              <TextField id="outlined-basic" label="Password" variant="outlined" />
-            </div>
-            <div style={{ display: "flex",flexDirection:"column", alignItems: "center", justifyContent: "space-between" }}>
-              <FormControlLabel control={<Checkbox defaultChecked />} label="Remember me" />{" "}
-              <Button variant="outlined">Login</Button>
-              <Link href={"/forgot-password"}>Forgot password</Link>
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <p>Username</p>
+                <TextField
+                  label="username"
+                  variant="outlined"
+                  value={formData.username}
+                  name="username"
+                  onChange={handleChange}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <p>Password</p>
+                <TextField
+                  label="password"
+                  variant="outlined"
+                  type="password"
+                  value={formData.password}
+                  name="password"
+                  onChange={handleChange}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}>
+                <FormControlLabel control={<Checkbox defaultChecked />} label="Remember me" />{" "}
+                <Button variant="outlined" type="submit">
+                  Login
+                </Button>
+                <Link href={"/forgot-password"}>Forgot password</Link>
+              </div>
+            </form>
           </Box>
         </Box>
       </Box>
@@ -51,7 +147,7 @@ function Login() {
           margin: "0 auto 1.25rem",
         }}></Box>
     </div>
-  ); 
+  );
 }
 
 export default Login;
