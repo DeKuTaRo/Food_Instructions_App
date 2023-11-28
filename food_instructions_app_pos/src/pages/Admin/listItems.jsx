@@ -34,20 +34,22 @@ export const mainListItems = (
         <ListItemText primary="User account" />
       </ListItemButton>
     </Link>
-    <Link href={"/recipes"} underline="none" color="inherit">
+    <Link href={"/ingredient"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <EmojiFoodBeverageIcon />
         </ListItemIcon>
-        <ListItemText primary="Recipes" />
+        <ListItemText primary="Ingredients" />
       </ListItemButton>
     </Link>
-    <ListItemButton>
-      <ListItemIcon>
-        <MenuBookIcon />
-      </ListItemIcon>
-      <ListItemText primary="Course" />
-    </ListItemButton>
+    <Link href={"/food"} underline="none" color="inherit">
+      <ListItemButton>
+        <ListItemIcon>
+          <MenuBookIcon />
+        </ListItemIcon>
+        <ListItemText primary="Food" />
+      </ListItemButton>
+    </Link>
     <ListItemButton>
       <ListItemIcon>
         <TapasIcon />

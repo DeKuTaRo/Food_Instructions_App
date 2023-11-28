@@ -10,11 +10,12 @@ import ForgotPassword from "./Client/ForgotPassword";
 
 import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
-import UserAccount from "../pages/Admin/Pages/UserAccount/UserAccount";
+import UserAccount from "./Admin/pages/UserAccount/UserAccount";
+import Ingredient from "./Admin/pages/Ingredient/Ingredient";
 function Pages() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">   
+    <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/cuisine/:type" element={<Cuisine />} />
@@ -29,6 +30,7 @@ function Pages() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user-account" element={<UserAccount />} />
+        <Route path="/ingredient" element={<Ingredient />} />
       </Routes>
     </AnimatePresence>
   );
