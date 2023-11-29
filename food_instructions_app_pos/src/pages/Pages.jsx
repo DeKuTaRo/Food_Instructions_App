@@ -2,7 +2,7 @@ import React from "react";
 import Home from "./Home";
 import Cuisine from "./Cuisine";
 import Searched from "./Searched";
-import Recipe from "./Recipe";
+// import Recipe from "./Recipe";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import LoginClient from "./Client/Login";
@@ -12,6 +12,9 @@ import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
 import UserAccount from "./Admin/pages/UserAccount/UserAccount";
 import Ingredient from "./Admin/pages/Ingredient/Ingredient";
+import Nutrition from "./Admin/pages/Nutrition/Nutrition";
+import Food from "./Admin/pages/Food/Food";
+import Recipe from "./Admin/pages/Recipe/Recipe";
 function Pages() {
   const location = useLocation();
   return (
@@ -20,7 +23,7 @@ function Pages() {
         <Route path="/" element={<Home />} />
         <Route path="/cuisine/:type" element={<Cuisine />} />
         <Route path="/searched/:search" element={<Searched />} />
-        <Route path="/recipe/:name" element={<Recipe />} />
+        {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 
         {/* Login page */}
         <Route path="/login-plus" element={<LoginClient />} />
@@ -31,6 +34,9 @@ function Pages() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user-account" element={<UserAccount />} />
         <Route path="/ingredient" element={<Ingredient />} />
+        <Route path="/nutrition" element={<Nutrition />} />
+        <Route path="/food" element={<Food />} />
+        <Route path="/recipe" element={<Recipe />} />
       </Routes>
     </AnimatePresence>
   );

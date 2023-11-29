@@ -50,18 +50,22 @@ export const mainListItems = (
         <ListItemText primary="Food" />
       </ListItemButton>
     </Link>
-    <ListItemButton>
-      <ListItemIcon>
-        <TapasIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dietary" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BentoIcon />
-      </ListItemIcon>
-      <ListItemText primary="Ingredient" />
-    </ListItemButton>
+    <Link href={"/nutrition"} underline="none" color="inherit">
+      <ListItemButton>
+        <ListItemIcon>
+          <TapasIcon />
+        </ListItemIcon>
+        <ListItemText primary="Nutrition" />
+      </ListItemButton>
+    </Link>
+    <Link href={"/recipe"} underline="none" color="inherit">
+      <ListItemButton>
+        <ListItemIcon>
+          <BentoIcon />
+        </ListItemIcon>
+        <ListItemText primary="Recipe" />
+      </ListItemButton>
+    </Link>
     <ListItemButton>
       <ListItemIcon>
         <FoodBankIcon />
