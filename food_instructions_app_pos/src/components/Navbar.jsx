@@ -38,11 +38,6 @@ const HeaderListItem = (props) => {
             </Link>
           </ListItem>
         ))}
-        <ListItem sx={{ p: 0, "&:hover a": { color: "white", backgroundColor: "black" } }}>
-          <Link sx={{ p: "0.5rem 1rem", width: "100%" }} underline="none" color="inherit" href={"/"}>
-            List1
-          </Link>
-        </ListItem>
       </List>
     </div>
   );
@@ -95,6 +90,13 @@ function NavBar() {
               { content: "Lunch", href: "/" },
               { content: "Dinner", href: "/" },
             ]}
+          />
+        </ListItem>
+        <ListItem onMouseEnter={() => setHoverMenuHeader("header3")} onMouseLeave={() => setHoverMenuHeader(null)}>
+          <HeaderListItem
+            isHovered={hoverMenuHeader === "header3" ? true : false}
+            title="Nutrition"
+            listItems={[{ content: "Facts", href: "/nutrition-facts" }]}
           />
         </ListItem>
       </List>

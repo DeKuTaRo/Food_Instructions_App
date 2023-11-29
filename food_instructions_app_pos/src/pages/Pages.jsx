@@ -8,13 +8,17 @@ import { AnimatePresence } from "framer-motion";
 import LoginClient from "./Client/Login";
 import ForgotPassword from "./Client/ForgotPassword";
 
+// Admin
 import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
 import UserAccount from "./Admin/pages/UserAccount/UserAccount";
 import Ingredient from "./Admin/pages/Ingredient/Ingredient";
-import Nutrition from "./Admin/pages/Nutrition/Nutrition";
+import ANutrition from "./Admin/pages/Nutrition/Nutrition";
 import Food from "./Admin/pages/Food/Food";
 import Recipe from "./Admin/pages/Recipe/Recipe";
+
+// Client
+import Nutrition from "./Client/Nutrition";
 function Pages() {
   const location = useLocation();
   return (
@@ -25,18 +29,19 @@ function Pages() {
         <Route path="/searched/:search" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 
-        {/* Login page */}
+        {/* Client page */}
         <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/nutrition-facts" element={<Nutrition />} />
 
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user-account" element={<UserAccount />} />
         <Route path="/ingredient" element={<Ingredient />} />
-        <Route path="/nutrition" element={<Nutrition />} />
-        <Route path="/food" element={<Food />} />
-        <Route path="/recipe" element={<Recipe />} />
+        <Route path="/a-nutrition" element={<ANutrition />} />
+        <Route path="/a-food" element={<Food />} />
+        <Route path="/a-recipe" element={<Recipe />} />
       </Routes>
     </AnimatePresence>
   );

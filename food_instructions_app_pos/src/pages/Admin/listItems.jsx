@@ -42,7 +42,7 @@ export const mainListItems = (
         <ListItemText primary="Ingredients" />
       </ListItemButton>
     </Link>
-    <Link href={"/food"} underline="none" color="inherit">
+    <Link href={"/a-food"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <MenuBookIcon />
@@ -50,7 +50,7 @@ export const mainListItems = (
         <ListItemText primary="Food" />
       </ListItemButton>
     </Link>
-    <Link href={"/nutrition"} underline="none" color="inherit">
+    <Link href={"/a-nutrition"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <TapasIcon />
@@ -58,7 +58,7 @@ export const mainListItems = (
         <ListItemText primary="Nutrition" />
       </ListItemButton>
     </Link>
-    <Link href={"/recipe"} underline="none" color="inherit">
+    <Link href={"/a-recipe"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <BentoIcon />

@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import InputLabel from "@mui/material/InputLabel";
@@ -47,7 +47,7 @@ const rows = [
   createData(4, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Chanh"),
 ];
 
-function Nutrition() {
+function ANutrition() {
   const commonStyles = {
     height: "auto",
     // Add any other shared styles here
@@ -72,6 +72,24 @@ function Nutrition() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [details, setDetails] = useState({});
+
+  const fetchDetails = async () => {
+    const data = await fetch(
+      `https://api.edamam.com/api/nutrition-data?app_id=${process.env.APP_ID_NUTRITION}&app_key=${process.env.APP_KEY_NUTRITION}&nutrition-type=cooking&ingr=%5B%221%20cup%20rice%2C%22%2C%20%221%20fried%20chicken%2C%22%2C%20%22%22%5D`
+    );
+    const detailData = await data.json();
+
+    setDetails(detailData);
+    console.log(detailData);
+  };
+
+  useEffect(() => {
+    fetchDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -154,4 +172,4 @@ function Nutrition() {
   );
 }
 
-export default Nutrition;
+export default ANutrition;
