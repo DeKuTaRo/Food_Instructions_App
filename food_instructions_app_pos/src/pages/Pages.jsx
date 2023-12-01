@@ -16,7 +16,7 @@ import Ingredient from "./Admin/pages/Ingredient/Ingredient";
 import ANutrition from "./Admin/pages/Nutrition/Nutrition";
 import Food from "./Admin/pages/Food/Food";
 import Recipe from "./Admin/pages/Recipe/Recipe";
-
+import SignUp from "./Client/SignUp"; 
 // Client
 import Nutrition from "./Client/Nutrition";
 function Pages() {
@@ -33,6 +33,7 @@ function Pages() {
         <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/nutrition-facts" element={<Nutrition />} />
+        <Route path="/sign-up" element={<SignUp/>} />
 
         {/* Admin */}
         <Route path="/login" element={<Login />} />

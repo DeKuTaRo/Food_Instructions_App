@@ -28,9 +28,9 @@ function LoginClient() {
       <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "10rem" }}>
         <GiKnifeFork style={{ fontSize: "6rem" }} />
 
-        <Box sx={{ pl: 3, width: "100%" }}>
-          <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700, margin: "32px 0px" }}>Login</Box>
-          <div style={{ fontSize: "40px" }}>
+        <Box sx={{ pl: 3, width: "80%" }}>
+          <Box sx={{ color: "black", fontSize: "2.8rem", fontWeight: 700, margin: "28px 0px" }}>Login</Box>
+          <div style={{ fontSize: "24px" }}>
             <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
             <p>Enter your username and password below.</p>
           </div>
@@ -43,7 +43,7 @@ function LoginClient() {
                   alignItems: "center",
                   gap: "96px",
                   margin: "12px 0px",
-                  fontSize: "28px",
+                  fontSize: "24px",
                   fontWeight: "bold",
                 }}>
                 <p>Username</p>
@@ -55,7 +55,7 @@ function LoginClient() {
                   alignItems: "center",
                   gap: "100px",
                   margin: "12px 0px",
-                  fontSize: "28px",
+                  fontSize: "24px",
                   fontWeight: "bold",
                 }}>
                 <p>Password</p>
@@ -70,7 +70,7 @@ function LoginClient() {
                   margin: "12px 0px",
                 }}>
                 <div
-                  style={{ display: "flex", gap: "94px ", alignItems: "center", width: "100%", marginLeft: "-16px" }}>
+                  style={{ display: "flex", gap: "76px ", alignItems: "center", width: "100%", marginLeft: "-16px" }}>
                   <FormControlLabel
                     color="success"
                     labelPlacement="start"
@@ -79,10 +79,16 @@ function LoginClient() {
                   />{" "}
                   <Button variant="outlined">Login</Button>
                 </div>
-
-                <Link style={{ marginLeft: "232px" }} href={"/forgot-password"}>
+                
+                <Link style={{ marginLeft: "214px" }} href={"/forgot-password"}>
                   Forgot password
                 </Link>
+                
+                <div style={{ marginLeft: "214px", display:"flex", gap:"4px"}}>
+                <p>Create an account at </p> 
+                <Link  href={"/sign-up"}>Sign Up</Link>
+                </div>
+               
               </div>
             </Box>
           </Box>
