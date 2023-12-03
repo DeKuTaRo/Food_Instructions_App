@@ -6,11 +6,18 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
-
+import { motion } from "framer-motion";
 import Headers from "../../components/Headers";
 import NavBar from "../../components/Navbar";
 function LoginClient() {
   return (
+
+    <motion.div
+    animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+     >
     <div style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
@@ -95,6 +102,7 @@ function LoginClient() {
         </Box>
       </Box>
     </div>
+    </motion.div>
   );
 }
 
