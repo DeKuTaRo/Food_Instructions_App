@@ -7,7 +7,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import LoginClient from "./Client/Login";
 import ForgotPassword from "./Client/ForgotPassword";
-
+import RecipeDetail from "./Client/RecipeDetail";
 // Admin
 import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
@@ -34,7 +34,7 @@ function Pages() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/nutrition-facts" element={<Nutrition />} />
         <Route path="/sign-up" element={<SignUp/>} />
-
+        
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -43,6 +43,7 @@ function Pages() {
         <Route path="/a-nutrition" element={<ANutrition />} />
         <Route path="/a-food" element={<Food />} />
         <Route path="/a-recipe" element={<Recipe />} />
+        <Route path="/recipe/:label" element={<RecipeDetail />} />
       </Routes>
     </AnimatePresence>
   );

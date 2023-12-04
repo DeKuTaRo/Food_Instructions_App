@@ -1,25 +1,18 @@
-import React from "react";
-import axios from 'axios';
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-// import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Box, CardActionArea } from '@mui/material';
-import {
-  Button,
-  styled
-} from '@mui/material';
-
-
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
+import { Button, styled } from "@mui/material";
 import { motion } from "framer-motion";
 import Headers from "../components/Headers";
 import NavBar from "../components/Navbar";
+
 const fadeIn = {
   "0%": { opacity: 0 },
   "100%": { opacity: 1 },
@@ -57,6 +50,33 @@ const StyledContentBox = styled(Box)({
   },
 });
 
+function SearchedCard({ recipe }) {
+  return (
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Link to={`/recipe/${recipe.label}`}>
+        <Card>
+          <CardActionArea component={fadeInAnimation}>
+            <StyledCardMedia
+              component="img"
+              alt={recipe.label}
+              height="140"
+              image={recipe.image}
+            />
+            <CardContent>
+              <Typography variant="h6">{recipe.label}</Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
+    </motion.div>
+  );
+}
+
 function Searched() {
   const [foodList, setFoodList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,8 +93,8 @@ function Searched() {
         "https://api.edamam.com/api/recipes/v2",
         {
           params: {
-            type: "public",
-            q: search, // Use the search parameter from the URL
+            type: "public", 
+            q: search,
             app_id: "704b3f39",
             app_key: "309bd85138349b57e3e1328673aef406",
           },
@@ -109,28 +129,7 @@ function Searched() {
           <Grid container spacing={2}>
             {foodList.map((food, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <StyledCard>
-                  <CardActionArea component={fadeInAnimation}>
-                    <StyledCardMedia
-                      component="img"
-                      alt={food.recipe.label}
-                      image={food.recipe.image}
-                    />
-                    <CardContent>
-                      <Typography variant="h6">
-                        {food.recipe.label}
-                      </Typography>
-                      <Typography variant="body1" noWrap>
-                        Source: {food.recipe.source}
-                      </Typography>
-                      <StyledContentBox>
-                        <Typography variant="body2">
-                          {food.recipe.ingredientLines.join(", ")}
-                        </Typography>
-                      </StyledContentBox>
-                    </CardContent>
-                  </CardActionArea>
-                </StyledCard>
+                <SearchedCard recipe={food.recipe} />
               </Grid>
             ))}
           </Grid>
