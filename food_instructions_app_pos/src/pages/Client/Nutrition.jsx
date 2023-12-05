@@ -36,30 +36,32 @@ const rows = [
 function Nutrition() {
   const [details, setDetails] = useState({});
 
-  //   const fetchDetails = async () => {
-  //     const data = await fetch(
-  //       `https://api.edamam.com/api/nutrition-data?app_id=${process.env.REACT_APP_APP_ID_NUTRITION}&app_key=${process.env.REACT_APP_APP_KEY_NUTRITION}&nutrition-type=cooking&ingr=%5B%221%20cup%20rice%2C%22%2C%20%221%20fried%20chicken%2C%22%2C%20%22%22%5D`
-  //     );
-  //     const detailData = await data.json();
-
-  //     setDetails(detailData);
-  //     console.log(detailData);
-  //   };
-
-  //   useEffect(() => {
-  //     fetchDetails();
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, []);
-
   const [textValue, setTextValue] = useState("");
   const handleTextareaChange = (event) => {
     setTextValue(event.target.value);
   };
-  const handleSearchNutritionFacts = (e) => {
-    console.log("textValue = ", textValue);
+  const handleSearchNutritionFacts = async (e) => {
+    console.log("textValue = ", encodeURIComponent(JSON.stringify(textValue.split("\n"))));
+    try {
+      const data = await fetch(
+        `https://api.edamam.com/api/nutrition-data?app_id=${process.env.REACT_APP_APP_ID_NUTRITION}&app_key=${process.env.REACT_APP_APP_KEY_NUTRITION}&nutrition-type=cooking&ingr=${encodeURIComponent(JSON.stringify(textValue.split(",")))}`
+      );
+
+      const detailData = await data.json();
+
+      setDetails(detailData);
+    } catch (error) {
+      console.error("There was an error:", error);
+    }
   };
 
   const handleResetNutritionFacts = (e) => {};
+
+  useEffect(() => {
+    handleSearchNutritionFacts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <motion.div
       animate={{ opacity: 1 }}

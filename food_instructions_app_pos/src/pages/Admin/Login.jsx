@@ -34,7 +34,6 @@ function Login() {
       axios
         .post("http://localhost:5000/account/login", formData)
         .then((res) => {
-          console.log("res = ", res);
           if (!res.data.status) {
             toast.error(res.data.msg.vn, {
               position: "top-right",
