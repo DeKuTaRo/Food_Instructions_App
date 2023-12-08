@@ -41,6 +41,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Resizer from "react-image-file-resizer";
+import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
 const defaultTheme = createTheme();
 
@@ -336,19 +338,19 @@ const FoodDialog = ({
 function Food() {
   const [allFoodData, setAllFoodData] = useState({});
   const [allFoodDataTable, setAllFoodDataTable] = useState([]);
-  useEffect(() => {
-    const fetchDetails = async () => {
-      try {
-        const data = await axios.get(`http://localhost:5000/food/getAll`);
-        setAllFoodData(data);
-        setAllFoodDataTable(data.data.result.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   const fetchDetails = async () => {
+  //     try {
+  //       const data = await axios.get(`http://localhost:5000/food/getAll`);
+  //       setAllFoodData(data);
+  //       setAllFoodDataTable(data.data.result.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchDetails();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -410,6 +412,8 @@ function Food() {
     }
   };
 
+
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -433,6 +437,7 @@ function Food() {
                   <Button variant="outlined" onClick={handleClickOpen}>
                     Add new <AddIcon />
                   </Button>
+                  
                 </Title>
                 <Table size="small">
                   <TableHead>
@@ -443,7 +448,7 @@ function Food() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {allFoodDataTable &&
+                    {/* {allFoodDataTable &&
                       allFoodDataTable.map((row) => (
                         <TableRow key={row._id}>
                           <TableCell>{row.name}</TableCell>
@@ -457,7 +462,22 @@ function Food() {
                             </Button>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))} */}
+                    {/* {recipeDetail &&
+                      recipeDetail.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{row.name}</TableCell>
+                          <TableCell>{row.original}</TableCell>
+                          <TableCell> 
+                            <Button variant="outlined" onClick={() => handleGetDetailFood(row._id)}>
+                              <EditIcon />
+                            </Button>
+                            <Button variant="outlined">
+                              <DeleteIcon />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))} */}
                   </TableBody>
                 </Table>
                 <Link color="primary" href="#" sx={{ mt: 3 }}>

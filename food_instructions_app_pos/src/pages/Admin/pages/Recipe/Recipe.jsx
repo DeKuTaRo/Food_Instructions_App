@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -15,39 +16,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../Title";
 
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-import TextField from "@mui/material/TextField";
-import { useState } from "react";
 import Button from "@mui/material/Button";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
-import InputLabel from "@mui/material/InputLabel";
 
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
+import axios from "axios";
+import { Skeleton } from "@mui/material";
 
 const defaultTheme = createTheme();
 
-// Generate Order Data
-function createData(id, imageRecipe, userName) {
-  return { id, imageRecipe, userName };
-}
-
-const rows = [
-  createData(0, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Cà chua"),
-  createData(1, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Khoai tây"),
-  createData(2, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Cà rốt"),
-  createData(3, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Củ cải"),
-  createData(4, "https://th.bing.com/th/id/OIP.1ua_uJ3VTX9pIm4ZRIZQnAHaHa?rs=1&pid=ImgDetMain", "Chanh"),
-];
-
-function Recipe() {
+function ARecipe() {
   const commonStyles = {
     height: "auto",
     // Add any other shared styles here
@@ -63,15 +43,41 @@ function Recipe() {
     width: "60px", // Width for mobile screens
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [input, setInput] = useState("chocolate");
+  const navigate = useNavigate();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    navigate("/searched/" + input);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const [loading, setLoading] = useState(true);
+  const [recipeDetail, setRecipeDetail] = useState([]);
+  useEffect(() => {
+    fetchRecipeDetails();
+  }, []);
+
+  const fetchRecipeDetails = async () => {
+    try {
+      // setLoading(true);
+      const response = await axios.get("https://api.edamam.com/api/recipes/v2", {
+        params: {
+          type: "public",
+          q: input, // Use the id parameter from the URL
+          app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
+          app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
+        },
+      });
+      // setLoading(true);
+      setInput("");
+      setRecipeDetail(response.data.hits);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -92,9 +98,15 @@ function Recipe() {
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
               <React.Fragment>
                 <Title>
-                  <Button variant="outlined" onClick={handleClickOpen}>
+                  <Button variant="outlined">
                     Add new <AddIcon />
                   </Button>
+                  <form onSubmit={submitHandler}>
+                    <div>
+                      <FaSearch />
+                      <input onChange={(e) => setInput(e.target.value)} type="text" value={input} />
+                    </div>
+                  </form>
                 </Title>
                 <Table size="small">
                   <TableHead>
@@ -104,47 +116,42 @@ function Recipe() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell>
-                          <img
-                            src={row.imageIngredient}
-                            alt=""
-                            style={
-                              window.innerWidth <= 600 // Check window width for mobile screens
-                                ? mobileStyles
-                                : imageStyles
-                            }
-                          />
-                        </TableCell>
-                        <TableCell>{row.userName}</TableCell>
-                      </TableRow>
-                    ))}
+                    {loading
+                      ? // <p>... is loading</p>
+                        Array.from({ length: 11 }, (_, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              <Skeleton
+                                rectangular="text"
+                                height={200}
+                                width={window.innerWidth <= 600 ? mobileStyles : imageStyles}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Skeleton variant="text" />
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : recipeDetail.map((row, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              <Link href={`/a-recipe/details/${encodeURIComponent(row._links.self.href)}`}>
+                                <img
+                                  src={row.recipe.image}
+                                  alt=""
+                                  style={window.innerWidth <= 600 ? mobileStyles : imageStyles}
+                                />
+                              </Link>
+                            </TableCell>
+                            <TableCell>{row.recipe.label}</TableCell>
+                          </TableRow>
+                        ))}
                   </TableBody>
                 </Table>
+
                 <Link color="primary" href="#" sx={{ mt: 3 }}>
                   See more orders
                 </Link>
-
-                <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="md">
-                  <DialogTitle>Ingredient form</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText></DialogContentText>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="nameIngredient"
-                      label="Name"
-                      type="text"
-                      fullWidth
-                      variant="standard"
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Save</Button>
-                  </DialogActions>
-                </Dialog>
               </React.Fragment>{" "}
             </Paper>{" "}
           </Container>
@@ -154,4 +161,4 @@ function Recipe() {
   );
 }
 
-export default Recipe;
+export default ARecipe;
