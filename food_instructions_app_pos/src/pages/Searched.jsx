@@ -57,15 +57,20 @@ function SearchedCard({ recipe }) {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
+      boxShadow="5px 5px lightgray"
     >
-      <Link to={`/recipe/${recipe.label}`}>
-        <Card>
-          <CardActionArea component={fadeInAnimation}>
+      <Link to={`/recipe/${recipe.label}`} >
+        <Card >
+          <CardActionArea component={fadeInAnimation} style={{display:"flex",justifyContent:"center",alignItems:"center", flexDirection:"column"}}>
             <StyledCardMedia
               component="img"
               alt={recipe.label}
               height="140"
-              image={recipe.image}
+              image={recipe.images.SMALL.url}
+              
+              
+            
+              
             />
             <CardContent>
               <Typography variant="h6">{recipe.label}</Typography>
@@ -119,14 +124,14 @@ function Searched() {
       <Headers />
       <NavBar />
 
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center"  }}>
         <Typography variant="h4" gutterBottom>
           Food List for {search}
         </Typography>
         {loading ? (
           <Button disabled>Fetching...</Button>
         ) : (
-          <Grid container spacing={2}>
+          <Grid container spacing={2} >
             {foodList.map((food, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <SearchedCard recipe={food.recipe} />
