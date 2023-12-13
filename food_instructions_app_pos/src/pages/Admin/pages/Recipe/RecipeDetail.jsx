@@ -44,10 +44,8 @@ function ARecipeDetail() {
         const response = await axios.get(`${url}`, {
           params: {
             type: "public",
-            // app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
-            // app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
-            app_id: `704b3f39`,
-            app_key: `309bd85138349b57e3e1328673aef406`,
+            app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
+            app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
           },
         });
         // if (isMounted) {
@@ -68,8 +66,6 @@ function ARecipeDetail() {
       // isMounted = false;
     };
   }, []);
-
-  console.log("recipeDetail = ", recipeDetail);
 
   return (
     <ThemeProvider theme={defaultTheme}>

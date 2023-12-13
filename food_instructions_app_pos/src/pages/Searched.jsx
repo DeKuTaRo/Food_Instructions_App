@@ -42,36 +42,20 @@ const StyledCardMedia = styled(CardMedia)({
   },
 });
 
-const StyledContentBox = styled(Box)({
-  maxHeight: "200px",
-  overflow: "auto",
-  "@media (max-width: 600px)": {
-    maxHeight: "80px",
-  },
-});
-
-function SearchedCard({ recipe }) {
+function SearchedCard({ recipe, link }) {
   return (
     <motion.div
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      boxShadow="5px 5px lightgray"
-    >
-      <Link to={`/recipe/${recipe.label}`} >
-        <Card >
-          <CardActionArea component={fadeInAnimation} style={{display:"flex",justifyContent:"center",alignItems:"center", flexDirection:"column"}}>
-            <StyledCardMedia
-              component="img"
-              alt={recipe.label}
-              height="140"
-              image={recipe.images.SMALL.url}
-              
-              
-            
-              
-            />
+      style={{ boxShadow: "5px 5px lightgray" }}>
+      <Link to={`/recipe/${encodeURIComponent(link)}`}>
+        <Card>
+          <CardActionArea
+            component={fadeInAnimation}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <StyledCardMedia component="img" alt={recipe.label} height="140" image={recipe.images.SMALL.url} />
             <CardContent>
               <Typography variant="h6">{recipe.label}</Typography>
             </CardContent>
@@ -94,17 +78,15 @@ function Searched() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "https://api.edamam.com/api/recipes/v2",
-        {
-          params: {
-            type: "public", 
-            q: search,
-            app_id: "704b3f39",
-            app_key: "309bd85138349b57e3e1328673aef406",
-          },
-        }
-      );
+      const response = await axios.get("https://api.edamam.com/api/recipes/v2", {
+        params: {
+          type: "public",
+          q: search,
+          app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
+          app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
+        },
+      });
+      console.log("response = ", response);
       setFoodList(response.data.hits);
     } catch (error) {
       console.error(error);
@@ -119,22 +101,21 @@ function Searched() {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%" }}
-    >
+      style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
 
-      <div style={{ textAlign: "center"  }}>
+      <div style={{ textAlign: "center" }}>
         <Typography variant="h4" gutterBottom>
           Food List for {search}
         </Typography>
         {loading ? (
           <Button disabled>Fetching...</Button>
         ) : (
-          <Grid container spacing={2} >
+          <Grid container spacing={2}>
             {foodList.map((food, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <SearchedCard recipe={food.recipe} />
+                <SearchedCard recipe={food.recipe} link={food._links.self.href} />
               </Grid>
             ))}
           </Grid>
