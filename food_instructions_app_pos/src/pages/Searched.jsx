@@ -82,8 +82,8 @@ function Searched() {
         params: {
           type: "public",
           q: search,
-          app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
-          app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
+          app_id: "cebaa309",
+          app_key: "8b7370a5e87e324eabeddcff12e4fba3",
         },
       });
       console.log("response = ", response);

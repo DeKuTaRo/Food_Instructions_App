@@ -67,8 +67,9 @@ function RecipeDetail() {
         const response = await axios.get(`${label}`, {
           params: {
             type: "public",
-            app_id: `${process.env.REACT_APP_APP_ID_RECIPE}`,
-            app_key: `${process.env.REACT_APP_APP_KEY_RECIPE}`,
+            app_id: `704b3f39`,
+            app_key: `
+            309bd85138349b57e3e1328673aef406`,
           },
         });
         console.log("response = ", response);
@@ -319,28 +320,35 @@ function RecipeDetail() {
                     <Typography variant="inherit" align="right" sx={{ borderBottom: "1px solid #ccc" }}>
                       %Daily value
                     </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                      <Typography>123</Typography>
-                      <Typography>456</Typography>
-                    </Box>
-
-                    {/* {Object.keys(totalNutrients).forEach((key) => {
-                          console.log(
-                            "totalNutrients =",
-                            totalNutrients[key].label +
-                              " " +
-                              Number(totalNutrients[key].quantity.toFixed(1)) +
-                              " " +
-                              totalNutrients[key].unit
-                          );
-                          <Typography>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", gap:"30px"}}>
+                        <Typography sx={{display:"flex", alignItems:"baseline",flexDirection:"column"}}>
+                          {Object.keys(totalNutrients).map((key) => (
+                          <Typography 
+                          key={key}
+                          >
                             {totalNutrients[key].label +
-                              " " +
+                              " = " +
                               Number(totalNutrients[key].quantity.toFixed(1)) +
                               " " +
                               totalNutrients[key].unit}
-                          </Typography>;
-                        })} */}
+                          </Typography>
+                      ))}
+                      </Typography  >
+                      <Typography sx={{display:"flex", alignItems:"flex-end",flexDirection:"column"}}>
+                      {Object.keys(totalDaily).map((key) => (
+                          <Typography 
+                          key={key}>
+                            {totalDaily[key].label +
+                              " = " +
+                              Number(totalDaily[key].quantity.toFixed(1)) +
+                              " " +
+                              totalDaily[key].unit}
+                          </Typography>
+                      ))}
+                      </Typography>
+                    </Box>
+
+                    
                   </Item>
                 </Box>
               </Grid>
