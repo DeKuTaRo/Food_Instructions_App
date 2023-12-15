@@ -7,7 +7,6 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
 import { Button, styled } from "@mui/material";
 import { motion } from "framer-motion";
 import Headers from "../components/Headers";
@@ -20,16 +19,6 @@ const fadeIn = {
 
 const fadeInAnimation = styled("div")({
   animation: `${fadeIn} 0.5s ease-in-out`,
-});
-
-const StyledCard = styled(Card)({
-  width: "400px",
-  height: "400px",
-  textAlign: "left",
-  margin: "auto",
-  "@media (max-width: 600px)": {
-    width: "80%",
-  },
 });
 
 const StyledCardMedia = styled(CardMedia)({

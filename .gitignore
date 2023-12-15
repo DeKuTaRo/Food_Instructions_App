@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-food_instructions_app_api/node_modules
+# node_modules
+food_instructions_app_api/account/node_modules
 food_instructions_app_pos/node_modules
 
 # production
@@ -14,7 +14,9 @@ food_instructions_app_pos/node_modules
 .env.test.local
 .env.production.local
 
-food_instructions_app_api/.env
+# .env
+food_instructions_app_api/account/.env
+food_instructions_app_api/account/.env.dev
 food_instructions_app_pos/.env
 
 npm-debug.log*

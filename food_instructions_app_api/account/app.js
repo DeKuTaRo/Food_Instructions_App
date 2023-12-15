@@ -1,13 +1,13 @@
-var createError = require("http-errors");
+// var createError = require("http-errors");
 var express = require("express");
 var cors = require("cors");
 var path = require("path");
-var cookieParser = require("cookie-parser");
+// var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const dotenv = require("dotenv").config();
 
-var defineRoutes = require("./routes/index");
-const db = require("./config/db");
+// var defineRoutes = require("./routes/index");
+// const db = require("./config/db");
 
 var app = express();
 // const corsOptions = { origin: "*", optionsSuccessStatus: 200 };
@@ -18,17 +18,17 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-defineRoutes(app);
-db();
+// defineRoutes(app);
+// db();
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -39,6 +39,14 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+
+app.use("/", (req, res, next) => {
+  res.send("Account service");
+});
+
+app.listen("3001", (req, res, next) => {
+  console.log("Listen on port 3001");
 });
 
 module.exports = app;

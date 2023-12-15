@@ -19,7 +19,6 @@ import {
   Box,
   Paper,
   TextField,
-  Stack,
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -39,26 +38,12 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const obejcttest = {
-  Ca: {
-    label: "Calcium",
-    quantity: 345.332948,
-    unit: "mg",
-  },
-  Fat: {
-    label: "Fat",
-    quantity: 279.04753875,
-    unit: "g",
-  },
-};
-
 function RecipeDetail() {
   const { label } = useParams();
   const [recipeDetail, setRecipeDetail] = useState({});
   const [loading, setLoading] = useState(true);
   const [totalNutrients, setTotalNutrientations] = useState({});
   const [totalDaily, setTotalDaily] = useState({});
-  const [showActiveDetails, setShowActiveDetails] = useState("ingredients");
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -85,7 +70,6 @@ function RecipeDetail() {
     fetchRecipeDetails();
   }, []);
 
-  console.log("totalNutrients = ", totalNutrients);
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -320,35 +304,30 @@ function RecipeDetail() {
                     <Typography variant="inherit" align="right" sx={{ borderBottom: "1px solid #ccc" }}>
                       %Daily value
                     </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", gap:"30px"}}>
-                        <Typography sx={{display:"flex", alignItems:"baseline",flexDirection:"column"}}>
-                          {Object.keys(totalNutrients).map((key) => (
-                          <Typography 
-                          key={key}
-                          >
+                    <Box sx={{ display: "flex", justifyContent: "space-between", gap: "30px" }}>
+                      <Typography sx={{ display: "flex", alignItems: "baseline", flexDirection: "column" }}>
+                        {Object.keys(totalNutrients).map((key) => (
+                          <Typography key={key}>
                             {totalNutrients[key].label +
                               " = " +
                               Number(totalNutrients[key].quantity.toFixed(1)) +
                               " " +
                               totalNutrients[key].unit}
                           </Typography>
-                      ))}
-                      </Typography  >
-                      <Typography sx={{display:"flex", alignItems:"flex-end",flexDirection:"column"}}>
-                      {Object.keys(totalDaily).map((key) => (
-                          <Typography 
-                          key={key}>
+                        ))}
+                      </Typography>
+                      <Typography sx={{ display: "flex", alignItems: "flex-end", flexDirection: "column" }}>
+                        {Object.keys(totalDaily).map((key) => (
+                          <Typography key={key}>
                             {totalDaily[key].label +
                               " = " +
                               Number(totalDaily[key].quantity.toFixed(1)) +
                               " " +
                               totalDaily[key].unit}
                           </Typography>
-                      ))}
+                        ))}
                       </Typography>
                     </Box>
-
-                    
                   </Item>
                 </Box>
               </Grid>
