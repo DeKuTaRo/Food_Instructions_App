@@ -30,7 +30,7 @@ function SignUp() {
             margin: "0 auto 1.25rem",
             position: "absolute",
             left: "-10%",
-            right: "-10%",
+            right: "-9%",
             width: "100vw",
           }}
         ></Box>

@@ -96,7 +96,7 @@ function Login() {
         <Box sx={{ pl: 3 }}>
           <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700 }}>Login ADMIN</Box>
           <Box sx={{ mt: 8 }}>
-            <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
+            < >Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</>
             <p>Enter your username and password below.</p>
             <form onSubmit={handleSubmit}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -144,6 +144,8 @@ function Login() {
           backgroundPosition: "left top",
           padding: "3rem 0",
           margin: "0 auto 1.25rem",
+          height:"100%",
+          bottom:"0"
         }}></Box>
     </div>
   );
