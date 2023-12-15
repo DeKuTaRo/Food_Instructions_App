@@ -12,7 +12,12 @@ import Headers from "../../components/Headers";
 import NavBar from "../../components/Navbar";
 function SignUp() {
   return (
-    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div style={{ margin: "0% 10%" }}>
         <Headers />
         <NavBar />
@@ -26,12 +31,30 @@ function SignUp() {
             position: "absolute",
             left: "-10%",
             right: "-10%",
-          }}></Box>
-        <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "10rem" }}>
+            width: "100vw",
+          }}
+        ></Box>
+        <Box
+          sx={{
+            display: "flex",
+            position: "relative",
+            top: "1.5rem",
+            left: "5rem",
+          }}
+        >
           <GiKnifeFork style={{ fontSize: "6rem" }} />
 
           <Box sx={{ pl: 3, width: "80%" }}>
-            <Box sx={{ color: "black", fontSize: "2.8rem", fontWeight: 700, margin: "28px 12px " }}>Sign Up</Box>
+            <Box
+              sx={{
+                color: "black",
+                fontSize: "2.8rem",
+                fontWeight: 700,
+                margin: "28px 12px ",
+              }}
+            >
+              Sign Up
+            </Box>
             <div style={{ fontSize: "24px", marginLeft: "12px" }}>
               <p>
                 You need to fill in the information to <b>register</b>{" "}
@@ -39,7 +62,15 @@ function SignUp() {
             </div>
 
             <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
-              <Box sx={{ mt: 8, display: "flex", flexDirection: "column", width: "100vh", margin: "" }}>
+              <Box
+                sx={{
+                  mt: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100vh",
+                  margin: "",
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
@@ -48,9 +79,20 @@ function SignUp() {
                     margin: "12px 12px",
                     fontSize: "24px",
                     fontWeight: "bold",
-                  }}>
-                  <TextField fullWidth id="outlined-basic" label="First Name *" variant="outlined" />
-                  <TextField fullWidth id="outlined-basic" label="Last Name *" variant="outlined" />
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="First Name *"
+                    variant="outlined"
+                  />
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Last Name *"
+                    variant="outlined"
+                  />
                 </div>
                 <div
                   style={{
@@ -60,8 +102,14 @@ function SignUp() {
                     margin: "12px 12px",
                     fontSize: "24px",
                     fontWeight: "bold",
-                  }}>
-                  <TextField fullWidth id="outlined-basic" label="Email Address *" variant="outlined" />
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Email Address *"
+                    variant="outlined"
+                  />
                 </div>
                 <div
                   style={{
@@ -71,8 +119,14 @@ function SignUp() {
                     margin: "12px 12px",
                     fontSize: "24px",
                     fontWeight: "bold",
-                  }}>
-                  <TextField fullWidth id="outlined-basic" label="Password *" variant="outlined" />
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Password *"
+                    variant="outlined"
+                  />
                 </div>
 
                 <div
@@ -83,8 +137,14 @@ function SignUp() {
                     margin: "12px 12px",
                     fontSize: "24px",
                     fontWeight: "bold",
-                  }}>
-                  <TextField fullWidth id="outlined-basic" label="Con *" variant="outlined" />
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Con *"
+                    variant="outlined"
+                  />
                 </div>
 
                 <div
@@ -94,9 +154,17 @@ function SignUp() {
                     alignItems: "flex-start",
                     gap: "16px",
                     margin: "12px 0px",
-                  }}>
+                  }}
+                >
                   <div
-                    style={{ display: "flex", gap: "76px ", alignItems: "center", width: "100%", marginLeft: "10px" }}>
+                    style={{
+                      display: "flex",
+                      gap: "76px ",
+                      alignItems: "center",
+                      width: "100%",
+                      marginLeft: "10px",
+                    }}
+                  >
                     <FormControlLabel
                       color="success"
                       labelPlacement="end"
@@ -112,13 +180,19 @@ function SignUp() {
                       alignItems: "center",
                       width: "97% ",
                       margin: "12px",
-                    }}>
-                    <Button variant="contained" style={{ width: "100%", padding: "12px" }}>
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      style={{ width: "100%", padding: "12px" }}
+                    >
                       Register
                     </Button>
                   </div>
 
-                  <div style={{ display: "flex", gap: "8px", margin: "12px 12px" }}>
+                  <div
+                    style={{ display: "flex", gap: "8px", margin: "12px 12px" }}
+                  >
                     <p>Have an account ? </p>
                     <Link href={"/login-plus"}>Login</Link>
                   </div>

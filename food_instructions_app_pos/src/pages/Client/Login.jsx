@@ -25,8 +25,9 @@ function LoginClient() {
             position: "absolute",
             left: "-10%",
             right: "-10%",
+            width:"100vw"
           }}></Box>
-        <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "10rem" }}>
+        <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "5rem" }}>
           <GiKnifeFork style={{ fontSize: "6rem" }} />
 
           <Box sx={{ pl: 3, width: "80%" }}>

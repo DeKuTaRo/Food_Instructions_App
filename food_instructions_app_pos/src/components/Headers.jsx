@@ -12,7 +12,11 @@ function Headers() {
   const [searchValue, setSearchValue] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navigate = useNavigate();
-
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
   const handleSearchClick = () => {
     // Navigate to the searched page with the search value
     navigate(`/searched/${searchValue}`);
@@ -55,18 +59,23 @@ function Headers() {
           type="text"
           placeholder="Search..."
           sx={{
-            width: isSearchFocused ? "300px" : "200px",
-            height:isSearchFocused ? "35px" : "35px",
+            width: "300px", // Đặt giá trị mặc định cho width
+            height: "35px",
             marginRight: 1,
             fontSize: "0.8rem",
             backgroundColor: "#C0C0C0",
             color: "#000000",
             borderRadius: "5px",
+            transition: "width 0.3s", // Thêm hiệu ứng chuyển động
+            "&:focus": {
+              width: "300px", // Kích thước tối đa có thể đạt được
+            },
           }}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
+          onKeyDown={handleKeyPress}
           startAdornment={
             <InputAdornment position="start">
               <IconButton
@@ -85,6 +94,7 @@ function Headers() {
             </InputAdornment>
           }
         />
+
       </Box>
         <Link to={"/cuisine/Italian"}>
           <Box sx={{ p: 1, fontSize: "0.8rem" }}>

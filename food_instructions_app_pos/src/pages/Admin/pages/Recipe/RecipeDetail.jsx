@@ -62,7 +62,8 @@ function ARecipeDetail() {
     };
 
     fetchRecipeDetails();
-    return () => {
+    return () => 
+    {
       // isMounted = false;
     };
   }, []);
