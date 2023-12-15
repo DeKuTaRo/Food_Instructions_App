@@ -1,5 +1,4 @@
 import React from "react";
-import Home from "./Home";
 import Cuisine from "./Cuisine";
 import Searched from "./Searched";
 // import Recipe from "./Recipe";
@@ -16,6 +15,7 @@ import Food from "./Admin/pages/Food/Food";
 import ARecipe from "./Admin/pages/Recipe/Recipe";
 import ARecipeDetail from "./Admin/pages/Recipe/RecipeDetail";
 // Client
+import Home from "./Client/Home";
 import SignUp from "./Client/SignUp";
 import Nutrition from "./Client/Nutrition";
 import LoginClient from "./Client/Login";
@@ -26,12 +26,12 @@ function Pages() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Home />} />
         <Route path="/cuisine/:type" element={<Cuisine />} />
         <Route path="/searched/:search" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 
         {/* Client page */}
+        <Route path="/" element={<Home />} />
         <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/nutrition-facts" element={<Nutrition />} />

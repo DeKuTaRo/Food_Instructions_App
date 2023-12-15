@@ -19,7 +19,6 @@ import {
   Box,
   Paper,
   TextField,
-  Stack,
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -40,26 +39,12 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const obejcttest = {
-  Ca: {
-    label: "Calcium",
-    quantity: 345.332948,
-    unit: "mg",
-  },
-  Fat: {
-    label: "Fat",
-    quantity: 279.04753875,
-    unit: "g",
-  },
-};
-
 function RecipeDetail() {
   const { label } = useParams();
   const [recipeDetail, setRecipeDetail] = useState({});
   const [loading, setLoading] = useState(true);
   const [totalNutrients, setTotalNutrientations] = useState({});
   const [totalDaily, setTotalDaily] = useState({});
-  const [showActiveDetails, setShowActiveDetails] = useState("ingredients");
   const [rating, setRating] = useState([false, false, false, false, false]);
 
   const handleStarHover = (index) => {
@@ -104,15 +89,13 @@ function RecipeDetail() {
     fetchRecipeDetails();
   }, []);
 
-  console.log("totalNutrients = ", totalNutrients);
   return (
     <motion.div
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%", height: "3000px" }}
-    >
+      style={{ margin: "0% 10%", height: "3000px" }}>
       <Headers />
       <NavBar />
 
@@ -121,19 +104,12 @@ function RecipeDetail() {
           <Typography variant="h6">Fetching Recipe Details...</Typography>
         ) : (
           <>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
+            <Typography component="h2" variant="h6" color="primary" gutterBottom>
               <Breadcrumbs aria-label="breadcrumb">
                 <Link underline="hover" color="inherit" href="/a-recipe">
                   Recipe
                 </Link>
-                <Typography color="text.primary">
-                  {recipeDetail.recipe.label}
-                </Typography>
+                <Typography color="text.primary">{recipeDetail.recipe.label}</Typography>
               </Breadcrumbs>
             </Typography>
             {/* Ingrediens, Nutritions */}
@@ -163,18 +139,15 @@ function RecipeDetail() {
                       display: "flex",
                       alignItems: "center",
                       textAlign: "left",
-                    }}
-                  >
+                    }}>
                     <Box component="div" variant="inherit">
                       <Typography variant="h4" gutterBottom>
                         Ingredients:
                       </Typography>
                       <ul>
-                        {recipeDetail.recipe.ingredientLines.map(
-                          (item, index) => (
-                            <li key={index}>{item}</li>
-                          )
-                        )}
+                        {recipeDetail.recipe.ingredientLines.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
                       </ul>
                     </Box>
                   </Grid>
@@ -196,15 +169,10 @@ function RecipeDetail() {
                           height: "2rem",
                           borderRadius: "1rem",
                           textAlign: "center",
-                        }}
-                      >
+                        }}>
                         {index + 1}
                       </Typography>
-                      <Typography
-                        variant="h5"
-                        gutterBottom
-                        sx={{ marginLeft: "3rem" }}
-                      >
+                      <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
                         {item}
                       </Typography>
                       {/* {recipeDetail.recipe.instructionLines.length / 2 === index && (
@@ -229,9 +197,7 @@ function RecipeDetail() {
                       value=""
                     />
 
-                    <Button sx={{ textAlign: "center", width: "100%" }}>
-                      Post comment
-                    </Button>
+                    <Button sx={{ textAlign: "center", width: "100%" }}>Post comment</Button>
                     <br></br>
                     <Typography>Rate this food</Typography>
                     <Typography>
@@ -239,8 +205,7 @@ function RecipeDetail() {
                         <span
                           key={index}
                           onMouseEnter={() => handleStarHover(index)}
-                          onClick={() => handleStarClick(index)}
-                        >
+                          onClick={() => handleStarClick(index)}>
                           {isActive ? <StarIcon /> : <StarOutlineIcon />}
                         </span>
                       ))}
@@ -260,16 +225,11 @@ function RecipeDetail() {
                           justifyContent: "space-between",
                           marginTop: "4rem",
                           marginBottom: "2rem",
-                        }}
-                      >
-                        <Typography sx={{ borderBottom: "1px solid red" }}>
-                          224 comments
-                        </Typography>
+                        }}>
+                        <Typography sx={{ borderBottom: "1px solid red" }}>224 comments</Typography>
                         <Typography>
                           <BoltIcon sx={{ borderBottom: "1px solid orange" }} />{" "}
-                          <LocalFireDepartmentIcon
-                            sx={{ borderBottom: "1px solid orange" }}
-                          />
+                          <LocalFireDepartmentIcon sx={{ borderBottom: "1px solid orange" }} />
                         </Typography>
                       </Box>
 
@@ -278,8 +238,7 @@ function RecipeDetail() {
                           display: "flex",
                           flexDirection: "column",
                           gap: "12px",
-                        }}
-                      >
+                        }}>
                         <TextField placeholder="Search comment" />
 
                         <Box
@@ -290,15 +249,13 @@ function RecipeDetail() {
                             flexDirection: "column",
                             textAlign: "left",
                             gap: "12px",
-                          }}
-                        >
+                          }}>
                           <Box
                             sx={{
                               display: "flex",
                               gap: "8px",
                               alignItems: "center",
-                            }}
-                          >
+                            }}>
                             <Avatar
                               alt="Remy Sharp"
                               src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
@@ -312,10 +269,8 @@ function RecipeDetail() {
 
                               textAlign: "left",
                               gap: "8px",
-                            }}
-                          >
-                            <AccessTimeIcon />{" "}
-                            <Typography>3 months ago</Typography>
+                            }}>
+                            <AccessTimeIcon /> <Typography>3 months ago</Typography>
                           </Typography>
                           <Typography>This food is so delicious</Typography>
                           <Typography>
@@ -331,8 +286,7 @@ function RecipeDetail() {
 
                               textAlign: "left",
                               gap: "8px",
-                            }}
-                          >
+                            }}>
                             <ThumbUpOffAltIcon /> 0
                             <QuickreplyIcon /> Reply
                           </Typography>
@@ -342,11 +296,9 @@ function RecipeDetail() {
                               padding: "2rem",
                               marginLeft: "2rem",
                               borderLeft: "3px solid #000000",
-                            }}
-                          >
+                            }}>
                             <Typography>
-                              Naomi (JOC Community Manager){" "}
-                              <Chip label="admin" sx={{ color: "black" }} />
+                              Naomi (JOC Community Manager) <Chip label="admin" sx={{ color: "black" }} />
                             </Typography>
                             <Typography
                               sx={{
@@ -354,15 +306,13 @@ function RecipeDetail() {
 
                                 textAlign: "left",
                                 gap: "8px",
-                              }}
-                            >
+                              }}>
                               <QuickreplyIcon /> Reply to Karen
                               <AccessTimeIcon /> 3 months ago
                             </Typography>
                             <Typography margin={"12px 4px"}>
-                              Hi Karen! Aww. We are so happy to hear you enjoyed
-                              the recipe! Thank you so much for trying Nami’s
-                              recipe and for your kind feedback. Happy Cooking!
+                              Hi Karen! Aww. We are so happy to hear you enjoyed the recipe! Thank you so much for
+                              trying Nami’s recipe and for your kind feedback. Happy Cooking!
                             </Typography>
                             <Typography
                               sx={{
@@ -370,8 +320,7 @@ function RecipeDetail() {
 
                                 textAlign: "left",
                                 gap: "8px",
-                              }}
-                            >
+                              }}>
                               <ThumbUpOffAltIcon /> 0
                               <QuickreplyIcon /> Reply
                             </Typography>
@@ -390,21 +339,15 @@ function RecipeDetail() {
                     width: 1,
                     backgroundColor: "#ccc",
                     borderRadius: "1rem",
-                  }}
-                >
+                  }}>
                   <Item
                     sx={{
                       borderTopRightRadius: "1rem",
                       borderTopLeftRadius: "1rem",
                       backgroundColor: "#ccc",
                       marginBottom: "1rem",
-                    }}
-                  >
-                    <Typography
-                      variant="h5"
-                      gutterBottom
-                      sx={{ padding: "1rem" }}
-                    >
+                    }}>
+                    <Typography variant="h5" gutterBottom sx={{ padding: "1rem" }}>
                       Nutrition each ingredient
                     </Typography>
                     <React.Fragment>
@@ -420,14 +363,10 @@ function RecipeDetail() {
                         <TableBody>
                           {recipeDetail.recipe.ingredients.map((row, index) => (
                             <TableRow key={index}>
-                              <TableCell>
-                                {row.quantity + " " + row.measure}
-                              </TableCell>
+                              <TableCell>{row.quantity + " " + row.measure}</TableCell>
                               <TableCell>{row.foodCategory}</TableCell>
                               <TableCell>{row.food}</TableCell>
-                              <TableCell>
-                                {Number(row.weight.toFixed(1)) + " g"}
-                              </TableCell>
+                              <TableCell>{Number(row.weight.toFixed(1)) + " g"}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -435,12 +374,7 @@ function RecipeDetail() {
                     </React.Fragment>{" "}
                   </Item>
                   <Item sx={{ padding: "1rem" }}>
-                    <Typography
-                      variant="h3"
-                      align="center"
-                      gutterBottom
-                      sx={{ borderBottom: "10px solid #ccc" }}
-                    >
+                    <Typography variant="h3" align="center" gutterBottom sx={{ borderBottom: "10px solid #ccc" }}>
                       Nutrition facts
                     </Typography>
                     <Typography variant="h5" align="left">
@@ -451,18 +385,11 @@ function RecipeDetail() {
                         display: "flex",
                         justifyContent: "space-between",
                         borderBottom: "10px solid #ccc",
-                      }}
-                    >
+                      }}>
                       <Typography variant="h4">Calories</Typography>
-                      <Typography variant="h4">
-                        {Number(recipeDetail.recipe.calories.toFixed(1))}
-                      </Typography>
+                      <Typography variant="h4">{Number(recipeDetail.recipe.calories.toFixed(1))}</Typography>
                     </Box>
-                    <Typography
-                      variant="inherit"
-                      align="right"
-                      sx={{ borderBottom: "1px solid #ccc" }}
-                    >
+                    <Typography variant="inherit" align="right" sx={{ borderBottom: "1px solid #ccc" }}>
                       %Daily value
                     </Typography>
                     <Box
@@ -470,15 +397,13 @@ function RecipeDetail() {
                         display: "flex",
                         justifyContent: "space-between",
                         gap: "30px",
-                      }}
-                    >
+                      }}>
                       <Typography
                         sx={{
                           display: "flex",
                           alignItems: "baseline",
                           flexDirection: "column",
-                        }}
-                      >
+                        }}>
                         {Object.keys(totalNutrients).map((key) => (
                           <Typography key={key}>
                             {totalNutrients[key].label +
@@ -494,8 +419,7 @@ function RecipeDetail() {
                           display: "flex",
                           alignItems: "flex-end",
                           flexDirection: "column",
-                        }}
-                      >
+                        }}>
                         {Object.keys(totalDaily).map((key) => (
                           <Typography key={key}>
                             {totalDaily[key].label +

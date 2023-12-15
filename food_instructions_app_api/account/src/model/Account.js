@@ -16,6 +16,9 @@ const AccountSchema = new Schema(
       type: String,
       required: true,
     },
+    salt: {
+      type: String,
+    },
     address: [{ type: Schema.Types.ObjectId, ref: "address", require: true }],
     wishlist: [
       {

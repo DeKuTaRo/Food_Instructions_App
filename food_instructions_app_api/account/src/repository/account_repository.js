@@ -1,26 +1,29 @@
-const { CustomerModel, AddressModel } = require("../model");
+const { AccountModel, AddressModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
-  async CreateCustomer({ email, password, phone, salt }) {
+  async CreateAccount({ username, email, password, salt }) {
     try {
-      const customer = new CustomerModel({
+      const account = new AccountModel({
+        username,
         email,
         password,
         salt,
-        phone,
         address: [],
+        wishlist: [],
+        orders: [],
+        cart: [],
       });
-      const customerResult = await customer.save();
-      return customerResult;
+      const accountResult = await account.save();
+      return accountResult;
     } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Customer");
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Account");
     }
   }
 
   async CreateAddress({ _id, street, postalCode, city, country }) {
     try {
-      const profile = await CustomerModel.findById(_id);
+      const profile = await AccountModel.findById(_id);
 
       if (profile) {
         const newAddress = new AddressModel({
@@ -41,10 +44,10 @@ class AccountRepository {
     }
   }
 
-  async FindCustomer({ email }) {
+  async FindAccount({ username }) {
     try {
-      const existingCustomer = await CustomerModel.findOne({ email: email });
-      return existingCustomer;
+      const existingAccount = await AccountModel.findOne({ username: username });
+      return existingAccount;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");
     }
@@ -52,8 +55,8 @@ class AccountRepository {
 
   async FindCustomerById({ id }) {
     try {
-      const existingCustomer = await CustomerModel.findById(id).populate("address");
-      return existingCustomer;
+      const existingAccount = await AccountModel.findById(id).populate("address");
+      return existingAccount;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");
     }
@@ -61,7 +64,7 @@ class AccountRepository {
 
   async Wishlist(customerId) {
     try {
-      const profile = await CustomerModel.findById(customerId).populate("wishlist");
+      const profile = await AccountModel.findById(customerId).populate("wishlist");
 
       return profile.wishlist;
     } catch (err) {
@@ -80,7 +83,7 @@ class AccountRepository {
     };
 
     try {
-      const profile = await CustomerModel.findById(customerId).populate("wishlist");
+      const profile = await AccountModel.findById(customerId).populate("wishlist");
 
       if (profile) {
         let wishlist = profile.wishlist;
@@ -115,7 +118,7 @@ class AccountRepository {
 
   async AddCartItem(customerId, { _id, name, price, banner }, qty, isRemove) {
     try {
-      const profile = await CustomerModel.findById(customerId).populate("cart");
+      const profile = await AccountModel.findById(customerId).populate("cart");
 
       if (profile) {
         const cartItem = {
@@ -163,7 +166,7 @@ class AccountRepository {
 
   async AddOrderToProfile(customerId, order) {
     try {
-      const profile = await CustomerModel.findById(customerId);
+      const profile = await AccountModel.findById(customerId);
 
       if (profile) {
         if (profile.orders == undefined) {

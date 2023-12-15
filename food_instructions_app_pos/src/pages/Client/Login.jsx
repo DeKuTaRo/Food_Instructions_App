@@ -1,3 +1,4 @@
+import { useState } from "react";
 import bgImage from "../../images/bg1.png";
 import { Box } from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
@@ -9,7 +10,58 @@ import Link from "@mui/material/Link";
 import { motion } from "framer-motion";
 import Headers from "../../components/Headers";
 import NavBar from "../../components/Navbar";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 function LoginClient() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    try {
+      axios.post(`http://localhost:8001/account/login`, formData).then((res) => {
+        if (res.data.status) {
+          toast.success("Đăng nhập thành công", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+        localStorage.setItem("isLogin", true);
+        navigate("/");
+      });
+    } catch (err) {
+      toast.error(err, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
   return (
     <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <div style={{ margin: "0% 10%" }}>
@@ -39,58 +91,85 @@ function LoginClient() {
 
             <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
               <Box sx={{ mt: 8, display: "flex", flexDirection: "column" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "96px",
-                    margin: "12px 0px",
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                  }}>
-                  <p>Username</p>
-                  <TextField fullWidth id="outlined-basic" label="Username" variant="outlined" />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "100px",
-                    margin: "12px 0px",
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                  }}>
-                  <p>Password</p>
-                  <TextField fullWidth id="outlined-basic" label="Password" variant="outlined" />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    gap: "16px",
-                    margin: "12px 0px",
-                  }}>
+                <form onSubmit={handleSubmit}>
                   <div
-                    style={{ display: "flex", gap: "76px ", alignItems: "center", width: "100%", marginLeft: "-16px" }}>
-                    <FormControlLabel
-                      color="success"
-                      labelPlacement="start"
-                      label="Remember me"
-                      control={<Checkbox defaultChecked />}
-                    />{" "}
-                    <Button variant="outlined">Login</Button>
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "96px",
+                      margin: "12px 0px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
+                    <p>Username</p>
+                    <TextField
+                      fullWidth
+                      id="username"
+                      label="Username"
+                      variant="outlined"
+                      name="username"
+                      onChange={handleChange}
+                      value={formData.username}
+                    />
                   </div>
-
-                  <Link style={{ marginLeft: "214px" }} href={"/forgot-password"}>
-                    Forgot password
-                  </Link>
-
-                  <div style={{ marginLeft: "214px", display: "flex", gap: "4px" }}>
-                    <p>Create an account at </p>
-                    <Link href={"/sign-up"}>Sign Up</Link>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "100px",
+                      margin: "12px 0px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
+                    <p>Password</p>
+                    <TextField
+                      fullWidth
+                      id="password"
+                      label="Password"
+                      variant="outlined"
+                      name="password"
+                      type="password"
+                      onChange={handleChange}
+                      value={formData.password}
+                    />
                   </div>
-                </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      gap: "16px",
+                      margin: "12px 0px",
+                    }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "76px ",
+                        alignItems: "center",
+                        width: "100%",
+                        marginLeft: "-16px",
+                      }}>
+                      <FormControlLabel
+                        color="success"
+                        labelPlacement="start"
+                        label="Remember me"
+                        control={<Checkbox defaultChecked />}
+                      />{" "}
+                      <Button type="submit" variant="outlined">
+                        Login
+                      </Button>
+                    </div>
+
+                    <Link style={{ marginLeft: "214px" }} href={"/forgot-password"}>
+                      Forgot password
+                    </Link>
+
+                    <div style={{ marginLeft: "214px", display: "flex", gap: "4px" }}>
+                      <p>Create an account at </p>
+                      <Link href={"/sign-up"}>Sign Up</Link>
+                    </div>
+                  </div>
+                </form>
               </Box>
             </Box>
           </Box>

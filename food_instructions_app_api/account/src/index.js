@@ -12,6 +12,8 @@ const StartServer = async () => {
 
   app
     .listen(PORT, () => {
+      console.log(`account service`);
+
       console.log(`listening to port ${PORT}`);
     })
     .on("error", (err) => {
