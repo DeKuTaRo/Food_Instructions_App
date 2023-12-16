@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bgImage from "../../images/bg1.png";
 import { Box } from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
@@ -14,13 +14,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function LoginClient() {
+function Profile() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const [detailAccount, setDetailAccount] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +31,27 @@ function LoginClient() {
       [name]: value,
     }));
   };
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    const getAccountDetail = async () => {
+      try {
+        axios
+          .get(`http://localhost:8001/account/profile`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            console.log("res =", res);
+            setDetailAccount(res.data);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAccountDetail();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +70,6 @@ function LoginClient() {
           });
         }
         localStorage.setItem("isLogin", "true");
-        localStorage.setItem("id", res.data.id);
         localStorage.setItem("token", res.data.token);
         navigate("/");
       });
@@ -78,40 +100,56 @@ function LoginClient() {
             margin: "0 auto 1.25rem",
             position: "absolute",
             left: "-10%",
-            right: "-10%",
+            right: "-9%",
             width: "100vw",
           }}></Box>
-        <Box sx={{ display: "flex", position: "relative", top: "1.5rem", left: "5rem" }}>
+        <Box
+          sx={{
+            display: "flex",
+            position: "relative",
+            top: "1.5rem",
+            left: "5rem",
+          }}>
           <GiKnifeFork style={{ fontSize: "6rem" }} />
 
           <Box sx={{ pl: 3, width: "80%" }}>
-            <Box sx={{ color: "black", fontSize: "2.8rem", fontWeight: 700, margin: "28px 0px" }}>Login</Box>
-            <div style={{ fontSize: "24px" }}>
-              <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
-              <p>Enter your username and password below.</p>
-            </div>
+            <Box
+              sx={{
+                color: "black",
+                fontSize: "2.8rem",
+                fontWeight: 700,
+                margin: "1.5rem 12px ",
+              }}>
+              Profile
+            </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
-              <Box sx={{ mt: 8, display: "flex", flexDirection: "column" }}>
+              <Box
+                sx={{
+                  mt: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100vh",
+                  margin: "",
+                }}>
                 <form onSubmit={handleSubmit}>
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "96px",
-                      margin: "12px 0px",
+                      gap: "28px",
+                      margin: "12px 12px",
                       fontSize: "24px",
                       fontWeight: "bold",
                     }}>
-                    <p>Username</p>
                     <TextField
                       fullWidth
                       id="username"
-                      label="Username"
-                      variant="outlined"
                       name="username"
+                      label="Username *"
+                      variant="outlined"
+                      value={detailAccount.username}
                       onChange={handleChange}
-                      value={formData.username}
                     />
                   </div>
                   <div
@@ -119,20 +157,56 @@ function LoginClient() {
                       display: "flex",
                       alignItems: "center",
                       gap: "100px",
-                      margin: "12px 0px",
+                      margin: "12px 12px",
                       fontSize: "24px",
                       fontWeight: "bold",
                     }}>
-                    <p>Password</p>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      name="email"
+                      label="Email Address *"
+                      variant="outlined"
+                      value={detailAccount.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "100px",
+                      margin: "12px 12px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
                     <TextField
                       fullWidth
                       id="password"
-                      label="Password"
-                      variant="outlined"
                       name="password"
-                      type="password"
-                      onChange={handleChange}
+                      label="Password *"
+                      variant="outlined"
                       value={formData.password}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "100px",
+                      margin: "12px 12px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
+                    <TextField
+                      fullWidth
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      label="Confirm password *"
+                      variant="outlined"
+                      //   value={confirmPassword}
+                      //   onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
                   <div
@@ -149,26 +223,31 @@ function LoginClient() {
                         gap: "76px ",
                         alignItems: "center",
                         width: "100%",
-                        marginLeft: "-16px",
+                        marginLeft: "10px",
                       }}>
                       <FormControlLabel
                         color="success"
-                        labelPlacement="start"
-                        label="Remember me"
+                        labelPlacement="end"
+                        label="Are you sure of the above information
+"
                         control={<Checkbox defaultChecked />}
                       />{" "}
-                      <Button type="submit" variant="outlined">
-                        Login
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "97% ",
+                        margin: "12px",
+                      }}>
+                      <Button type="submit" variant="contained" style={{ width: "100%", padding: "12px" }}>
+                        Register
                       </Button>
                     </div>
 
-                    <Link style={{ marginLeft: "214px" }} href={"/forgot-password"}>
-                      Forgot password
-                    </Link>
-
-                    <div style={{ marginLeft: "214px", display: "flex", gap: "4px" }}>
-                      <p>Create an account at </p>
-                      <Link href={"/sign-up"}>Sign Up</Link>
+                    <div style={{ display: "flex", gap: "8px", margin: "12px 12px" }}>
+                      <p>Have an account ? </p>
+                      <Link href={"/login-plus"}>Login</Link>
                     </div>
                   </div>
                 </form>
@@ -181,4 +260,4 @@ function LoginClient() {
   );
 }
 
-export default LoginClient;
+export default Profile;

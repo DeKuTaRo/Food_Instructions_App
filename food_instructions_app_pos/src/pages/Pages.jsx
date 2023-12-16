@@ -1,6 +1,5 @@
 import React from "react";
 import Cuisine from "./Cuisine";
-import Searched from "./Searched";
 // import Recipe from "./Recipe";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -21,6 +20,9 @@ import Nutrition from "./Client/Nutrition";
 import LoginClient from "./Client/Login";
 import ForgotPassword from "./Client/ForgotPassword";
 import RecipeDetail from "./Client/RecipeDetail";
+import Searched from "./Client/Searched";
+import Profile from "./Client/Profile";
+
 function Pages() {
   const location = useLocation();
   return (
@@ -37,6 +39,7 @@ function Pages() {
         <Route path="/nutrition-facts" element={<Nutrition />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/recipe/:label" element={<RecipeDetail />} />
+        <Route path="/profile" element={<Profile />} />
 
         {/* Admin */}
         <Route path="/login" element={<Login />} />
