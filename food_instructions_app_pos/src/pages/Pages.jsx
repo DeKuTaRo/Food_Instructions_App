@@ -1,5 +1,4 @@
 import React from "react";
-import Cuisine from "./Cuisine";
 // import Recipe from "./Recipe";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -22,6 +21,7 @@ import ForgotPassword from "./Client/ForgotPassword";
 import RecipeDetail from "./Client/RecipeDetail";
 import Searched from "./Client/Searched";
 import Profile from "./Client/Profile";
+import Cuisine from "./Client/Cuisine";
 
 function Pages() {
   const location = useLocation();
