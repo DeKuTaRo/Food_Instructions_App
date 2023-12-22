@@ -19,6 +19,12 @@ const AccountSchema = new Schema(
     salt: {
       type: String,
     },
+    role : {
+      type: String,
+    },
+    isAdmin: {
+      type: Boolean,
+    },
     address: [{ type: Schema.Types.ObjectId, ref: "address", require: true }],
     wishlist: [
       {

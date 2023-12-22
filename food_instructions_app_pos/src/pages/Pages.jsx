@@ -3,6 +3,8 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
+import NotPermission from "./NotPermission";
+
 // Admin
 import Login from "./Admin/Login";
 import Dashboard from "./Admin/Dashboard";
@@ -22,6 +24,7 @@ import RecipeDetail from "./Client/RecipeDetail";
 import Searched from "./Client/Searched";
 import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
+import NotFound from "./NotFound";
 
 function Pages() {
   const location = useLocation();
@@ -31,6 +34,9 @@ function Pages() {
         <Route path="/cuisine/:type" element={<Cuisine />} />
         <Route path="/searched/:search" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
+
+        <Route path="*" element={<NotFound />} />
+        <Route path="/not_permission" element={<NotPermission />} />
 
         {/* Client page */}
         <Route path="/" element={<Home />} />

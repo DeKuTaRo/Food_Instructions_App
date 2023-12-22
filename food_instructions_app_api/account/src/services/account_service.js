@@ -9,15 +9,14 @@ class AccountService {
   }
 
   async SignIn(userInputs) {
-    const { username, password } = userInputs;
+    const { username, password, role } = userInputs;
     try {
-      const existingAccount = await this.repository.FindAccount({ username });
+      const existingAccount = await this.repository.FindAccount({ username, role });
       if (existingAccount) {
         const validPassword = await ValidatePassword(password, existingAccount.password, existingAccount.salt);
-
         if (validPassword) {
           const token = await GenerateSignature({ username: existingAccount.username, _id: existingAccount._id });
-          return FormateData({ id: existingAccount._id, token, status: true });
+          return FormateData({ id: existingAccount._id, token, status: true, isAdmin: existingAccount.isAdmin });
         }
       }
 

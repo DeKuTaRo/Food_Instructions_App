@@ -16,8 +16,6 @@ import TableRow from "@mui/material/TableRow";
 import Title from "../../Title";
 
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
@@ -40,9 +38,6 @@ import axios from "axios";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Resizer from "react-image-file-resizer";
-import { useNavigate } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
 
 const defaultTheme = createTheme();
 

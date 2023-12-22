@@ -1,16 +1,12 @@
-import MuiDrawer from "@mui/material/Drawer";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
+import { Toolbar, List, Divider, IconButton, Typography, Box, Link, Button } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import { RxAvatar } from "react-icons/rx";
 import { mainListItems, secondaryListItems } from "../../pages/Admin/listItems";
 
 const drawerWidth = 240;
@@ -34,6 +30,18 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 function HeaderContent({ open, toggleDrawer, title }) {
+  const [hoverDialogAccount, setHoverDialogAccount] = useState(null);
+  const showDialogAccount = hoverDialogAccount === "account" ? true : false;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // window.location.reload();
+    localStorage.setItem("isLogin", false);
+    localStorage.removeItem("token");
+    localStorage.setItem("isAdmin", false);
+    // window.href = "/login";
+    navigate("/login");
+  };
   return (
     <AppBar position="absolute" open={open}>
       <Toolbar
@@ -54,11 +62,48 @@ function HeaderContent({ open, toggleDrawer, title }) {
         <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
           {title}
         </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+        <Box
+          component="div"
+          sx={{ position: "relative" }}
+          onMouseEnter={() => setHoverDialogAccount("account")}
+          onMouseLeave={() => setHoverDialogAccount(null)}>
+          <Box sx={{ p: 1, fontSize: "1.5rem" }}>
+            <RxAvatar />
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              backgroundColor: "white",
+              boxShadow: "0 0 10px 0 rgba(50, 50, 50, 0.25)",
+              right: "0.5rem",
+              zIndex: 10,
+              display: showDialogAccount ? "flex" : "none",
+              flexDirection: "column",
+              gap: 1,
+            }}>
+            <Link
+              href={"/profile"}
+              underline="none"
+              sx={{
+                padding: "0.5rem 2rem",
+                color: "black",
+                cursor: "pointer",
+                "&:hover": { backgroundColor: "black", color: "white" },
+              }}>
+              Profile
+            </Link>
+            <Button
+              sx={{
+                padding: "0.5rem 2rem",
+                color: "black",
+                cursor: "pointer",
+                "&:hover": { backgroundColor: "black", color: "white" },
+              }}
+              onClick={handleLogout}>
+              Logout
+            </Button>
+          </Box>
+        </Box>
       </Toolbar>
     </AppBar>
   );

@@ -33,7 +33,7 @@ function LoginClient() {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      axios.post(`http://localhost:8001/account/login`, formData).then((res) => {
+      axios.post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/login`, formData).then((res) => {
         if (res.data.status) {
           toast.success("Đăng nhập thành công", {
             position: "top-right",

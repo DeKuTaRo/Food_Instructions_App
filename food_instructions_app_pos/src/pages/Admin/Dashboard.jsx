@@ -14,6 +14,7 @@ import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
 import { HeaderWithSidebar } from "../../components/Admin/HeaderWithSidebar";
+import NotPermission from "../../pages/NotPermission";
 
 function Copyright(props) {
   return (
@@ -33,6 +34,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
+  const isAdmin = localStorage.getItem("isAdmin");
+  if (isAdmin === "false") {
+    return <NotPermission />;
+  }
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>

@@ -47,7 +47,7 @@ function SignUp() {
       });
     } else {
       try {
-        axios.post(`http://localhost:8001/account/signup`, formData).then((res) => {
+        axios.post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/signup`, formData).then((res) => {
           if (res.data.status) {
             toast.success("Đăng kí thành công", {
               position: "top-right",
@@ -181,6 +181,7 @@ function SignUp() {
                       id="password"
                       name="password"
                       label="Password *"
+                      type="password"
                       variant="outlined"
                       value={formData.password}
                       onChange={handleChange}
@@ -200,6 +201,7 @@ function SignUp() {
                       id="confirmPassword"
                       name="confirmPassword"
                       label="Confirm password *"
+                      type="password"
                       variant="outlined"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}

@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
-import { FaFacebook, FaInstagramSquare, FaPinterest } from "react-icons/fa";
-import { AiFillTwitterCircle } from "react-icons/ai";
-import { SiYoutubemusic } from "react-icons/si";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookSquare, faInstagram, faPinterest, faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
+
 import { RxAvatar } from "react-icons/rx";
 import React, { useState } from "react";
 import { Input, IconButton, InputAdornment, Link } from "@mui/material";
@@ -102,37 +102,39 @@ function Headers() {
         </Box>
         <Tooltip title="Facebook" placement="bottom">
           <Link underline="none" color="inherit">
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <FaFacebook />
-            </Box>
+            <FontAwesomeIcon
+              icon={faFacebookSquare}
+              style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#1877F2" }}
+            />
           </Link>
         </Tooltip>
         <Tooltip title="Instagram" placement="bottom">
           <Link underline="none" color="inherit">
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <FaInstagramSquare />
-            </Box>
+            <FontAwesomeIcon
+              icon={faInstagram}
+              style={{
+                borderRadius: "1.5rem",
+                padding: "0.5rem",
+                fontSize: "1.5rem",
+                color: "white",
+                background: "linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D)",
+              }}
+            />
           </Link>
         </Tooltip>
         <Tooltip title="Pinterest" placement="bottom">
           <Link underline="none" color="inherit">
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <FaPinterest />
-            </Box>
+            <FontAwesomeIcon icon={faPinterest} style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#BD081C" }} />
           </Link>
         </Tooltip>
         <Tooltip title="Twitter" placement="bottom">
           <Link underline="none" color="inherit">
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <AiFillTwitterCircle />
-            </Box>
+            <FontAwesomeIcon icon={faTwitter} style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#1DA1F2" }} />
           </Link>
         </Tooltip>
         <Tooltip title="Youtube" placement="bottom">
           <Link underline="none" color="inherit">
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <SiYoutubemusic />
-            </Box>
+            <FontAwesomeIcon icon={faYoutube} style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#FF0000" }} />
           </Link>
         </Tooltip>
         {isLogin === "true" && (

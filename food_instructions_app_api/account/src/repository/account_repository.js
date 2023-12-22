@@ -9,6 +9,8 @@ class AccountRepository {
         email,
         password,
         salt,
+        isAdmin: false,
+        role: "user",
         address: [],
         wishlist: [],
         orders: [],
@@ -44,9 +46,9 @@ class AccountRepository {
     }
   }
 
-  async FindAccount({ username }) {
+  async FindAccount({ username, role }) {
     try {
-      const existingAccount = await AccountModel.findOne({ username: username });
+      const existingAccount = await AccountModel.findOne({ username: username, role: role });
       return existingAccount;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");

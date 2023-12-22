@@ -15,38 +15,25 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const [username, setUsernam] = useState("");
+  const [password, setPassword] = useState("");
+
+  const formData = {
+    username: username,
+    password: password,
+    role: username === "admin" ? "admin" : "user",
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       axios
-        .post("http://localhost:5000/account/login", formData)
+        .post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/login`, formData)
         .then((res) => {
-          if (!res.data.status) {
-            toast.error(res.data.msg.vn, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-          } else {
-            toast.success(res.data.msg.vn, {
+          localStorage.setItem("isAdmin", res.data.isAdmin);
+          if (res.data.isAdmin === true) {
+            toast.success("Đăng nhập thành công", {
               position: "top-right",
               autoClose: 3000,
               hideProgressBar: false,
@@ -57,10 +44,21 @@ function Login() {
               theme: "dark",
             });
             navigate("/dashboard");
+          } else {
+            toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc bạn không có quyền truy cập", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
           }
         })
         .catch((err) => {
-          toast.error(err.response.msg.vn, {
+          toast.error(err, {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -96,7 +94,7 @@ function Login() {
         <Box sx={{ pl: 3 }}>
           <Box sx={{ color: "black", fontSize: "2rem", fontWeight: 700 }}>Login ADMIN</Box>
           <Box sx={{ mt: 8 }}>
-            < >Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</>
+            <>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</>
             <p>Enter your username and password below.</p>
             <form onSubmit={handleSubmit}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -104,9 +102,9 @@ function Login() {
                 <TextField
                   label="username"
                   variant="outlined"
-                  value={formData.username}
+                  value={username}
                   name="username"
-                  onChange={handleChange}
+                  onChange={(e) => setUsernam(e.target.value)}
                 />
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -115,9 +113,9 @@ function Login() {
                   label="password"
                   variant="outlined"
                   type="password"
-                  value={formData.password}
+                  value={password}
                   name="password"
-                  onChange={handleChange}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div
@@ -144,8 +142,8 @@ function Login() {
           backgroundPosition: "left top",
           padding: "3rem 0",
           margin: "0 auto 1.25rem",
-          height:"100%",
-          bottom:"0"
+          height: "100%",
+          bottom: "0",
         }}></Box>
     </div>
   );
