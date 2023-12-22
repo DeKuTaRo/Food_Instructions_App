@@ -6,7 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import { HeaderWithSidebar } from "../../../Admin/components/HeaderWithSidebar";
+import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -275,52 +275,25 @@ const FoodDialog = ({
                 value={getValueDetail("name")}
                 onChange={handleChange}
               />
-            </Box>
-            <Box gridColumn="span 6">
-              <TextField
-                autoFocus
-                margin="dense"
-                id="originalFood"
-                label="Original"
-                type="text"
-                variant="standard"
-                fullWidth
-                name="original"
-                value={getValueDetail("original")}
-                onChange={handleChange}
-              />
-            </Box>
-            <Box gridColumn="span 6">
-              <InputLabel htmlFor="descFood">Description</InputLabel>
+              <InputLabel htmlFor="descFood">link</InputLabel>
               <TextareaAutosize
                 id="descFood"
-                placeholder="Description"
+                placeholder="link"
                 minRows={4}
                 style={{ width: "100%", padding: "0.5rem" }}
-                value={getValueDetail("description")}
-                name="description"
+                value={getValueDetail("link")}
+                name="link"
                 onChange={handleChange}
               />
             </Box>
-            <Box gridColumn="span 6">
-              <InputLabel htmlFor="instrucFood">Instructions</InputLabel>
-              <TextareaAutosize
-                id="instrucFood"
-                placeholder="Instructions"
-                minRows={4}
-                style={{ width: "100%", padding: "0.5rem" }}
-                value={getValueDetail("instructions")}
-                name="instructions"
-                onChange={handleChange}
-              />
-            </Box>
-            <Box gridColumn="span 6">
+
+            {/* <Box gridColumn="span 6">
               <VideoUpload
                 onVideoUpload={handleVideoChange}
-                // videoData={getValueDetail("video")}
-                // videoData={valueDetail != null ? valueDetail.result.data.video : ""}
+                videoData={getValueDetail("video")}
+                videoData={valueDetail != null ? valueDetail.result.data.video : ""}
               />
-            </Box>
+            </Box> */}
             <Box gridColumn="span 6">
               <ImageUpload onImageUpload={handleImageChange} imageData={getValueDetail("image")} />
             </Box>
@@ -359,10 +332,7 @@ function Food() {
 
   const [formData, setFormData] = useState({
     name: "",
-    original: "",
-    description: "",
-    instructions: "",
-    video: "",
+    link: "",
     image: "",
   });
 
@@ -370,10 +340,7 @@ function Food() {
     setOpen(false);
     setFormData({
       name: "",
-      original: "",
-      description: "",
-      instructions: "",
-      video: "",
+      link: "",
       image: "",
     });
   };
@@ -386,12 +353,12 @@ function Food() {
     }));
   };
 
-  const handleVideoChange = (videoValue) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      video: videoValue,
-    }));
-  };
+  // const handleVideoChange = (videoValue) => {
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     video: videoValue,
+  //   }));
+  // };
 
   const handleImageChange = (imageValue) => {
     setFormData((prevData) => ({
@@ -411,8 +378,6 @@ function Food() {
       console.log("Error: " + error);
     }
   };
-
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -437,7 +402,6 @@ function Food() {
                   <Button variant="outlined" onClick={handleClickOpen}>
                     Add new <AddIcon />
                   </Button>
-                  
                 </Title>
                 <Table size="small">
                   <TableHead>
@@ -494,7 +458,7 @@ function Food() {
           handleClose={handleClose}
           formData={formData}
           handleChange={handleChange}
-          handleVideoChange={handleVideoChange}
+          // handleVideoChange={handleVideoChange}
           handleImageChange={handleImageChange}
           valueDetail={valueDetail}
         />

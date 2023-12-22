@@ -4,8 +4,8 @@ import { GiKnifeFork } from "react-icons/gi";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
 function ForgotPassword() {
   return (
     <div style={{ margin: "0% 10%" }}>

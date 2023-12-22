@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
 import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";

@@ -11,7 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 
-import IconDango from "../assets/icons/icon-dango.svg";
+import IconDango from "../../assets/icons/icon-dango.svg";
 import { IoIosArrowDropright } from "react-icons/io";
 function Popular() {
   const cardRef = useRef(null);

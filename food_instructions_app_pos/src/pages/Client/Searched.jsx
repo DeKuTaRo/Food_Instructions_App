@@ -9,8 +9,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, styled } from "@mui/material";
 import { motion } from "framer-motion";
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
 
 const fadeIn = {
   "0%": { opacity: 0 },

@@ -1,8 +1,8 @@
-import Veggie from "../../components/Veggie";
-import Popular from "../../components/Popular";
+import Veggie from "../../components/Client/Veggie";
+import Popular from "../../components/Client/Popular";
 import { motion } from "framer-motion";
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
 
 import React from "react";
 

@@ -13,7 +13,7 @@ import Link from "@mui/material/Link";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
-import { HeaderWithSidebar } from "./components/HeaderWithSidebar";
+import { HeaderWithSidebar } from "../../components/Admin/HeaderWithSidebar";
 
 function Copyright(props) {
   return (
@@ -21,7 +21,8 @@ function Copyright(props) {
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
-      </Link>{""}
+      </Link>
+      {""}
       {new Date().getFullYear()}
       {"."}
     </Typography>

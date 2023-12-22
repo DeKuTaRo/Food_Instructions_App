@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import { HeaderWithSidebar } from "../../../Admin/components/HeaderWithSidebar";
+import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";

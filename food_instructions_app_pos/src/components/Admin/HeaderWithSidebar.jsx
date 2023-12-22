@@ -11,7 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "../listItems";
+import { mainListItems, secondaryListItems } from "../../pages/Admin/listItems";
 
 const drawerWidth = 240;
 

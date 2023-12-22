@@ -4,8 +4,8 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
-import Headers from "../../components/Headers";
-import NavBar from "../../components/Navbar";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import {
   Button,
