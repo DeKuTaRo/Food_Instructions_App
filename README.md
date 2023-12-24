@@ -5,8 +5,9 @@ npx create-react-app food_instructions_app_pos
 
 Run nodejs folder backend
 cd food_instructions_app_api
+cd to service you want to run (Ex.. account : cd account)
 npm i
-SET DEBUG=food_instructions_app_api:* & npm start
+npm run dev
 
 Run reactjs folder frontend
 cd food_instructions_app_pos

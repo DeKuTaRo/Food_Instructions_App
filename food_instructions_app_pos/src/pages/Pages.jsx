@@ -33,6 +33,7 @@ function Pages() {
       <Routes location={location} key={location.pathname}>
         <Route path="/cuisine/:type" element={<Cuisine />} />
         <Route path="/searched/:search" element={<Searched />} />
+        <Route path="/searched/" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 
         <Route path="*" element={<NotFound />} />

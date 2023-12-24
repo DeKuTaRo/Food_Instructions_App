@@ -1,7 +1,13 @@
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookSquare, faInstagram, faPinterest, faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
-
+import {
+  faSearchengin,
+  faFacebookSquare,
+  faInstagram,
+  faPinterest,
+  faTwitter,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
 import { RxAvatar } from "react-icons/rx";
 import React, { useState } from "react";
 import { Input, IconButton, InputAdornment, Link } from "@mui/material";
@@ -64,7 +70,7 @@ function Headers() {
 
       {/* Accordion */}
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center" }}>
           <Input
             type="text"
             placeholder="Search..."
@@ -99,7 +105,16 @@ function Headers() {
               </InputAdornment>
             }
           />
-        </Box>
+        </Box> */}
+        <Tooltip title="Search" placement="bottom">
+          <Link href={"/searched"} underline="none" color="inherit">
+            <FontAwesomeIcon icon={faSearchengin} style={{ padding: "0.5rem", fontSize: "1.5rem" }} />
+            {/* <FontAwesomeIcon
+              icon={faFacebookSquare}
+              style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#1877F2" }}
+            /> */}
+          </Link>
+        </Tooltip>
         <Tooltip title="Facebook" placement="bottom">
           <Link underline="none" color="inherit">
             <FontAwesomeIcon
