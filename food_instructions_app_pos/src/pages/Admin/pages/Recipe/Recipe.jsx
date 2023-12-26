@@ -1,34 +1,100 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 import {
-  CssBaseline,
-  Box,
-  Toolbar,
-  Container,
-  Paper,
-  Link,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Button,
-  Grid,
-  TextField,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  TextField,
+  styled,
   Stack,
 } from "@mui/material";
-
+import { FaSearch } from "react-icons/fa";
+import Paper from "@mui/material/Paper";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { motion } from "framer-motion";
+import CssBaseline from "@mui/material/CssBaseline";
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
 import AddIcon from "@mui/icons-material/Add";
-import { FaSearch, FaArrowAltCircleDown } from "react-icons/fa";
-import { motion } from "framer-motion";
-import axios from "axios";
 
-import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../../../utils/searchData";
+import {
+  dietSearch,
+  healthSearch,
+  cuisineSearch,
+  mealSearch,
+  dishSearch,
+} from "../../../../utils/searchData";
 import RecipeDialog from "./RecipeDialog";
+
+const fadeIn = {
+  "0%": { opacity: 0 },
+  "100%": { opacity: 1 },
+};
+
+const fadeInAnimation = styled("div")({
+  animation: `${fadeIn} 0.5s ease-in-out`,
+});
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  //   padding: theme.spacing(1),
+  //   textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
+const StyledCardMedia = styled(CardMedia)({
+  height: "100px",
+  width: "100px",
+  objectFit: "cover",
+  "@media (max-width: 600px)": {
+    height: "80px",
+    width: "80px",
+  },
+});
+
+function SearchedCard({ recipe, link }) {
+  return (
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{ boxShadow: "5px 5px lightgray"}}
+      
+    >
+      <Link to={`/a-recipe/details/${encodeURIComponent(link)}`}>
+        <Card>
+          <CardActionArea
+            component={fadeInAnimation}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <StyledCardMedia
+              component="img"
+              alt={recipe.label}
+              height="140"
+              image={recipe.images.SMALL.url}
+            />
+            <CardContent>
+              <Typography variant="h6">{recipe.label}</Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
+    </motion.div>
+  );
+}
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -49,33 +115,18 @@ function useDebounce(value, delay) {
 const defaultTheme = createTheme();
 
 function ARecipe() {
-  const commonStyles = {
-    height: "auto",
-    // Add any other shared styles here
-  };
-
-  const imageStyles = {
-    ...commonStyles,
-    width: "200px", // Default width for larger screens
-  };
-
-  const mobileStyles = {
-    ...commonStyles,
-    width: "60px", // Width for mobile screens
-  };
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState({});
-  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
-
   const [loading, setLoading] = useState(true);
 
+  const params = useParams();
+  console.log("params: ", params);
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
 
+  const [linkNextPage, setLinkNextPage] = useState("");
+  const [linkPreviousPage, setLinkPreviousPage] = useState("");
   const [diet, setDiet] = useState([]);
   const [health, setHealth] = useState([]);
   const [cuisine, setCuisine] = useState([]);
@@ -100,6 +151,22 @@ function ARecipe() {
   const handleSelectDish = (e, values) => {
     setDish(values);
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const [collapse, setCollapse] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState({});
+  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
   const queryParams = new URLSearchParams({
     type: "public",
@@ -134,11 +201,15 @@ function ARecipe() {
   });
 
   const url = `${process.env.REACT_APP_RECIPE_URL}?${queryParams.toString()}`;
-
+  console.log(process.env.REACT_APP_RECIPE_URL);
+  const urlFetch = "";
   const handleSearch = async () => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(
+        linkNextPage === "" ? url : linkNextPage
+      );
       setSearchResults(response.data);
+      setLinkNextPage(response.data._links.next.href);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -146,20 +217,14 @@ function ARecipe() {
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const [collapse, setCollapse] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      >
+    
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
@@ -169,178 +234,205 @@ function ARecipe() {
             component="main"
             sx={{
               backgroundColor: (theme) =>
-                theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
               flexGrow: 1,
               height: "100vh",
+             
               overflow: "auto",
-            }}>
-            <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <React.Fragment>
-                  <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                      <Button variant="outlined" onClick={handleClickOpen}>
-                        Add new <AddIcon />
-                      </Button>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="nameFood"
-                          type="text"
-                          variant="standard"
-                          fullWidth
-                          name="name"
-                          placeholder="Search here ..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          onKeyDown={handleKeyPress}
-                        />
-                        <Button type="button" onClick={handleSearch}>
-                          <FaSearch />
-                        </Button>
-                        <Button type="button" onClick={() => setCollapse(!collapse)}>
-                          <FaArrowAltCircleDown />
-                        </Button>
-                      </Box>
-                    </Grid>
-                    {collapse && (
-                      <>
-                        <Grid item xs={6}>
-                          <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="diet_search"
-                            options={dietSearch}
-                            getOptionLabel={(option) => option.title}
-                            onChange={handleSelectDiet}
-                            value={diet}
-                            defaultValue={[]}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" label="Diet" placeholder="Diet" />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="health_search"
-                            options={healthSearch}
-                            getOptionLabel={(option) => option.title}
-                            onChange={handleSelectHealth}
-                            value={health}
-                            defaultValue={[]}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" label="Health" placeholder="Health" />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="cuisine_search"
-                            options={cuisineSearch}
-                            getOptionLabel={(option) => option.title}
-                            onChange={handleSelectCuisine}
-                            value={cuisine}
-                            defaultValue={[]}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" label="Cuisine" placeholder="Cuisine" />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="meal_search"
-                            options={mealSearch}
-                            getOptionLabel={(option) => option.title}
-                            onChange={handleSelectMeal}
-                            value={meal}
-                            defaultValue={[]}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" label="Meal" placeholder="Meal" />
-                            )}
-                          />
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="dish_search"
-                            options={dishSearch}
-                            getOptionLabel={(option) => option.title}
-                            onChange={handleSelectDish}
-                            value={dish}
-                            defaultValue={[]}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" label="Dish" placeholder="Dish" />
-                            )}
-                          />
-                        </Grid>
-                      </>
+              display:"flex",
+              justifyContent:"center",
+              marginTop:"68px",
+
+            }}
+
+          >
+            <div style={{p:2, textAlign: "center", width:"100vw",
+              padding:"16px 60px", }}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}></Grid>
+                <Grid item xs={4}>
+                  <Box
+                    component="div"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="nameFood"
+                      type="text"
+                      variant="standard"
+                      fullWidth
+                      name="name"
+                      placeholder="Search food here ..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                    />
+                    <Button type="button" onClick={handleSearch}>
+                      <FaSearch />
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid item xs={4}></Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="diet_search"
+                    options={dietSearch}
+                    getOptionLabel={(option) => option.title}
+                    onChange={handleSelectDiet}
+                    value={diet}
+                    defaultValue={[]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Diet"
+                        placeholder="Diet"
+                      />
                     )}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="health_search"
+                    options={healthSearch}
+                    getOptionLabel={(option) => option.title}
+                    onChange={handleSelectHealth}
+                    value={health}
+                    defaultValue={[]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Health"
+                        placeholder="Health"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="cuisine_search"
+                    options={cuisineSearch}
+                    getOptionLabel={(option) => option.title}
+                    onChange={handleSelectCuisine}
+                    value={cuisine}
+                    defaultValue={[]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Cuisine"
+                        placeholder="Cuisine"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="meal_search"
+                    options={mealSearch}
+                    getOptionLabel={(option) => option.title}
+                    onChange={handleSelectMeal}
+                    value={meal}
+                    defaultValue={[]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Meal"
+                        placeholder="Meal"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="dish_search"
+                    options={dishSearch}
+                    getOptionLabel={(option) => option.title}
+                    onChange={handleSelectDish}
+                    value={dish}
+                    defaultValue={[]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Dish"
+                        placeholder="Dish"
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+
+              {loading ? (
+                <Typography sx={{ margin: "2rem 0rem" }}>
+                  Results will show here
+                </Typography>
+              ) : (
+                <>
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ marginTop: "2rem", marginBottom: "2rem" }}
+                  >
+                    {searchResults.hits.map((food, index) => (
+                      <Grid item xs={12} sm={6} md={4} key={index}>
+                        <SearchedCard
+                          recipe={food.recipe}
+                          link={food._links.self.href}
+                        />
+                      </Grid>
+                    ))}
                   </Grid>
-                  {loading ? (
-                    <Typography> Type input to search recipe</Typography>
-                  ) : (
-                    searchResults.hits.map((row, index) => (
-                      <Table size="small" key={index}>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Image</TableCell>
-                            <TableCell>Name</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>
-                              <Link href={`/a-recipe/details/${encodeURIComponent(row._links.self.href)}`}>
-                                <img
-                                  src={row.recipe.image}
-                                  alt={row.recipe.label}
-                                  style={window.innerWidth <= 600 ? mobileStyles : imageStyles}
-                                />
-                              </Link>
-                            </TableCell>
-                            <TableCell>{row.recipe.label}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    ))
-                  )}
-                  {loading ? (
-                    <></>
-                  ) : (
-                    <Stack
-                      spacing={{ xs: 1, sm: 2 }}
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      useFlexGap
-                      flexWrap="wrap">
-                      <Stack>
-                        <Typography>Found {searchResults.count} recipes</Typography>
-                        <Stack spacing={1} direction="row">
-                          <Typography>Show on page</Typography>
-                          <Typography>from {searchResults.from}</Typography>
-                          <Typography>to {searchResults.to}</Typography>
-                        </Stack>
+                  <Stack
+                    spacing={{ xs: 1, sm: 2 }}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    useFlexGap
+                    flexWrap="wrap"
+                  >
+                    <Stack>
+                      <Typography>
+                        Found {searchResults.count} recipes
+                      </Typography>
+                      <Stack spacing={1} direction="row">
+                        <Typography>Show on page</Typography>
+                        <Typography>from {searchResults.from}</Typography>
+                        <Typography>to {searchResults.to}</Typography>
                       </Stack>
-                      <Button variant="contained" href={searchResults._links.next.href}>
+                    </Stack>
+                    {/* href={`/searched/${encodeURIComponent(searchResults._links.next.href)} */}
+                    <Box>
+                      <Button
+                        sx={{ margin: "1rem" }}
+                        variant="contained"
+                        onClick={handleSearch}
+                      >
+                        Previous page
+                      </Button>
+                      <Button variant="contained" onClick={handleSearch}>
                         {searchResults._links.next.title}
                       </Button>
-                    </Stack>
-                  )}
-                </React.Fragment>{" "}
-              </Paper>{" "}
-            </Container>
+                    </Box>
+                  </Stack>
+                </>
+              )}
+            </div>
           </Box>
         </Box>
         {open && <RecipeDialog open={open} handleClose={handleClose} />}
