@@ -23,6 +23,30 @@ class AccountRepository {
     }
   }
 
+  async Accounts() {
+    try {
+      return await AccountModel.find();
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Accounts");
+    }
+  }
+
+  async UpdateStatus(id, isChecked) {
+    try {
+      const account = await AccountModel.findOneAndUpdate(
+        {
+          _id: id,
+        },
+        {
+          isAdmin: isChecked,
+        }
+      );
+      return await AccountModel.find();
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Account Status");
+    }
+  }
+
   async CreateAddress({ _id, street, postalCode, city, country }) {
     try {
       const profile = await AccountModel.findById(_id);

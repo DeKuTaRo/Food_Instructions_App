@@ -17,6 +17,7 @@ import {
   Select,
 } from "@mui/material";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import withAuthorization from "../../utils/auth";
 
 function RecipeDialog({ open, handleClose }) {
   const [name, setName] = useState("");
@@ -269,4 +270,4 @@ function RecipeDialog({ open, handleClose }) {
   );
 }
 
-export default RecipeDialog;
+export default withAuthorization(RecipeDialog);

@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  TextField,
-  styled,
-  Stack,
-} from "@mui/material";
+import { Autocomplete, Box, Button, TextField, styled, Stack } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { motion } from "framer-motion";
 import CssBaseline from "@mui/material/CssBaseline";
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
-import AddIcon from "@mui/icons-material/Add";
 
-import {
-  dietSearch,
-  healthSearch,
-  cuisineSearch,
-  mealSearch,
-  dishSearch,
-} from "../../../../utils/searchData";
+import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../../../utils/searchData";
 import RecipeDialog from "./RecipeDialog";
+import withAuthorization from "../../utils/auth";
 
 const fadeIn = {
   "0%": { opacity: 0 },
@@ -40,14 +26,6 @@ const fadeIn = {
 const fadeInAnimation = styled("div")({
   animation: `${fadeIn} 0.5s ease-in-out`,
 });
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  //   padding: theme.spacing(1),
-  //   textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 const StyledCardMedia = styled(CardMedia)({
   height: "100px",
@@ -66,9 +44,7 @@ function SearchedCard({ recipe, link }) {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ boxShadow: "5px 5px lightgray"}}
-      
-    >
+      style={{ boxShadow: "5px 5px lightgray" }}>
       <Link to={`/a-recipe/details/${encodeURIComponent(link)}`}>
         <Card>
           <CardActionArea
@@ -78,14 +54,8 @@ function SearchedCard({ recipe, link }) {
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "column",
-            }}
-          >
-            <StyledCardMedia
-              component="img"
-              alt={recipe.label}
-              height="140"
-              image={recipe.images.SMALL.url}
-            />
+            }}>
+            <StyledCardMedia component="img" alt={recipe.label} height="140" image={recipe.images.SMALL.url} />
             <CardContent>
               <Typography variant="h6">{recipe.label}</Typography>
             </CardContent>
@@ -117,8 +87,6 @@ const defaultTheme = createTheme();
 function ARecipe() {
   const [loading, setLoading] = useState(true);
 
-  const params = useParams();
-  console.log("params: ", params);
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearch();
@@ -126,7 +94,6 @@ function ARecipe() {
   };
 
   const [linkNextPage, setLinkNextPage] = useState("");
-  const [linkPreviousPage, setLinkPreviousPage] = useState("");
   const [diet, setDiet] = useState([]);
   const [health, setHealth] = useState([]);
   const [cuisine, setCuisine] = useState([]);
@@ -153,12 +120,6 @@ function ARecipe() {
   };
 
   const [open, setOpen] = React.useState(false);
-
-  const [collapse, setCollapse] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -201,13 +162,9 @@ function ARecipe() {
   });
 
   const url = `${process.env.REACT_APP_RECIPE_URL}?${queryParams.toString()}`;
-  console.log(process.env.REACT_APP_RECIPE_URL);
-  const urlFetch = "";
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        linkNextPage === "" ? url : linkNextPage
-      );
+      const response = await axios.get(linkNextPage === "" ? url : linkNextPage);
       setSearchResults(response.data);
       setLinkNextPage(response.data._links.next.href);
     } catch (error) {
@@ -218,13 +175,7 @@ function ARecipe() {
   };
 
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      initial={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      >
-    
+    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
@@ -234,29 +185,20 @@ function ARecipe() {
             component="main"
             sx={{
               backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
+                theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
               flexGrow: 1,
               height: "100vh",
-             
+
               overflow: "auto",
-              display:"flex",
-              justifyContent:"center",
-              marginTop:"68px",
-
-            }}
-
-          >
-            <div style={{p:2, textAlign: "center", width:"100vw",
-              padding:"16px 60px", }}>
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "68px",
+            }}>
+            <div style={{ p: 2, textAlign: "center", width: "100vw", padding: "16px 60px" }}>
               <Grid container spacing={2}>
                 <Grid item xs={4}></Grid>
                 <Grid item xs={4}>
-                  <Box
-                    component="div"
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
+                  <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
                     <TextField
                       autoFocus
                       margin="dense"
@@ -287,12 +229,7 @@ function ARecipe() {
                     value={diet}
                     defaultValue={[]}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Diet"
-                        placeholder="Diet"
-                      />
+                      <TextField {...params} variant="standard" label="Diet" placeholder="Diet" />
                     )}
                   />
                 </Grid>
@@ -307,12 +244,7 @@ function ARecipe() {
                     value={health}
                     defaultValue={[]}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Health"
-                        placeholder="Health"
-                      />
+                      <TextField {...params} variant="standard" label="Health" placeholder="Health" />
                     )}
                   />
                 </Grid>
@@ -327,12 +259,7 @@ function ARecipe() {
                     value={cuisine}
                     defaultValue={[]}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Cuisine"
-                        placeholder="Cuisine"
-                      />
+                      <TextField {...params} variant="standard" label="Cuisine" placeholder="Cuisine" />
                     )}
                   />
                 </Grid>
@@ -347,12 +274,7 @@ function ARecipe() {
                     value={meal}
                     defaultValue={[]}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Meal"
-                        placeholder="Meal"
-                      />
+                      <TextField {...params} variant="standard" label="Meal" placeholder="Meal" />
                     )}
                   />
                 </Grid>
@@ -367,34 +289,20 @@ function ARecipe() {
                     value={dish}
                     defaultValue={[]}
                     renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Dish"
-                        placeholder="Dish"
-                      />
+                      <TextField {...params} variant="standard" label="Dish" placeholder="Dish" />
                     )}
                   />
                 </Grid>
               </Grid>
 
               {loading ? (
-                <Typography sx={{ margin: "2rem 0rem" }}>
-                  Results will show here
-                </Typography>
+                <Typography sx={{ margin: "2rem 0rem" }}>Results will show here</Typography>
               ) : (
                 <>
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ marginTop: "2rem", marginBottom: "2rem" }}
-                  >
+                  <Grid container spacing={2} sx={{ marginTop: "2rem", marginBottom: "2rem" }}>
                     {searchResults.hits.map((food, index) => (
                       <Grid item xs={12} sm={6} md={4} key={index}>
-                        <SearchedCard
-                          recipe={food.recipe}
-                          link={food._links.self.href}
-                        />
+                        <SearchedCard recipe={food.recipe} link={food._links.self.href} />
                       </Grid>
                     ))}
                   </Grid>
@@ -404,12 +312,9 @@ function ARecipe() {
                     justifyContent="space-between"
                     alignItems="center"
                     useFlexGap
-                    flexWrap="wrap"
-                  >
+                    flexWrap="wrap">
                     <Stack>
-                      <Typography>
-                        Found {searchResults.count} recipes
-                      </Typography>
+                      <Typography>Found {searchResults.count} recipes</Typography>
                       <Stack spacing={1} direction="row">
                         <Typography>Show on page</Typography>
                         <Typography>from {searchResults.from}</Typography>
@@ -418,11 +323,7 @@ function ARecipe() {
                     </Stack>
                     {/* href={`/searched/${encodeURIComponent(searchResults._links.next.href)} */}
                     <Box>
-                      <Button
-                        sx={{ margin: "1rem" }}
-                        variant="contained"
-                        onClick={handleSearch}
-                      >
+                      <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
                         Previous page
                       </Button>
                       <Button variant="contained" onClick={handleSearch}>
@@ -441,4 +342,4 @@ function ARecipe() {
   );
 }
 
-export default ARecipe;
+export default withAuthorization(ARecipe);

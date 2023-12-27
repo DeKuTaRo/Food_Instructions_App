@@ -15,6 +15,10 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../../Title";
+import Checkbox from "@mui/material/Checkbox";
+import axios from "axios";
+import { toast } from "react-toastify";
+import withAuthorization from "../../utils/auth";
 
 function Copyright(props) {
   return (
@@ -29,27 +33,73 @@ function Copyright(props) {
   );
 }
 
-// Generate Order Data
-function createData(id, dateCreate, userName) {
-  return { id, dateCreate, userName };
-}
-
-const rows = [
-  createData(0, "16 Mar, 2019", "Elvis Presley"),
-  createData(1, "16 Mar, 2019", "Paul McCartney"),
-  createData(2, "16 Mar, 2019", "Tom Scholz"),
-  createData(3, "16 Mar, 2019", "Michael Jackson"),
-  createData(4, "15 Mar, 2019", "Bruce Springsteen"),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function UserAccount() {
+function UserAccount() {
+  const [allAccounts, setAllAccounts] = React.useState({ accounts: [] });
+  const tokenAdmin = localStorage.getItem("tokenAdmin");
+  const getAllAccounts = async () => {
+    const response = await axios.get(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/getAllAccounts`, {
+      headers: {
+        Authorization: `Bearer ${tokenAdmin}`,
+      },
+    });
+    setAllAccounts(response.data);
+  };
+  React.useEffect(() => {
+    getAllAccounts();
+  }, []);
+
+  const handleChangeAdminRole = async (_id, isChecked) => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/changeAdminStatus/${_id}`,
+        {
+          isChecked,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${tokenAdmin}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Dữ liệu được cập nhật thành công", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.error("Có lỗi xảy ra", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      setAllAccounts(response.data);
+    } catch (err) {
+      toast.error(err, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -73,20 +123,27 @@ export default function UserAccount() {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date create</TableCell>
-                      <TableCell>User Name</TableCell>
+                      <TableCell>Username</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>CheckAdmin</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell>{row.dateCreate}</TableCell>
-                        <TableCell>{row.userName}</TableCell>
+                    {allAccounts.accounts.map((user) => (
+                      <TableRow key={user._id}>
+                        <TableCell>{user.username}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>
+                          <Checkbox
+                            onClick={(e) => handleChangeAdminRole(user._id, e.target.checked)}
+                            checked={user.isAdmin || false}
+                          />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-                <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+                <Link color="primary" href="#" sx={{ mt: 3 }}>
                   See more orders
                 </Link>
               </React.Fragment>{" "}
@@ -98,3 +155,5 @@ export default function UserAccount() {
     </ThemeProvider>
   );
 }
+
+export default withAuthorization(UserAccount);

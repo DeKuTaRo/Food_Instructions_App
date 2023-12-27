@@ -43,6 +43,7 @@ function Login() {
               progress: undefined,
               theme: "dark",
             });
+            localStorage.setItem("tokenAdmin", res.data.token)
             navigate("/dashboard");
           } else {
             toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc bạn không có quyền truy cập", {

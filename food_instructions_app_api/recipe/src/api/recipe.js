@@ -5,6 +5,14 @@ const UserAuth = require("../middleware/auth");
 module.exports = (app) => {
   const service = new RecipeService();
 
+  app.put("/recipe/wishlist", (req, res, next) => {
+    try {
+      console.log("req.body = ", req.body); 
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.post("/recipe/add", async (req, res, next) => {
     try {
       const { name, link, linkImage, diet, health, cuisine, meal, dish } = req.body;

@@ -14,7 +14,7 @@ import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
 import { HeaderWithSidebar } from "../../components/Admin/HeaderWithSidebar";
-import NotPermission from "../../pages/NotPermission";
+import withAuthorization from "./utils/auth";
 
 function Copyright(props) {
   return (
@@ -33,11 +33,7 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
-  const isAdmin = localStorage.getItem("isAdmin");
-  if (isAdmin === "false") {
-    return <NotPermission />;
-  }
+function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -94,3 +90,5 @@ export default function Dashboard() {
     </ThemeProvider>
   );
 }
+
+export default withAuthorization(Dashboard);

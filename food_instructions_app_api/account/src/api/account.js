@@ -83,4 +83,24 @@ module.exports = (app) => {
   app.get("/", (req, res, next) => {
     res.send("Account Service");
   });
+
+  app.get("/account/getAllAccounts", async (req, res, next) => {
+    try {
+      const { data } = await service.GetAccounts();
+      return res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/account/changeAdminStatus/:id", UserAuth, async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { isChecked } = req.body;
+      const { data } = await service.UpdateAccountStatusAdmin(id, isChecked);
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  });
 };

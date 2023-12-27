@@ -20,6 +20,7 @@ function LoginClient() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    role: "user",
   });
 
   const handleChange = (e) => {
@@ -46,7 +47,7 @@ function LoginClient() {
             theme: "dark",
           });
         }
-        localStorage.setItem("isLogin", "true");
+        localStorage.setItem("isLoginClient", "true");
         localStorage.setItem("id", res.data.id);
         localStorage.setItem("token", res.data.token);
         navigate("/");

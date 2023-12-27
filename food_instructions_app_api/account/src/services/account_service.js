@@ -44,6 +44,32 @@ class AccountService {
     }
   }
 
+  async GetAccounts() {
+    try {
+      const accounts = await this.repository.Accounts();
+
+      return FormateData({
+        accounts,
+      });
+    } catch (err) {
+      throw new APIError("Data Not found");
+    }
+  }
+
+  async UpdateAccountStatusAdmin(id, isChecked) {
+    try {
+      const accounts = await this.repository.UpdateStatus(id, isChecked);
+      if (!accounts) {
+        return new APIError("Some error has been occurred");
+      }
+      return FormateData({
+        accounts,
+      });
+    } catch (err) {
+      throw new APIError("Data Not found");
+    }
+  }
+
   async AddNewAddress(_id, userInputs) {
     const { street, postalCode, city, country } = userInputs;
 
