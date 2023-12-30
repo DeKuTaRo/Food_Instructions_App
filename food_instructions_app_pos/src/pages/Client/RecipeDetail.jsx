@@ -1,7 +1,7 @@
 // RecipeDetail.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
 import Headers from "../../components/Client/Headers";
@@ -25,6 +25,8 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Link,
+  Stack,
 } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -38,6 +40,12 @@ import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import Avatar from "@mui/material/Avatar";
 import { Add, Remove } from "@mui/icons-material";
 import { toast } from "react-toastify";
+
+import { MdBreakfastDining } from "react-icons/md";
+import { MdBrunchDining } from "react-icons/md";
+import { MdDining } from "react-icons/md";
+import { MdDinnerDining } from "react-icons/md";
+import { MdKebabDining } from "react-icons/md";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -134,7 +142,6 @@ function RecipeDetail() {
   };
 
   const id = localStorage.getItem("id");
-  console.log("label = ", label);
   const handleAddRecipeToWishlist = () => {
     handleCheckLoginStatus();
 
@@ -147,7 +154,6 @@ function RecipeDetail() {
           linkRecipe: label,
         })
         .then((res) => {
-          console.log("res = ", res);
           toast.success("Thêm vào danh sách yêu thích thành công", {
             position: "top-right",
             autoClose: 3000,
@@ -160,21 +166,34 @@ function RecipeDetail() {
           });
         });
     } catch (err) {
-      console.log(err);
+      console.err(err);
     }
-    console.log("add to wish list");
   };
 
   const handlePostComments = () => {
     handleCheckLoginStatus();
-
-    console.log("add comments");
   };
 
   const handleAddRecipeToCart = () => {
     handleCheckLoginStatus();
+  };
 
-    console.log("add to carts");
+  const handleMealType = (item) => {
+    if (item === "breakfast") {
+      return <MdBreakfastDining />;
+    }
+    if (item === "brunch") {
+      return <MdBrunchDining />;
+    }
+    if (item === "lunch/dinner") {
+      return <MdDining />;
+    }
+    if (item === "snack") {
+      return <MdDinnerDining />;
+    }
+    if (item === "teatime") {
+      return <MdKebabDining />;
+    }
   };
 
   return (
@@ -243,6 +262,25 @@ function RecipeDetail() {
                   </Grid>
                 </Grid>
 
+                {/* Cuisine, Meal */}
+                <Box sx={{ margin: "2rem auto " }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      CuisineType: {recipeDetail.recipe.cuisineType}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
+                        <Typography variant="h5">Meal: </Typography>
+                        <Typography variant="h5">
+                          {handleMealType(recipeDetail.recipe.mealType.join(","))}{" "}
+                          {recipeDetail.recipe.mealType.join(",")}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Box>
+
                 {/* Button */}
                 <Box sx={{ margin: "2rem auto " }}>
                   <Button variant="outlined" onClick={handleOpen}>
@@ -309,27 +347,32 @@ function RecipeDetail() {
                   <Typography variant="h4" gutterBottom>
                     How to make {recipeName}
                   </Typography>
-                  {recipeDetail.recipe.instructionLines &&
-                    recipeDetail.recipe.instructionLines.map((item, index) => (
-                      <Box component="div" key={index}>
-                        <Typography
-                          sx={{
-                            lineHeight: "2rem",
-                            backgroundColor: "black",
-                            color: "white",
-                            position: "absolute",
-                            width: "2rem",
-                            height: "2rem",
-                            borderRadius: "1rem",
-                            textAlign: "center",
-                          }}>
-                          {index + 1}
-                        </Typography>
-                        <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
-                          {item}
-                        </Typography>
-                      </Box>
-                    ))}
+                  {recipeDetail.recipe.ingredientLines.map((item, index) => (
+                    <Box component="div" key={index}>
+                      <Typography
+                        sx={{
+                          lineHeight: "2rem",
+                          backgroundColor: "black",
+                          color: "white",
+                          position: "absolute",
+                          width: "2rem",
+                          height: "2rem",
+                          borderRadius: "1rem",
+                          textAlign: "center",
+                        }}>
+                        {index + 1}
+                      </Typography>
+                      <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
+                        {item}
+                      </Typography>
+                    </Box>
+                  ))}
+                  <Typography variant="h5" gutterBottom sx={{ marginTop: "2rem" }}>
+                    More details about recipe{" "}
+                    <Link href={recipeDetail.recipe.url} underline="hover">
+                      here
+                    </Link>{" "}
+                  </Typography>
                 </Box>
                 {/* Comments */}
                 <Box sx={{ marginTop: "4rem" }}>

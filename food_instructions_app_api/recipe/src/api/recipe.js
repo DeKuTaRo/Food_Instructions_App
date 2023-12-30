@@ -26,9 +26,8 @@ module.exports = (app) => {
 
   app.put("/recipe/comments", async (req, res, next) => {
     try {
-      
       console.log("recipe comments");
-      res.status(200).json("add recipe comments")
+      res.status(200).json("add recipe comments");
     } catch (err) {
       next(err);
     }
