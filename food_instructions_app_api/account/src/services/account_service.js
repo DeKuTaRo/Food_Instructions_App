@@ -103,18 +103,19 @@ class AccountService {
     }
   }
 
-  async GetWishList(customerId) {
+  async GetWishList(_id, search) {
     try {
-      const wishListItems = await this.repository.Wishlist(customerId);
+      const wishListItems = await this.repository.Wishlist(_id, search);
       return FormateData(wishListItems);
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
   }
 
-  async AddToWishlist(customerId, product) {
+  async AddToWishlist(recipeInputs) {
     try {
-      const wishlistResult = await this.repository.AddWishlistItem(customerId, product);
+      const { _id, nameRecipe, imageRecipe, linkRecipe } = recipeInputs;
+      const wishlistResult = await this.repository.AddWishlistItem({ _id, nameRecipe, imageRecipe, linkRecipe });
       return FormateData(wishlistResult);
     } catch (err) {
       throw new APIError("Data Not found", err);

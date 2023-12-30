@@ -7,7 +7,7 @@ module.exports = (app) => {
 
   app.put("/recipe/wishlist", (req, res, next) => {
     try {
-      console.log("req.body = ", req.body); 
+      console.log("req.body = ", req.body);
     } catch (err) {
       next(err);
     }
@@ -20,6 +20,16 @@ module.exports = (app) => {
       return res.json(data);
     } catch (err) {
       // console.log(err);
+      next(err);
+    }
+  });
+
+  app.put("/recipe/comments", async (req, res, next) => {
+    try {
+      
+      console.log("recipe comments");
+      res.status(200).json("add recipe comments")
+    } catch (err) {
       next(err);
     }
   });

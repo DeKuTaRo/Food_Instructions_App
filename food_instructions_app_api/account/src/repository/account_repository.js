@@ -33,7 +33,7 @@ class AccountRepository {
 
   async UpdateStatus(id, isChecked) {
     try {
-      const account = await AccountModel.findOneAndUpdate(
+      await AccountModel.findOneAndUpdate(
         {
           _id: id,
         },
@@ -88,55 +88,44 @@ class AccountRepository {
     }
   }
 
-  async Wishlist(customerId) {
+  async Wishlist(_id, search) {
     try {
-      const profile = await AccountModel.findById(customerId).populate("wishlist");
+      const account = await AccountModel.findById(_id);
 
-      return profile.wishlist;
+      if (search === "") {
+        return account.wishlist;
+      }
+
+      const accountResult = [];
+      account.wishlist.forEach((item) => {
+        if (item.nameRecipe.toUpperCase().includes(search.toUpperCase())) {
+          accountResult.push(item);
+        }
+      });
+
+      return accountResult;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Wishlist ");
     }
   }
 
-  async AddWishlistItem(customerId, { _id, name, desc, price, available, banner }) {
-    const product = {
-      _id,
-      name,
-      desc,
-      price,
-      available,
-      banner,
+  async AddWishlistItem({ _id, nameRecipe, imageRecipe, linkRecipe }) {
+    const recipe = {
+      nameRecipe,
+      imageRecipe,
+      linkRecipe,
     };
 
     try {
-      const profile = await AccountModel.findById(customerId).populate("wishlist");
+      const account = await AccountModel.findById(_id);
+      const checkNameExist = account.wishlist.some((item) => item.nameRecipe === nameRecipe);
 
-      if (profile) {
-        let wishlist = profile.wishlist;
-
-        if (wishlist.length > 0) {
-          let isExist = false;
-          wishlist.map((item) => {
-            if (item._id.toString() === product._id.toString()) {
-              const index = wishlist.indexOf(item);
-              wishlist.splice(index, 1);
-              isExist = true;
-            }
-          });
-
-          if (!isExist) {
-            wishlist.push(product);
-          }
-        } else {
-          wishlist.push(product);
-        }
-
-        profile.wishlist = wishlist;
+      if (!checkNameExist) {
+        account.wishlist.push(recipe);
       }
+      const accountResult = await account.save();
 
-      const profileResult = await profile.save();
-
-      return profileResult.wishlist;
+      return accountResult.wishlist;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add to WishList");
     }

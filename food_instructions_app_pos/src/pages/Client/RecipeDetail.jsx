@@ -50,6 +50,8 @@ const Item = styled(Paper)(({ theme }) => ({
 function RecipeDetail() {
   const { label } = useParams();
   const [recipeDetail, setRecipeDetail] = useState({});
+  const [recipeName, setRecipeName] = useState("");
+  const [recipeImage, setRecipeImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [totalNutrients, setTotalNutrientations] = useState({});
   const [totalDaily, setTotalDaily] = useState({});
@@ -99,14 +101,10 @@ function RecipeDetail() {
     const fetchRecipeDetails = async () => {
       try {
         // setLoading(true);
-        const response = await axios.get(`${label}`, {
-          params: {
-            type: "public",
-            app_id: process.env.REACT_APP_APP_ID_RECIPE,
-            app_key: process.env.REACT_APP_APP_KEY_RECIPE,
-          },
-        });
+        const response = await axios.get(`${label}`);
         setRecipeDetail(response.data);
+        setRecipeName(response.data.recipe.label);
+        setRecipeImage(response.data.recipe.image);
         setTotalNutrientations(response.data.recipe.totalNutrients);
         setTotalDaily(response.data.recipe.totalDaily);
       } catch (error) {
@@ -119,9 +117,6 @@ function RecipeDetail() {
   }, []);
 
   const isLoginClient = localStorage.getItem("isLoginClient");
-
-  console.log("isLoginClient = ", isLoginClient);
-  // localStorage.setItem("isLoginClient", "true");
 
   const handleCheckLoginStatus = () => {
     if (isLoginClient !== "true") {
@@ -138,10 +133,48 @@ function RecipeDetail() {
     }
   };
 
+  const id = localStorage.getItem("id");
+  console.log("label = ", label);
   const handleAddRecipeToWishlist = () => {
     handleCheckLoginStatus();
 
+    try {
+      axios
+        .post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToWishList`, {
+          _id: id,
+          nameRecipe: recipeName,
+          imageRecipe: recipeImage,
+          linkRecipe: label,
+        })
+        .then((res) => {
+          console.log("res = ", res);
+          toast.success("Thêm vào danh sách yêu thích thành công", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        });
+    } catch (err) {
+      console.log(err);
+    }
     console.log("add to wish list");
+  };
+
+  const handlePostComments = () => {
+    handleCheckLoginStatus();
+
+    console.log("add comments");
+  };
+
+  const handleAddRecipeToCart = () => {
+    handleCheckLoginStatus();
+
+    console.log("add to carts");
   };
 
   return (
@@ -164,21 +197,21 @@ function RecipeDetail() {
                 <Link underline="hover" color="inherit" href="/a-recipe">
                   Recipe
                 </Link>
-                <Typography color="text.primary">{recipeDetail.recipe.label}</Typography>
+                <Typography color="text.primary">{recipeName}</Typography>
               </Breadcrumbs>
             </Typography>
             {/* Ingrediens, Nutritions */}
             <Grid container spacing={2}>
-              {/* Ingredients */}
               <Grid item xs={8}>
                 <Grid container spacing={2}>
+                  {/* Image */}
                   <Grid item md={6} xs={12}>
                     <Typography variant="h4" gutterBottom>
-                      {recipeDetail.recipe.label}
+                      {recipeName}
                     </Typography>
                     <img
-                      src={recipeDetail.recipe.image}
-                      alt={recipeDetail.recipe.label}
+                      src={recipeImage}
+                      alt={recipeName}
                       style={{
                         maxWidth: "100%",
                         borderRadius: "1rem",
@@ -186,6 +219,8 @@ function RecipeDetail() {
                       }}
                     />
                   </Grid>
+
+                  {/* Ingredients */}
                   <Grid
                     item
                     md={6}
@@ -204,174 +239,231 @@ function RecipeDetail() {
                           <li key={index}>{item}</li>
                         ))}
                       </ul>
-                      <div style={{ margin: "20px auto " }}>
-                        <Button variant="outlined" onClick={handleOpen}>
-                          Buy
-                        </Button>
-                        <Button variant="outlined" onClick={handleAddRecipeToWishlist}>
-                          Add to wishlist
-                        </Button>
-                        <Dialog open={open} onClose={handleClose}>
-                          <DialogTitle style={{ fontSize: "2.5em", fontWeight: "800" }}>Buy ingredients </DialogTitle>
-                          <DialogContent>
-                            <Typography style={{ margin: "20px" }}>
-                              <ul style={{ listStyleType: "none" }}>
-                                {recipeDetail.recipe.ingredientLines.map((item, index) => (
-                                  <li key={index}>
-                                    {numberOfPeople} x{item}
-                                  </li>
-                                ))}
-                              </ul>
-                            </Typography>
-                            <Typography>Số người: {numberOfPeople}</Typography>
-                            <Typography>
-                              {" "}
-                              <IconButton onClick={handleDecrease}>
-                                <Remove />
-                              </IconButton>
-                              <IconButton onClick={handleIncrease}>
-                                <Add />
-                              </IconButton>
-                            </Typography>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose} color="primary">
-                              Cancel
-                            </Button>
-                            <Button onClick={handleClose} color="primary" variant="contained">
-                              Confirm
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                      </div>
                     </Box>
                   </Grid>
                 </Grid>
+
+                {/* Button */}
+                <Box sx={{ margin: "2rem auto " }}>
+                  <Button variant="outlined" onClick={handleOpen}>
+                    Buy
+                  </Button>
+                  <Button variant="outlined" onClick={handleAddRecipeToWishlist}>
+                    Add to wishlist
+                  </Button>
+                  <Button variant="outlined" onClick={handleAddRecipeToCart}>
+                    Add to cart
+                  </Button>
+                  <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle style={{ fontSize: "2.5em", fontWeight: "800" }}>Buy ingredients </DialogTitle>
+                    <DialogContent>
+                      <Typography style={{ margin: "1rem" }}>
+                        <ul style={{ listStyleType: "none" }}>
+                          {recipeDetail.recipe.ingredientLines.map((item, index) => (
+                            <li key={index}>
+                              {numberOfPeople} x{item}
+                            </li>
+                          ))}
+                        </ul>
+                      </Typography>
+                      <Typography>Số người: {numberOfPeople}</Typography>
+                      <Typography>
+                        {" "}
+                        <IconButton onClick={handleDecrease}>
+                          <Remove />
+                        </IconButton>
+                        <IconButton onClick={handleIncrease}>
+                          <Add />
+                        </IconButton>
+                      </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={handleClose} color="primary" variant="contained">
+                        Confirm
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Box>
+
+                {/* Heal Labels */}
+                <Box sx={{ marginTop: "2rem", textAlign: "left" }}>
+                  <Typography variant="h4" gutterBottom>
+                    Heal labels
+                  </Typography>
+                  <Box sx={{ border: "1px solid #ccc", padding: "2rem" }}>
+                    <Grid container spacing={2}>
+                      {recipeDetail.recipe.healthLabels.map((item, index) => (
+                        <Grid item xs={3} key={index}>
+                          {item}
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                </Box>
+
                 {/* Instructions line */}
                 <Box sx={{ textAlign: "left", marginTop: "2rem" }}>
                   <Typography variant="h4" gutterBottom>
-                    How to make {recipeDetail.recipe.label}
+                    How to make {recipeName}
                   </Typography>
-                  {recipeDetail.recipe.instructionLines.map((item, index) => (
-                    <Box component="div" key={index}>
-                      <Typography
-                        sx={{
-                          lineHeight: "2rem",
-                          backgroundColor: "black",
-                          color: "white",
-                          position: "absolute",
-                          width: "2rem",
-                          height: "2rem",
-                          borderRadius: "1rem",
-                          textAlign: "center",
-                        }}>
-                        {index + 1}
-                      </Typography>
-                      <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
-                        {item}
-                      </Typography>
-                      {/* {recipeDetail.recipe.instructionLines.length / 2 === index && (
-                    <img src={recipeDetail.recipe.images.LARGE.url} alt={recipeDetail.recipe.label} />
-                  )} */}
-                    </Box>
-                  ))}
-                  {/* Comments */}
-                  <Box sx={{ marginTop: "4rem" }}>
-                    <TextareaAutosize
-                      aria-label="minimum height"
-                      minRows={6}
-                      placeholder="Leave your comment here"
-                      style={{
-                        width: "100%",
-                        padding: "1rem",
-                        fontSize: "1rem",
-                        border: "1px solid #ccc",
-                        borderRadius: "1rem",
-                      }}
-                      readOnly
-                      value=""
-                    />
-
-                    <Button sx={{ textAlign: "center", width: "100%" }}>Post comment</Button>
-                    <br></br>
-                    <Typography>Rate this food</Typography>
-                    {rating.map((isActive, index) => (
-                      <span
-                        key={index}
-                        onMouseEnter={() => handleStarHover(index)}
-                        onClick={() => handleStarClick(index)}>
-                        {isActive ? <StarIcon /> : <StarOutlineIcon />}
-                      </span>
-                    ))}
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <TextField placeholder="Name" />
-                        <TextField placeholder="Email" />
-                        <TextField placeholder="Website" />
-                      </Grid>
-                    </Grid>
-                    <Box sx={{ marginBottom: "4rem" }}>
-                      <Box
-                        sx={{
-                          borderBottom: "1px solid #ccc",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          marginTop: "4rem",
-                          marginBottom: "2rem",
-                        }}>
-                        <Typography sx={{ borderBottom: "1px solid red" }}>224 comments</Typography>
-                        <Typography>
-                          <BoltIcon sx={{ borderBottom: "1px solid orange" }} />{" "}
-                          <LocalFireDepartmentIcon sx={{ borderBottom: "1px solid orange" }} />
+                  {recipeDetail.recipe.instructionLines &&
+                    recipeDetail.recipe.instructionLines.map((item, index) => (
+                      <Box component="div" key={index}>
+                        <Typography
+                          sx={{
+                            lineHeight: "2rem",
+                            backgroundColor: "black",
+                            color: "white",
+                            position: "absolute",
+                            width: "2rem",
+                            height: "2rem",
+                            borderRadius: "1rem",
+                            textAlign: "center",
+                          }}>
+                          {index + 1}
+                        </Typography>
+                        <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
+                          {item}
                         </Typography>
                       </Box>
+                    ))}
+                </Box>
+                {/* Comments */}
+                <Box sx={{ marginTop: "4rem" }}>
+                  <TextareaAutosize
+                    aria-label="minimum height"
+                    minRows={6}
+                    placeholder="Leave your comment here"
+                    style={{
+                      width: "100%",
+                      padding: "1rem",
+                      fontSize: "1rem",
+                      border: "1px solid #ccc",
+                      borderRadius: "1rem",
+                    }}
+                    readOnly
+                    value=""
+                  />
+
+                  <Button sx={{ textAlign: "center", width: "100%" }} onClick={handlePostComments}>
+                    Post comment
+                  </Button>
+                  <br></br>
+                  <Typography>Rate this food</Typography>
+                  {rating.map((isActive, index) => (
+                    <span
+                      key={index}
+                      onMouseEnter={() => handleStarHover(index)}
+                      onClick={() => handleStarClick(index)}>
+                      {isActive ? <StarIcon /> : <StarOutlineIcon />}
+                    </span>
+                  ))}
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField placeholder="Name" />
+                      <TextField placeholder="Email" />
+                      <TextField placeholder="Website" />
+                    </Grid>
+                  </Grid>
+                  <Box sx={{ marginBottom: "4rem" }}>
+                    <Box
+                      sx={{
+                        borderBottom: "1px solid #ccc",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "4rem",
+                        marginBottom: "2rem",
+                      }}>
+                      <Typography sx={{ borderBottom: "1px solid red" }}>224 comments</Typography>
+                      <Typography>
+                        <BoltIcon sx={{ borderBottom: "1px solid orange" }} />{" "}
+                        <LocalFireDepartmentIcon sx={{ borderBottom: "1px solid orange" }} />
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}>
+                      <TextField placeholder="Search comment" />
 
                       <Box
+                        aria-label="comments"
+                        component="div"
                         sx={{
                           display: "flex",
                           flexDirection: "column",
+                          textAlign: "left",
                           gap: "12px",
                         }}>
-                        <TextField placeholder="Search comment" />
-
                         <Box
-                          aria-label="comments"
-                          component="div"
                           sx={{
                             display: "flex",
-                            flexDirection: "column",
-                            textAlign: "left",
-                            gap: "12px",
+                            gap: "8px",
+                            alignItems: "center",
                           }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              gap: "8px",
-                              alignItems: "center",
-                            }}>
-                            <Avatar
-                              alt="Remy Sharp"
-                              src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-                            />
-                            <Typography>Karen</Typography>
-                          </Box>
+                          <Avatar
+                            alt="Remy Sharp"
+                            src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+                          />
+                          <Typography>Karen</Typography>
+                        </Box>
 
-                          <Box
+                        <Box
+                          sx={{
+                            display: "flex",
+
+                            textAlign: "left",
+                            gap: "8px",
+                          }}>
+                          <AccessTimeIcon /> <Typography>3 months ago</Typography>
+                        </Box>
+                        <Typography>This food is so delicious</Typography>
+                        <Typography>
+                          <StarIcon />
+                          <StarIcon />
+                          <StarIcon />
+                          <StarIcon />
+                          <StarIcon />
+                        </Typography>
+                        <Typography
+                          sx={{
+                            display: "flex",
+
+                            textAlign: "left",
+                            gap: "8px",
+                          }}>
+                          <ThumbUpOffAltIcon /> 0
+                          <QuickreplyIcon /> Reply
+                        </Typography>
+                        <Box
+                          sx={{
+                            backgroundColor: "#fafafa",
+                            padding: "2rem",
+                            marginLeft: "2rem",
+                            borderLeft: "3px solid #000000",
+                          }}>
+                          <Box>
+                            Naomi (JOC Community Manager) <Chip label="admin" sx={{ color: "black" }} />
+                          </Box>
+                          <Typography
                             sx={{
                               display: "flex",
 
                               textAlign: "left",
                               gap: "8px",
                             }}>
-                            <AccessTimeIcon /> <Typography>3 months ago</Typography>
-                          </Box>
-                          <Typography>This food is so delicious</Typography>
-                          <Typography>
-                            <StarIcon />
-                            <StarIcon />
-                            <StarIcon />
-                            <StarIcon />
-                            <StarIcon />
+                            <QuickreplyIcon /> Reply to Karen
+                            <AccessTimeIcon /> 3 months ago
+                          </Typography>
+                          <Typography margin={"12px 4px"}>
+                            Hi Karen! Aww. We are so happy to hear you enjoyed the recipe! Thank you so much for trying
+                            Nami’s recipe and for your kind feedback. Happy Cooking!
                           </Typography>
                           <Typography
                             sx={{
@@ -383,41 +475,6 @@ function RecipeDetail() {
                             <ThumbUpOffAltIcon /> 0
                             <QuickreplyIcon /> Reply
                           </Typography>
-                          <Box
-                            sx={{
-                              backgroundColor: "#fafafa",
-                              padding: "2rem",
-                              marginLeft: "2rem",
-                              borderLeft: "3px solid #000000",
-                            }}>
-                            <Box>
-                              Naomi (JOC Community Manager) <Chip label="admin" sx={{ color: "black" }} />
-                            </Box>
-                            <Typography
-                              sx={{
-                                display: "flex",
-
-                                textAlign: "left",
-                                gap: "8px",
-                              }}>
-                              <QuickreplyIcon /> Reply to Karen
-                              <AccessTimeIcon /> 3 months ago
-                            </Typography>
-                            <Typography margin={"12px 4px"}>
-                              Hi Karen! Aww. We are so happy to hear you enjoyed the recipe! Thank you so much for
-                              trying Nami’s recipe and for your kind feedback. Happy Cooking!
-                            </Typography>
-                            <Typography
-                              sx={{
-                                display: "flex",
-
-                                textAlign: "left",
-                                gap: "8px",
-                              }}>
-                              <ThumbUpOffAltIcon /> 0
-                              <QuickreplyIcon /> Reply
-                            </Typography>
-                          </Box>
                         </Box>
                       </Box>
                     </Box>

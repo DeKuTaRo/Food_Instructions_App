@@ -183,6 +183,17 @@ function Headers() {
                 }}>
                 Profile
               </Link>
+              <Link
+                href={"/wishlist"}
+                underline="none"
+                sx={{
+                  padding: "0.5rem 2rem",
+                  color: "black",
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "black", color: "white" },
+                }}>
+                Wishlist
+              </Link>
               <Button
                 sx={{
                   padding: "0.5rem 2rem",

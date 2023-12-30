@@ -103,4 +103,26 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.post("/account/addToWishList", async (req, res, next) => {
+    try {
+      const { _id, nameRecipe, imageRecipe, linkRecipe } = req.body;
+      const { data } = await service.AddToWishlist({ _id, nameRecipe, imageRecipe, linkRecipe });
+      return res.json(data);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/account/getWishlist", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const search = req.query.search;
+      const { data } = await service.GetWishList(_id, search);
+      return res.status(200).json(data);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  });
 };

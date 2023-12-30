@@ -24,6 +24,7 @@ import RecipeDetail from "./Client/RecipeDetail";
 import Searched from "./Client/Searched";
 import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
+import Wishlist from "./Client/Wishlist";
 import NotFound from "./NotFound";
 
 function Pages() {
@@ -47,6 +48,7 @@ function Pages() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/recipe/:label" element={<RecipeDetail />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/wishlist" element={<Wishlist />} />
 
         {/* Admin */}
         <Route path="/login" element={<Login />} />

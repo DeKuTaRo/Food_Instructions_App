@@ -19,7 +19,7 @@ const AccountSchema = new Schema(
     salt: {
       type: String,
     },
-    role : {
+    role: {
       type: String,
     },
     isAdmin: {
@@ -28,12 +28,9 @@ const AccountSchema = new Schema(
     address: [{ type: Schema.Types.ObjectId, ref: "address", require: true }],
     wishlist: [
       {
-        _id: { type: String, required: true },
-        name: { type: String },
-        description: { type: String },
-        banner: { type: String },
-        available: { type: Boolean },
-        price: { type: String },
+        nameRecipe: { type: String },
+        imageRecipe: { type: String },
+        linkRecipe: { type: String },
       },
     ],
     orders: [

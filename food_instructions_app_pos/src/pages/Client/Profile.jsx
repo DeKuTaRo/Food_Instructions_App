@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import bgImage from "../../images/bg1.png";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -113,7 +113,7 @@ function Profile() {
           <GiKnifeFork style={{ fontSize: "6rem" }} />
 
           <Box sx={{ pl: 3, width: "80%" }}>
-            <Box
+            <Typography
               sx={{
                 color: "black",
                 fontSize: "2.8rem",
@@ -121,7 +121,7 @@ function Profile() {
                 margin: "1.5rem 12px ",
               }}>
               Profile
-            </Box>
+            </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
               <Box
