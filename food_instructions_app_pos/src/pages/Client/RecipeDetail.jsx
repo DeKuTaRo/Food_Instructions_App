@@ -105,6 +105,9 @@ function RecipeDetail() {
     newRating[index] = !newRating[index];
     setRating(newRating);
   };
+  const [query, setQuery]=useState('');
+  const [video, setVideo]=useState('');
+  const [videoId, setVideoId] = useState('');
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
@@ -115,6 +118,18 @@ function RecipeDetail() {
         setRecipeImage(response.data.recipe.image);
         setTotalNutrientations(response.data.recipe.totalNutrients);
         setTotalDaily(response.data.recipe.totalDaily);
+
+        const API_KEY = 'AIzaSyCH4bfjTHEXmZmxl8uopDyx8hpvpIeqhC8';
+        const query=`How to cook ${response.data.recipe.label}`  ;
+        const api="https://www.googleapis.com/youtube/v3/search?key="+API_KEY+"&q"+query+"&type=video&maxResults=1"
+        const videoSearchResponse = await axios.get(api);
+        setVideo(videoSearchResponse.data.items[0].id.videoId)
+        // Get the video ID from the search results
+        const firstVideoId = videoSearchResponse.data.items[0]?.id.videoId;
+      
+      if (firstVideoId) {
+        setVideoId(firstVideoId);
+      }
       } catch (error) {
         console.error(error);
       } finally {
@@ -123,7 +138,9 @@ function RecipeDetail() {
     };
     fetchRecipeDetails();
   }, []);
-
+   console.log("sdasdasda",query)
+  console.log("sdasdasda",videoId)
+  console.log("sdasdasda",video)
   const isLoginClient = localStorage.getItem("isLoginClient");
 
   const handleCheckLoginStatus = () => {
@@ -195,6 +212,33 @@ function RecipeDetail() {
       return <MdKebabDining />;
     }
   };
+
+
+
+  //youtube
+
+  //   const [videoId, setVideoId] = useState('');
+  //   useEffect(() => {
+  //     // Thay thế 'YOUR_API_KEY' bằng API key của bạn
+  //     const API_KEY = 'AIzaSyCH4bfjTHEXmZmxl8uopDyx8hpvpIeqhC8';
+  //     const query = label; // Thay thế bằng tên món ăn bạn quan tâm
+
+  //     // Bước 1: Tìm kiếm video liên quan đến món ăn
+  //       const response = await axios.get(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&q=${query}&type=video&maxResults=1`);
+  //       .then((searchResponse) => {
+  //         // Lấy ID của video đầu tiên từ kết quả tìm kiếm
+  //         const firstVideoId = searchResponse.data.items[0]?.id.videoId;
+
+  //         if (firstVideoId) {
+  //           setVideoId(firstVideoId);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error fetching video data', error);
+  //       });
+  //   }, []);
+
+  // console.log("ssadasd",searchResponse)
 
   return (
     <motion.div
@@ -390,6 +434,26 @@ function RecipeDetail() {
                     readOnly
                     value=""
                   />
+
+                  {/* VIdeo */}
+                  <Box>
+
+                    <iframe
+                      width="560"
+                      height="315"
+                      src={`https://www.youtube.com/embed/${videoId}`}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    >
+
+                    </iframe>
+                    <Typography variant="h6">Loading video...</Typography>
+                  </Box>
+
+
+
 
                   <Button sx={{ textAlign: "center", width: "100%" }} onClick={handlePostComments}>
                     Post comment
