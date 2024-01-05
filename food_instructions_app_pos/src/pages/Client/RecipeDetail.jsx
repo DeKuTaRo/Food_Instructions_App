@@ -64,7 +64,7 @@ function RecipeDetail() {
   const [totalNutrients, setTotalNutrientations] = useState({});
   const [totalDaily, setTotalDaily] = useState({});
   const [rating, setRating] = useState([false, false, false, false, false]);
-
+  const [q, setq] = useState("");
   //modal
   const [open, setOpen] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(1);
@@ -105,9 +105,9 @@ function RecipeDetail() {
     newRating[index] = !newRating[index];
     setRating(newRating);
   };
-  const [query, setQuery]=useState('');
-  const [video, setVideo]=useState('');
-  const [videoId, setVideoId] = useState('');
+  const [query, setQuery] = useState("");
+  const [video, setVideo] = useState("");
+  const [videoId, setVideoId] = useState("");
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
@@ -119,17 +119,22 @@ function RecipeDetail() {
         setTotalNutrientations(response.data.recipe.totalNutrients);
         setTotalDaily(response.data.recipe.totalDaily);
 
-        const API_KEY = 'AIzaSyCH4bfjTHEXmZmxl8uopDyx8hpvpIeqhC8';
-        const query=`How to cook ${response.data.recipe.label}`  ;
-        const api="https://www.googleapis.com/youtube/v3/search?key="+API_KEY+"&q"+query+"&type=video&maxResults=1"
+        const API_KEY = "AIzaSyCH4bfjTHEXmZmxl8uopDyx8hpvpIeqhC8";
+        const query = `How to cook ${response.data.recipe.label}`;
+
+        const api =
+          "https://www.googleapis.com/youtube/v3/search?key=" +
+          API_KEY +
+          "&q=" +
+          query +
+          "&type=video&maxResults=1";
+        setq(api);
         const videoSearchResponse = await axios.get(api);
-        setVideo(videoSearchResponse.data.items[0].id.videoId)
+        setVideo(videoSearchResponse.data.items[0].id.videoId);
         // Get the video ID from the search results
-        const firstVideoId = videoSearchResponse.data.items[0]?.id.videoId;
-      
-      if (firstVideoId) {
+        const firstVideoId = videoSearchResponse.data.items[0].id.videoId;
+
         setVideoId(firstVideoId);
-      }
       } catch (error) {
         console.error(error);
       } finally {
@@ -138,9 +143,10 @@ function RecipeDetail() {
     };
     fetchRecipeDetails();
   }, []);
-   console.log("sdasdasda",query)
-  console.log("sdasdasda",videoId)
-  console.log("sdasdasda",video)
+  console.log("sdasdasda", query);
+  console.log("sdasdasda", videoId);
+  console.log("sdasdasda", video);
+  console.log("api", q);
   const isLoginClient = localStorage.getItem("isLoginClient");
 
   const handleCheckLoginStatus = () => {
@@ -164,12 +170,15 @@ function RecipeDetail() {
 
     try {
       axios
-        .post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToWishList`, {
-          _id: id,
-          nameRecipe: recipeName,
-          imageRecipe: recipeImage,
-          linkRecipe: label,
-        })
+        .post(
+          `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToWishList`,
+          {
+            _id: id,
+            nameRecipe: recipeName,
+            imageRecipe: recipeImage,
+            linkRecipe: label,
+          }
+        )
         .then((res) => {
           toast.success("Thêm vào danh sách yêu thích thành công", {
             position: "top-right",
@@ -213,8 +222,6 @@ function RecipeDetail() {
     }
   };
 
-
-
   //youtube
 
   //   const [videoId, setVideoId] = useState('');
@@ -246,7 +253,8 @@ function RecipeDetail() {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%", height: "3000px" }}>
+      style={{ margin: "0% 10%", height: "3000px" }}
+    >
       <Headers />
       <NavBar />
 
@@ -255,7 +263,12 @@ function RecipeDetail() {
           <Typography variant="h6">Fetching Recipe Details...</Typography>
         ) : (
           <>
-            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            <Typography
+              component="h2"
+              variant="h6"
+              color="primary"
+              gutterBottom
+            >
               <Breadcrumbs aria-label="breadcrumb">
                 <Link underline="hover" color="inherit" href="/a-recipe">
                   Recipe
@@ -292,15 +305,18 @@ function RecipeDetail() {
                       display: "flex",
                       alignItems: "center",
                       textAlign: "left",
-                    }}>
+                    }}
+                  >
                     <Box component="div" variant="inherit" sx={{}}>
                       <Typography variant="h4" gutterBottom>
                         Ingredients:
                       </Typography>
                       <ul>
-                        {recipeDetail.recipe.ingredientLines.map((item, index) => (
-                          <li key={index}>{item}</li>
-                        ))}
+                        {recipeDetail.recipe.ingredientLines.map(
+                          (item, index) => (
+                            <li key={index}>{item}</li>
+                          )
+                        )}
                       </ul>
                     </Box>
                   </Grid>
@@ -314,10 +330,17 @@ function RecipeDetail() {
                     </Grid>
 
                     <Grid item xs={6}>
-                      <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
+                      <Stack
+                        spacing={{ xs: 1, sm: 2 }}
+                        direction="row"
+                        useFlexGap
+                        flexWrap="wrap"
+                      >
                         <Typography variant="h5">Meal: </Typography>
                         <Typography variant="h5">
-                          {handleMealType(recipeDetail.recipe.mealType.join(","))}{" "}
+                          {handleMealType(
+                            recipeDetail.recipe.mealType.join(",")
+                          )}{" "}
                           {recipeDetail.recipe.mealType.join(",")}
                         </Typography>
                       </Stack>
@@ -330,22 +353,31 @@ function RecipeDetail() {
                   <Button variant="outlined" onClick={handleOpen}>
                     Buy
                   </Button>
-                  <Button variant="outlined" onClick={handleAddRecipeToWishlist}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleAddRecipeToWishlist}
+                  >
                     Add to wishlist
                   </Button>
                   <Button variant="outlined" onClick={handleAddRecipeToCart}>
                     Add to cart
                   </Button>
                   <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle style={{ fontSize: "2.5em", fontWeight: "800" }}>Buy ingredients </DialogTitle>
+                    <DialogTitle
+                      style={{ fontSize: "2.5em", fontWeight: "800" }}
+                    >
+                      Buy ingredients{" "}
+                    </DialogTitle>
                     <DialogContent>
                       <Typography style={{ margin: "1rem" }}>
                         <ul style={{ listStyleType: "none" }}>
-                          {recipeDetail.recipe.ingredientLines.map((item, index) => (
-                            <li key={index}>
-                              {numberOfPeople} x{item}
-                            </li>
-                          ))}
+                          {recipeDetail.recipe.ingredientLines.map(
+                            (item, index) => (
+                              <li key={index}>
+                                {numberOfPeople} x{item}
+                              </li>
+                            )
+                          )}
                         </ul>
                       </Typography>
                       <Typography>Số người: {numberOfPeople}</Typography>
@@ -363,7 +395,11 @@ function RecipeDetail() {
                       <Button onClick={handleClose} color="primary">
                         Cancel
                       </Button>
-                      <Button onClick={handleClose} color="primary" variant="contained">
+                      <Button
+                        onClick={handleClose}
+                        color="primary"
+                        variant="contained"
+                      >
                         Confirm
                       </Button>
                     </DialogActions>
@@ -403,21 +439,59 @@ function RecipeDetail() {
                           height: "2rem",
                           borderRadius: "1rem",
                           textAlign: "center",
-                        }}>
+                        }}
+                      >
                         {index + 1}
                       </Typography>
-                      <Typography variant="h5" gutterBottom sx={{ marginLeft: "3rem" }}>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ marginLeft: "3rem" }}
+                      >
                         {item}
                       </Typography>
                     </Box>
                   ))}
-                  <Typography variant="h5" gutterBottom sx={{ marginTop: "2rem" }}>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{ marginTop: "2rem" }}
+                  >
                     More details about recipe{" "}
                     <Link href={recipeDetail.recipe.url} underline="hover">
                       here
                     </Link>{" "}
                   </Typography>
                 </Box>
+                
+                {/* VIdeo */}
+                
+                <Box  sx={{
+                  display:"flex",
+                  flexDirection:"column",
+                  borderRadius:"0.2 rem",
+                  alignItems:"start",
+                  justifyContent:"center"
+
+                }}>
+                   <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{ marginTop: "2rem" }}
+                  >Video tutorials</Typography>
+
+                  <iframe
+                    width="90%"
+                    height="400 rem"
+                    src={`https://www.youtube.com/embed/${videoId}`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                  
+                </Box>
+
                 {/* Comments */}
                 <Box sx={{ marginTop: "4rem" }}>
                   <TextareaAutosize
@@ -435,27 +509,10 @@ function RecipeDetail() {
                     value=""
                   />
 
-                  {/* VIdeo */}
-                  <Box>
-
-                    <iframe
-                      width="560"
-                      height="315"
-                      src={`https://www.youtube.com/embed/${videoId}`}
-                      title="YouTube video player"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    >
-
-                    </iframe>
-                    <Typography variant="h6">Loading video...</Typography>
-                  </Box>
-
-
-
-
-                  <Button sx={{ textAlign: "center", width: "100%" }} onClick={handlePostComments}>
+                  <Button
+                    sx={{ textAlign: "center", width: "100%" }}
+                    onClick={handlePostComments}
+                  >
                     Post comment
                   </Button>
                   <br></br>
@@ -464,7 +521,8 @@ function RecipeDetail() {
                     <span
                       key={index}
                       onMouseEnter={() => handleStarHover(index)}
-                      onClick={() => handleStarClick(index)}>
+                      onClick={() => handleStarClick(index)}
+                    >
                       {isActive ? <StarIcon /> : <StarOutlineIcon />}
                     </span>
                   ))}
@@ -483,11 +541,16 @@ function RecipeDetail() {
                         justifyContent: "space-between",
                         marginTop: "4rem",
                         marginBottom: "2rem",
-                      }}>
-                      <Typography sx={{ borderBottom: "1px solid red" }}>224 comments</Typography>
+                      }}
+                    >
+                      <Typography sx={{ borderBottom: "1px solid red" }}>
+                        224 comments
+                      </Typography>
                       <Typography>
                         <BoltIcon sx={{ borderBottom: "1px solid orange" }} />{" "}
-                        <LocalFireDepartmentIcon sx={{ borderBottom: "1px solid orange" }} />
+                        <LocalFireDepartmentIcon
+                          sx={{ borderBottom: "1px solid orange" }}
+                        />
                       </Typography>
                     </Box>
 
@@ -496,7 +559,8 @@ function RecipeDetail() {
                         display: "flex",
                         flexDirection: "column",
                         gap: "12px",
-                      }}>
+                      }}
+                    >
                       <TextField placeholder="Search comment" />
 
                       <Box
@@ -507,13 +571,15 @@ function RecipeDetail() {
                           flexDirection: "column",
                           textAlign: "left",
                           gap: "12px",
-                        }}>
+                        }}
+                      >
                         <Box
                           sx={{
                             display: "flex",
                             gap: "8px",
                             alignItems: "center",
-                          }}>
+                          }}
+                        >
                           <Avatar
                             alt="Remy Sharp"
                             src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
@@ -527,8 +593,10 @@ function RecipeDetail() {
 
                             textAlign: "left",
                             gap: "8px",
-                          }}>
-                          <AccessTimeIcon /> <Typography>3 months ago</Typography>
+                          }}
+                        >
+                          <AccessTimeIcon />{" "}
+                          <Typography>3 months ago</Typography>
                         </Box>
                         <Typography>This food is so delicious</Typography>
                         <Typography>
@@ -544,7 +612,8 @@ function RecipeDetail() {
 
                             textAlign: "left",
                             gap: "8px",
-                          }}>
+                          }}
+                        >
                           <ThumbUpOffAltIcon /> 0
                           <QuickreplyIcon /> Reply
                         </Typography>
@@ -554,9 +623,11 @@ function RecipeDetail() {
                             padding: "2rem",
                             marginLeft: "2rem",
                             borderLeft: "3px solid #000000",
-                          }}>
+                          }}
+                        >
                           <Box>
-                            Naomi (JOC Community Manager) <Chip label="admin" sx={{ color: "black" }} />
+                            Naomi (JOC Community Manager){" "}
+                            <Chip label="admin" sx={{ color: "black" }} />
                           </Box>
                           <Typography
                             sx={{
@@ -564,13 +635,15 @@ function RecipeDetail() {
 
                               textAlign: "left",
                               gap: "8px",
-                            }}>
+                            }}
+                          >
                             <QuickreplyIcon /> Reply to Karen
                             <AccessTimeIcon /> 3 months ago
                           </Typography>
                           <Typography margin={"12px 4px"}>
-                            Hi Karen! Aww. We are so happy to hear you enjoyed the recipe! Thank you so much for trying
-                            Nami’s recipe and for your kind feedback. Happy Cooking!
+                            Hi Karen! Aww. We are so happy to hear you enjoyed
+                            the recipe! Thank you so much for trying Nami’s
+                            recipe and for your kind feedback. Happy Cooking!
                           </Typography>
                           <Typography
                             sx={{
@@ -578,7 +651,8 @@ function RecipeDetail() {
 
                               textAlign: "left",
                               gap: "8px",
-                            }}>
+                            }}
+                          >
                             <ThumbUpOffAltIcon /> 0
                             <QuickreplyIcon /> Reply
                           </Typography>
@@ -596,15 +670,21 @@ function RecipeDetail() {
                     width: 1,
                     backgroundColor: "#ccc",
                     borderRadius: "1rem",
-                  }}>
+                  }}
+                >
                   <Item
                     sx={{
                       borderTopRightRadius: "1rem",
                       borderTopLeftRadius: "1rem",
                       backgroundColor: "#ccc",
                       marginBottom: "1rem",
-                    }}>
-                    <Typography variant="h5" gutterBottom sx={{ padding: "1rem" }}>
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      gutterBottom
+                      sx={{ padding: "1rem" }}
+                    >
                       Nutrition each ingredient
                     </Typography>
                     <React.Fragment>
@@ -620,10 +700,14 @@ function RecipeDetail() {
                         <TableBody>
                           {recipeDetail.recipe.ingredients.map((row, index) => (
                             <TableRow key={index}>
-                              <TableCell>{row.quantity + " " + row.measure}</TableCell>
+                              <TableCell>
+                                {row.quantity + " " + row.measure}
+                              </TableCell>
                               <TableCell>{row.foodCategory}</TableCell>
                               <TableCell>{row.food}</TableCell>
-                              <TableCell>{Number(row.weight.toFixed(1)) + " g"}</TableCell>
+                              <TableCell>
+                                {Number(row.weight.toFixed(1)) + " g"}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -631,7 +715,12 @@ function RecipeDetail() {
                     </React.Fragment>{" "}
                   </Item>
                   <Item sx={{ padding: "1rem" }}>
-                    <Typography variant="h3" align="center" gutterBottom sx={{ borderBottom: "10px solid #ccc" }}>
+                    <Typography
+                      variant="h3"
+                      align="center"
+                      gutterBottom
+                      sx={{ borderBottom: "10px solid #ccc" }}
+                    >
                       Nutrition facts
                     </Typography>
                     <Typography variant="h5" align="left">
@@ -642,11 +731,18 @@ function RecipeDetail() {
                         display: "flex",
                         justifyContent: "space-between",
                         borderBottom: "10px solid #ccc",
-                      }}>
+                      }}
+                    >
                       <Typography variant="h4">Calories</Typography>
-                      <Typography variant="h4">{Number(recipeDetail.recipe.calories.toFixed(1))}</Typography>
+                      <Typography variant="h4">
+                        {Number(recipeDetail.recipe.calories.toFixed(1))}
+                      </Typography>
                     </Box>
-                    <Typography variant="inherit" align="right" sx={{ borderBottom: "1px solid #ccc" }}>
+                    <Typography
+                      variant="inherit"
+                      align="right"
+                      sx={{ borderBottom: "1px solid #ccc" }}
+                    >
                       %Daily value
                     </Typography>
                     <Box
@@ -654,13 +750,15 @@ function RecipeDetail() {
                         display: "flex",
                         justifyContent: "space-between",
                         gap: "30px",
-                      }}>
+                      }}
+                    >
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "baseline",
                           flexDirection: "column",
-                        }}>
+                        }}
+                      >
                         {Object.keys(totalNutrients).map((key) => (
                           <Typography key={key}>
                             {totalNutrients[key].label +
@@ -676,7 +774,8 @@ function RecipeDetail() {
                           display: "flex",
                           alignItems: "flex-end",
                           flexDirection: "column",
-                        }}>
+                        }}
+                      >
                         {Object.keys(totalDaily).map((key) => (
                           <Typography key={key}>
                             {totalDaily[key].label +
