@@ -2,7 +2,6 @@ const { RecipeSchema } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class RecipeRepository {
-
   async AddCommentsRecipe({ nameRecipe, imageRecipe, linkRecipe, comments }) {
     try {
       const checkRecipeExist = await RecipeSchema.findOne({ nameRecipe: nameRecipe });
@@ -17,6 +16,15 @@ class RecipeRepository {
       }
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add Comments");
+    }
+  }
+
+  async GetCommentsByName(recipeName) {
+    try {
+      const checkRecipeExist = await RecipeSchema.findOne({ nameRecipe: recipeName });
+      return checkRecipeExist;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Comments");
     }
   }
 }

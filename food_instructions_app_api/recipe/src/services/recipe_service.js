@@ -8,9 +8,9 @@ class RecipeService {
     this.repository = new RecipeRepository();
   }
 
-  async GetRecipes() {
+  async GetRecipesByName(recipeName) {
     try {
-      const recipes = await this.repository.Recipes();
+      const recipes = await this.repository.GetCommentsByName(recipeName);
 
       return FormateData({
         recipes,

@@ -22,6 +22,18 @@ module.exports = (app) => {
     }
   });
 
+  app.get("/recipe/getComments", UserAuth, async (req, res, next) => {
+
+    const recipeName = req.query.recipeName;
+
+    try {
+      const { data } = await service.GetRecipesByName(recipeName);
+      return res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.get("/", (req, res, next) => {
     res.send("Recipe Service");
   });
