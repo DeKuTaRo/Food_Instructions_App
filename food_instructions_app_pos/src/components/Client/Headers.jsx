@@ -10,25 +10,14 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { RxAvatar } from "react-icons/rx";
 import React, { useState } from "react";
-import { Input, IconButton, InputAdornment, Link } from "@mui/material";
+import { Link } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
-import { CiSearch } from "react-icons/ci";
 import Button from "@mui/material/Button";
 
 function Headers() {
-  const [searchValue, setSearchValue] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [hoverDialogAccount, setHoverDialogAccount] = useState(null);
   const navigate = useNavigate();
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSearchClick();
-    }
-  };
-  const handleSearchClick = () => {
-    navigate(`/searched/${searchValue}`);
-  };
 
   const isLoginClient = localStorage.getItem("isLoginClient");
 
@@ -65,54 +54,10 @@ function Headers() {
         )}
       </Box>
 
-      {/* Search Bar */}
-      {/* Search Bar */}
-
-      {/* Accordion */}
       <Box sx={{ display: "flex" }}>
-        {/* <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Input
-            type="text"
-            placeholder="Search..."
-            sx={{
-              width: isSearchFocused ? "300px" : "200px",
-              height: isSearchFocused ? "35px" : "35px",
-              marginRight: 1,
-              fontSize: "1rem",
-              backgroundColor: "#C0C0C0",
-              color: "#000000",
-              borderRadius: "0.5rem",
-            }}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onFocus={() => setIsSearchFocused(true)}
-            onBlur={() => setIsSearchFocused(false)}
-            onKeyDown={handleKeyPress}
-            startAdornment={
-              <InputAdornment position="start">
-                <IconButton
-                  size="small"
-                  sx={{
-                    backgroundColor: "transparent",
-                    color: "#000000",
-                    "&:hover": {
-                      backgroundColor: "transparent",
-                    },
-                  }}
-                  onClick={handleSearchClick}>
-                  <CiSearch />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </Box> */}
         <Tooltip title="Search" placement="bottom">
           <Link href={"/searched"} underline="none" color="inherit">
             <FontAwesomeIcon icon={faSearchengin} style={{ padding: "0.5rem", fontSize: "1.5rem" }} />
-            {/* <FontAwesomeIcon
-              icon={faFacebookSquare}
-              style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#1877F2" }}
-            /> */}
           </Link>
         </Tooltip>
         <Tooltip title="Facebook" placement="bottom">

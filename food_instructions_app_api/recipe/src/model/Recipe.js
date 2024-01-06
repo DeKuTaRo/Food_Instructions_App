@@ -4,33 +4,36 @@ const Schema = mongoose.Schema;
 
 const RecipeSchema = new Schema(
   {
-    name: {
+    nameRecipe: {
       type: String,
       required: true,
     },
-    link: {
+    imageRecipe: {
       type: String,
       required: true,
     },
-    linkImage: {
+    linkRecipe: {
       type: String,
       required: true,
     },
-    diet: {
-      type: String,
-    },
-    health: {
-      type: String,
-    },
-    cuisine: {
-      type: String,
-    },
-    meal: {
-      type: String,
-    },
-    dish: {
-      type: String,
-    },
+    comments: [
+      {
+        username: { type: String },
+        content: { type: String },
+        rating: { type: Number },
+        liked: { type: Number },
+        timeComment: { type: String },
+        replies: [
+          {
+            username: { type: String },
+            timeReply: { type: String },
+            content: { type: String },
+            liked: { type: String },
+          },
+        ],
+      },
+    ],
+    totalComments: { type: Number },
   },
   {
     toJSON: {

@@ -33,6 +33,16 @@ const AccountSchema = new Schema(
         linkRecipe: { type: String },
       },
     ],
+    comments: [
+      {
+        nameRecipe: { type: String },
+        imageRecipe: { type: String },
+        linkRecipe: { type: String },
+        content: { type: String },
+        rating: { type: String },
+        timeComment: { type: String },
+      },
+    ],
     orders: [
       {
         _id: { type: String, required: true },

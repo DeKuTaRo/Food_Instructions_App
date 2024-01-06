@@ -50,6 +50,7 @@ function LoginClient() {
         localStorage.setItem("isLoginClient", "true");
         localStorage.setItem("id", res.data.id);
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("username", res.data.username);
         navigate("/");
       });
     } catch (err) {

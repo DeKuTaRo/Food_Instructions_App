@@ -8,15 +8,6 @@ class RecipeService {
     this.repository = new RecipeRepository();
   }
 
-  async CreateRecipe(recipeInputs) {
-    try {
-      const recipeResult = await this.repository.CreateRecipe(recipeInputs);
-      return FormateData(recipeResult);
-    } catch (err) {
-      throw new APIError("Data Not found");
-    }
-  }
-
   async GetRecipes() {
     try {
       const recipes = await this.repository.Recipes();
@@ -29,116 +20,28 @@ class RecipeService {
     }
   }
 
-  async SignUp(userInputs) {
-    const { username, email, password } = userInputs;
+  async AddCommentsToRecipe(recipeInputs) {
     try {
-      // create salt
-      let salt = await GenerateSalt();
-
-      let userPassword = await GeneratePassword(password, salt);
-
-      const existingCustomer = await this.repository.CreateAccount({ username, email, password: userPassword, salt });
-
-      const token = await GenerateSignature({ username: username, _id: existingCustomer._id });
-
-      return FormateData({ id: existingCustomer._id, token, status: true });
+      const { nameRecipe, imageRecipe, linkRecipe, comments } = recipeInputs;
+      const commentsResult = await this.repository.AddCommentsRecipe({
+        nameRecipe,
+        imageRecipe,
+        linkRecipe,
+        comments,
+      });
+      return FormateData(commentsResult);
     } catch (err) {
-      throw new APIError("Data Not found", err);
+      throw new APIError("Data Not found");
     }
   }
 
-  async AddNewAddress(_id, userInputs) {
-    const { street, postalCode, city, country } = userInputs;
-
-    try {
-      const addressResult = await this.repository.CreateAddress({ _id, street, postalCode, city, country });
-      return FormateData(addressResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async GetProfile(id) {
-    try {
-      const existingCustomer = await this.repository.FindCustomerById({ id });
-      return FormateData(existingCustomer);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async GetShopingDetails(id) {
-    try {
-      const existingCustomer = await this.repository.FindCustomerById({ id });
-
-      if (existingCustomer) {
-        return FormateData(existingCustomer);
-      }
-      return FormateData({ msg: "Error" });
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async GetWishList(customerId) {
-    try {
-      const wishListItems = await this.repository.Wishlist(customerId);
-      return FormateData(wishListItems);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async AddToWishlist(customerId, product) {
-    try {
-      const wishlistResult = await this.repository.AddWishlistItem(customerId, product);
-      return FormateData(wishlistResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async ManageCart(customerId, product, qty, isRemove) {
-    try {
-      const cartResult = await this.repository.AddCartItem(customerId, product, qty, isRemove);
-
-      return FormateData(cartResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async ManageOrder(customerId, order) {
-    try {
-      const orderResult = await this.repository.AddOrderToProfile(customerId, order);
-      return FormateData(orderResult);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async SubscribeEvents(payload) {
-    const { event, data } = payload;
-
-    const { userId, product, order, qty } = data;
-
-    switch (event) {
-      case "ADD_TO_WISHLIST":
-      case "REMOVE_FROM_WISHLIST":
-        this.AddToWishlist(userId, product);
-        break;
-      case "ADD_TO_CART":
-        this.ManageCart(userId, product, qty, false);
-        break;
-      case "REMOVE_FROM_CART":
-        this.ManageCart(userId, product, qty, true);
-        break;
-      case "CREATE_ORDER":
-        this.ManageOrder(userId, order);
-        break;
-      default:
-        break;
-    }
+  async GetRecipePayload(userId, recipeInputs, event) {
+    const payload = {
+      event: event,
+      data: recipeInputs,
+      userId: userId,
+    };
+    return FormateData(payload);
   }
 }
 

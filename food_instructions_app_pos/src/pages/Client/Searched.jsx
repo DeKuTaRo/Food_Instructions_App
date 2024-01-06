@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -77,8 +77,6 @@ function useDebounce(value, delay) {
 function Searched() {
   const [loading, setLoading] = useState(true);
 
-  const params = useParams();
-  console.log("params: ", params);
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSearch();
@@ -86,7 +84,6 @@ function Searched() {
   };
 
   const [linkNextPage, setLinkNextPage] = useState("");
-  const [linkPreviousPage, setLinkPreviousPage] = useState("");
   const [diet, setDiet] = useState([]);
   const [health, setHealth] = useState([]);
   const [cuisine, setCuisine] = useState([]);
@@ -149,7 +146,6 @@ function Searched() {
   });
 
   const url = `${process.env.REACT_APP_RECIPE_URL}?${queryParams.toString()}`;
-const urlFetch = "";
   const handleSearch = async () => {
     try {
       const response = await axios.get(linkNextPage === "" ? url : linkNextPage);
@@ -161,8 +157,6 @@ const urlFetch = "";
       setLoading(false);
     }
   };
-
-  console.log("linkNextPage =", linkNextPage);
 
   return (
     <motion.div
@@ -298,9 +292,9 @@ const urlFetch = "";
                 <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
                   Previous page
                 </Button>
-                <Button variant="contained" onClick={handleSearch}>
+                {/* <Button variant="contained" onClick={handleSearch}>
                   {searchResults._links.next.title}
-                </Button>
+                </Button> */}
               </Box>
             </Stack>
           </>

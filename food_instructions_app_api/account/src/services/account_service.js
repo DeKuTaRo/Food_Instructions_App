@@ -16,7 +16,13 @@ class AccountService {
         const validPassword = await ValidatePassword(password, existingAccount.password, existingAccount.salt);
         if (validPassword) {
           const token = await GenerateSignature({ username: existingAccount.username, _id: existingAccount._id });
-          return FormateData({ id: existingAccount._id, token, status: true, isAdmin: existingAccount.isAdmin });
+          return FormateData({
+            id: existingAccount._id,
+            token,
+            status: true,
+            isAdmin: existingAccount.isAdmin,
+            username: existingAccount.username,
+          });
         }
       }
 
@@ -141,24 +147,29 @@ class AccountService {
     }
   }
 
+  async AddComments(recipeInputs, userId) {
+    const { nameRecipe, imageRecipe, linkRecipe, comments } = recipeInputs;
+    try {
+      const commentsResult = await this.repository.AddComments(
+        {
+          nameRecipe,
+          imageRecipe,
+          linkRecipe,
+          comments,
+        },
+        userId
+      );
+      return FormateData(commentsResult);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
   async SubscribeEvents(payload) {
-    const { event, data } = payload;
-
-    const { userId, product, order, qty } = data;
-
+    const { event, data, userId } = payload.data;
     switch (event) {
-      case "ADD_TO_WISHLIST":
-      case "REMOVE_FROM_WISHLIST":
-        this.AddToWishlist(userId, product);
-        break;
-      case "ADD_TO_CART":
-        this.ManageCart(userId, product, qty, false);
-        break;
-      case "REMOVE_FROM_CART":
-        this.ManageCart(userId, product, qty, true);
-        break;
-      case "CREATE_ORDER":
-        this.ManageOrder(userId, order);
+      case "ADD_COMMENTS_TO_RECIPES":
+        this.AddComments(data, userId);
         break;
       default:
         break;

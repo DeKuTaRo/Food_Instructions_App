@@ -50,7 +50,6 @@ module.exports = (app) => {
 
   app.get("/account/profile", UserAuth, async (req, res, next) => {
     try {
-      console.log("req = ", req);
       const { _id } = req.user;
       const { data } = await service.GetProfile({ _id });
       return res.json(data);
@@ -65,16 +64,6 @@ module.exports = (app) => {
       const { data } = await service.GetShopingDetails(_id);
 
       return res.json(data);
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.get("/wishlist", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-      const { data } = await service.GetWishList(_id);
-      return res.status(200).json(data);
     } catch (err) {
       next(err);
     }

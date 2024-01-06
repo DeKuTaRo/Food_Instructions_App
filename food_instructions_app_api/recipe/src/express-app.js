@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { recipe } = require("./api");
+const { recipe, appEvents } = require("./api");
 const HandleErrors = require("./utils/error-handler");
 var logger = require("morgan");
 
@@ -12,7 +12,7 @@ module.exports = async (app) => {
   app.use(logger("dev"));
 
   // Listen to events ///
-  // appEvent(app);
+  appEvents(app);
 
   //api
   recipe(app);

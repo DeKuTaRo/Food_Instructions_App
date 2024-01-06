@@ -2,21 +2,21 @@ const { RecipeSchema } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class RecipeRepository {
-  async CreateRecipe({ name, link, linkImage, diet, health, cuisine, meal, dish }) {
-    try {
-      const recippe = new RecipeSchema({ name, link, linkImage, diet, health, cuisine, meal, dish });
-      const recippeResult = await recippe.save();
-      return recippeResult;
-    } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Recipe");
-    }
-  }
 
-  async Recipes() {
+  async AddCommentsRecipe({ nameRecipe, imageRecipe, linkRecipe, comments }) {
     try {
-      return await RecipeSchema.find();
+      const checkRecipeExist = await RecipeSchema.findOne({ nameRecipe: nameRecipe });
+      if (checkRecipeExist) {
+        checkRecipeExist.comments.push(comments);
+        checkRecipeExist.totalComments += 1;
+        return await checkRecipeExist.save();
+      } else {
+        const totalComments = 1;
+        const recipe = new RecipeSchema({ nameRecipe, imageRecipe, linkRecipe, comments, totalComments });
+        return await recipe.save();
+      }
     } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Recipes");
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add Comments");
     }
   }
 }

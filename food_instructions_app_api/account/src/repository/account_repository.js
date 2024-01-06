@@ -15,6 +15,7 @@ class AccountRepository {
         wishlist: [],
         orders: [],
         cart: [],
+        comments: [],
       });
       const accountResult = await account.save();
       return accountResult;
@@ -199,6 +200,27 @@ class AccountRepository {
       throw new Error("Unable to add to order!");
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Customer");
+    }
+  }
+
+  async AddComments({ nameRecipe, imageRecipe, linkRecipe, comments }, userId) {
+    const { content, rating, timeComment } = comments;
+    const newComments = {
+      nameRecipe,
+      imageRecipe,
+      linkRecipe,
+      content,
+      rating,
+      timeComment,
+    };
+
+    try {
+      const account = await AccountModel.findById(userId);
+      account.comments.push(newComments);
+
+      return await account.save();
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add Comment");
     }
   }
 }

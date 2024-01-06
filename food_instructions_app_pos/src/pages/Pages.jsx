@@ -20,7 +20,7 @@ import SignUp from "./Client/SignUp";
 import Nutrition from "./Client/Nutrition";
 import LoginClient from "./Client/Login";
 import ForgotPassword from "./Client/ForgotPassword";
-import RecipeDetail from "./Client/RecipeDetail";
+import RecipeDetail from "./Client/RecipeDetail/RecipeDetail";
 import Searched from "./Client/Searched";
 import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
@@ -33,7 +33,6 @@ function Pages() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/cuisine/:type" element={<Cuisine />} />
-        <Route path="/searched/:search" element={<Searched />} />
         <Route path="/searched/" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 

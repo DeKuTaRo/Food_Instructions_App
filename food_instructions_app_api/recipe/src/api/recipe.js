@@ -1,44 +1,24 @@
 const RecipeService = require("../services/recipe_service");
 
 const UserAuth = require("../middleware/auth");
+const { PublishAccountEvent } = require("../utils");
 
 module.exports = (app) => {
   const service = new RecipeService();
 
-  app.put("/recipe/wishlist", (req, res, next) => {
+  app.post("/recipe/comments", UserAuth, async (req, res, next) => {
+    const { _id } = req.user;
+    const recipeInputs = req.body;
     try {
-      console.log("req.body = ", req.body);
+      // get payload // to send account service
+      const dataPayload = await service.GetRecipePayload(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
+      PublishAccountEvent(dataPayload);
+
+      const { data } = await service.AddCommentsToRecipe(recipeInputs);
+
+      res.status(200).json(data);
     } catch (err) {
       next(err);
-    }
-  });
-
-  app.post("/recipe/add", async (req, res, next) => {
-    try {
-      const { name, link, linkImage, diet, health, cuisine, meal, dish } = req.body;
-      const { data } = await service.CreateRecipe({ name, link, linkImage, diet, health, cuisine, meal, dish });
-      return res.json(data);
-    } catch (err) {
-      // console.log(err);
-      next(err);
-    }
-  });
-
-  app.put("/recipe/comments", async (req, res, next) => {
-    try {
-      console.log("recipe comments");
-      res.status(200).json("add recipe comments");
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.get("/recipe/getAll", async (req, res, next) => {
-    try {
-      const { data } = await service.GetRecipes();
-      return res.status(200).json(data);
-    } catch (error) {
-      next(error);
     }
   });
 
