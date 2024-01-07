@@ -26,7 +26,8 @@ import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
 import Wishlist from "./Client/Wishlist";
 import NotFound from "./NotFound";
-
+import Abot from "./About";
+import About from "./About";
 function Pages() {
   const location = useLocation();
   return (
@@ -58,6 +59,9 @@ function Pages() {
         <Route path="/a-food" element={<Food />} />
         <Route path="/a-recipe" element={<ARecipe />} />
         <Route path="/a-recipe/details/:url" element={<ARecipeDetail />} />
+
+         <Route path="/about" element={<About />} />
+
       </Routes>
     </AnimatePresence>
   );

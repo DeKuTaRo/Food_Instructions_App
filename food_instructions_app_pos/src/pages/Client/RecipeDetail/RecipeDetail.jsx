@@ -17,7 +17,7 @@ import {
   IconButton,
   Link,
 } from "@mui/material";
-
+import Footer from "../../../components/Client/Footer";
 import { Add, Remove } from "@mui/icons-material";
 import { toast } from "react-toastify";
 
@@ -298,6 +298,7 @@ function RecipeDetail() {
           </>
         )}
       </div>
+      <Footer />
     </motion.div>
   );
 }

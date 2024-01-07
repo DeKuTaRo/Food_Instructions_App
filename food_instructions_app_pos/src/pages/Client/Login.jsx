@@ -13,7 +13,7 @@ import NavBar from "../../components/Client/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import Footer from "../../components/Client/Footer";
 function LoginClient() {
   const navigate = useNavigate();
 
@@ -179,6 +179,7 @@ function LoginClient() {
           </Box>
         </Box>
       </div>
+     
     </motion.div>
   );
 }

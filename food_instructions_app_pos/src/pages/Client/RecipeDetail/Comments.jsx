@@ -151,10 +151,11 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           </label>
         );
       })}
+         <Box sx={{display:"flex" ,justifyContent:"center",alignItems:"center",width:"100%"}}>
       <Button variant="contained" sx={{ textAlign: "center", marginTop: "1rem" }} onClick={handlePostComments}>
         Post comment
       </Button>
-
+      </Box>
       <Box sx={{ marginBottom: "4rem" }}>
         <Box
           sx={{

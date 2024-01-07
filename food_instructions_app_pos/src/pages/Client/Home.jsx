@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Headers from "../../components/Client/Headers";
 import NavBar from "../../components/Client/Navbar";
 
+import Footer from "../../components/Client/Footer";
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 
@@ -23,6 +24,7 @@ function Home() {
       <Veggie />
       <Popular />
       <Topics />
+      <Footer />  
     </motion.div>
   );
 }
