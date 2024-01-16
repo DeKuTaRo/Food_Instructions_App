@@ -156,7 +156,7 @@ function RecipeDetail() {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%", height: "3000px" }}>
+      style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
 
@@ -177,7 +177,6 @@ function RecipeDetail() {
             <Grid container spacing={2}>
               <Grid item xs={8}>
                 <Grid container spacing={2}>
-
                   <Grid item md={6} xs={12}>
                     <NameWithImage recipeName={recipeName} recipeImage={recipeImage} />
                   </Grid>

@@ -16,23 +16,7 @@ const RecipeSchema = new Schema(
       type: String,
       required: true,
     },
-    comments: [
-      {
-        username: { type: String },
-        content: { type: String },
-        rating: { type: Number },
-        liked: { type: Number },
-        timeComment: { type: String },
-        replies: [
-          {
-            username: { type: String },
-            timeReply: { type: String },
-            content: { type: String },
-            liked: { type: String },
-          },
-        ],
-      },
-    ],
+    comments: [{ type: Object, ref: "comment", required: true }],
     totalComments: { type: Number },
   },
   {

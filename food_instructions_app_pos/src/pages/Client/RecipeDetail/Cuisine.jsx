@@ -1,7 +1,12 @@
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 const Cuisine = ({ cuisineType }) => {
-  return <Typography>CuisineType: {cuisineType}</Typography>;
+  return (
+    <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
+      <Typography variant="h5">Cuisine: </Typography>
+      <Typography variant="h5">{cuisineType}</Typography>
+    </Stack>
+  );
 };
 
 export default Cuisine;

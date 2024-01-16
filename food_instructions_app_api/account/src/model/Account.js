@@ -39,7 +39,7 @@ const AccountSchema = new Schema(
         imageRecipe: { type: String },
         linkRecipe: { type: String },
         content: { type: String },
-        rating: { type: String },
+        rating: { type: Number },
         timeComment: { type: String },
       },
     ],

@@ -11,6 +11,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import Avatar from "@mui/material/Avatar";
+import CommentIcon from "@mui/icons-material/Comment";
 
 const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginStatus, token }) => {
   const [commentsPost, setCommentsPost] = useState("");
@@ -20,6 +21,15 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   const [totalComments, setTotalComments] = useState(0);
   const [ratingComment, setRatingComment] = useState(null);
   const [hoverStarComment, setHoverStarComment] = useState(null);
+  const [replyVisible, setReplyVisible] = useState({});
+  const [likeEachComment, setLikeEachComment] = useState({});
+  const [idRecipe, setIdRecipe] = useState("");
+  const [isLiked, setIsLiked] = useState(true);
+
+  const [commentReply, setCommentReply] = useState("");
+  const debounceReplyComment = useDebounce(commentReply, 1000);
+
+  const isAdmin = localStorage.getItem("isAdmin");
 
   const formData = {
     nameRecipe: recipeName,
@@ -95,23 +105,105 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           "Content-Type": "application/json",
         },
       });
-      if (response.statusText === "OK") {
+      if (response.data.recipes !== null) {
         setListComments(response.data.recipes.comments);
         setTotalComments(response.data.recipes.totalComments);
+        setIdRecipe(response.data.recipes._id);
       }
-      console.log("response =", response);
     };
     getComments();
   }, []);
 
-  const handleLikeComment = () => {
+  const handleSetLikeComment = async (_idComment) => {
     handleCheckLoginStatus();
-    console.log("handleLikeComment");
+    setIsLiked(!isLiked);
+    setLikeEachComment((prevLike) => ({
+      ...prevLike,
+      [_idComment]: !prevLike[_idComment],
+    }));
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/liked`,
+        {
+          _idComment: _idComment,
+          isLiked: isLiked,
+          idRecipe: idRecipe,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.recipes !== undefined) {
+        setListComments(response.data.recipes.comments);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleReplyComment = () => {
+  const handleReplyComment = (_id) => {
     handleCheckLoginStatus();
-    console.log("handleReplyComment");
+    setReplyVisible((prevVisibility) => ({
+      ...prevVisibility,
+      [_id]: !prevVisibility[_id],
+    }));
+  };
+
+  const handlePostReplyComments = async (_idComment) => {
+    console.log("reply comments");
+    handleCheckLoginStatus();
+    if (debounceReplyComment === "") {
+      toast.error("Vui lòng nhập bình luận", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } else {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
+          {
+            timeComment: getCurrentDateTimeInVietnam,
+            content: debounceReplyComment,
+            liked: 0,
+            rating: 0,
+            _idComment: _idComment,
+            idRecipe: idRecipe,
+            nameRecipe: recipeName,
+            imageRecipe: recipeImage,
+            linkRecipe: label,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("response = ", response);
+      } catch (err) {
+        console.error(err);
+        // toast.error("Có lỗi xảy ra", {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "dark",
+        // });
+      }
+    }
   };
 
   return (
@@ -132,7 +224,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
       />
 
       <Typography>Rate this food</Typography>
-      {[...Array(5)].map((index) => {
+      {[...Array(5)].map((star, index) => {
         const currentRating = index + 1;
         return (
           <label key={index}>
@@ -151,10 +243,10 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           </label>
         );
       })}
-         <Box sx={{display:"flex" ,justifyContent:"center",alignItems:"center",width:"100%"}}>
-      <Button variant="contained" sx={{ textAlign: "center", marginTop: "1rem" }} onClick={handlePostComments}>
-        Post comment
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+        <Button variant="contained" sx={{ textAlign: "center", marginTop: "1rem" }} onClick={handlePostComments}>
+          Post comment
+        </Button>
       </Box>
       <Box sx={{ marginBottom: "4rem" }}>
         <Box
@@ -211,7 +303,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                   alt="Remy Sharp"
                   src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
                 />
-                <Typography>{item.username}</Typography>
+                <Typography variant="h6">{item.username}</Typography>
               </Box>
 
               <Box
@@ -224,16 +316,13 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
               </Box>
               <Typography>{item.content}</Typography>
               <Box sx={{ display: "flex" }}>
-                {[...Array(5)].map((index) => {
+                {[...Array(5)].map((start, index) => {
+                  const currentRating = index + 1;
+
                   return (
                     <label key={index}>
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={0 ? item.rating === null : item.rating}
-                        style={{ display: "none" }}
-                      />
-                      <FaStar color={item.rating ? "#ffc107" : "#e4e5e9"} />
+                      <input type="radio" name="rating" value={currentRating} style={{ display: "none" }} />
+                      <FaStar color={currentRating <= item.rating ? "#ffc107" : "#e4e5e9"} />
                     </label>
                   );
                 })}
@@ -244,49 +333,83 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                   textAlign: "left",
                   gap: "8px",
                 }}>
-                <Button variant="outlined" startIcon={<ThumbUpOffAltIcon />} onClick={() => handleLikeComment()}>
-                  {item.liked}
+                <Button
+                  variant="outlined"
+                  startIcon={<ThumbUpOffAltIcon />}
+                  onClick={() => {
+                    handleSetLikeComment(item._id);
+                  }}>
+                  {likeEachComment[item._id] ? item.liked + 1 : item.liked}
                 </Button>
-                <Button variant="contained" startIcon={<QuickreplyIcon />} onClick={() => handleReplyComment()}>
+                <Button
+                  variant="contained"
+                  startIcon={<QuickreplyIcon />}
+                  onClick={() => handleReplyComment(item._id, isLiked)}>
                   Reply
                 </Button>
               </Typography>
-              
-              <Box
-                sx={{
-                  backgroundColor: "#fafafa",
-                  padding: "2rem",
-                  marginLeft: "2rem",
-                  borderLeft: "3px solid #000000",
-                }}>
-                <Box>
-                  Naomi (JOC Community Manager) <Chip label="admin" sx={{ color: "black" }} />
+
+              {replyVisible[item._id] && (
+                <>
+                  <TextareaAutosize
+                    aria-label="comments"
+                    minRows={3}
+                    placeholder="Leave your reply here"
+                    style={{
+                      width: "100%",
+                      padding: "1rem",
+                      fontSize: "1rem",
+                      border: "1px solid #ccc",
+                      borderRadius: "1rem",
+                    }}
+                    value={commentReply}
+                    onChange={(e) => setCommentReply(e.target.value)}
+                  />
+                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                    <Button
+                      variant="contained"
+                      sx={{ textAlign: "center", marginTop: "1rem" }}
+                      onClick={() => handlePostReplyComments(item._id)}>
+                      Post comment
+                    </Button>
+                  </Box>
+                </>
+              )}
+
+              {item.replies.map((reply) => (
+                <Box
+                  key={reply._id}
+                  sx={{
+                    backgroundColor: "#fafafa",
+                    padding: "1rem",
+                    marginLeft: "2rem",
+                    borderLeft: "3px solid #000000",
+                  }}>
+                  <Box sx={{ fontSize: "1.25rem" }}>
+                    {reply.username} {isAdmin === "true" && <Chip label="admin" sx={{ color: "black" }} />}
+                  </Box>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      textAlign: "left",
+                      gap: "0.5rem",
+                      marginTop: "1rem",
+                    }}>
+                    <CommentIcon /> Reply to {item.username}
+                    <AccessTimeIcon /> {reply.timeComment}
+                  </Typography>
+                  <Typography margin={"1rem"}>{reply.content}</Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      textAlign: "left",
+                      gap: "0.5rem",
+                    }}>
+                    <ThumbUpOffAltIcon /> {reply.liked}
+                    <QuickreplyIcon /> Reply
+                  </Typography>
                 </Box>
-                <Typography
-                  sx={{
-                    display: "flex",
-
-                    textAlign: "left",
-                    gap: "8px",
-                  }}>
-                  <QuickreplyIcon /> Reply to Karen
-                  <AccessTimeIcon /> 3 months ago
-                </Typography>
-                <Typography margin={"12px 4px"}>
-                  Hi Karen! Aww. We are so happy to hear you enjoyed the recipe! Thank you so much for trying Nami’s
-                  recipe and for your kind feedback. Happy Cooking!
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
-
-                    textAlign: "left",
-                    gap: "8px",
-                  }}>
-                  <ThumbUpOffAltIcon /> 0
-                  <QuickreplyIcon /> Reply
-                </Typography>
-              </Box>
+              ))}
             </Box>
           ))}
         </Box>

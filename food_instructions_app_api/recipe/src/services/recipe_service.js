@@ -43,6 +43,28 @@ class RecipeService {
     };
     return FormateData(payload);
   }
+
+  async AddLikeToComment(userInfo, recipeComment) {
+    const { _id, username } = userInfo;
+    const { _idComment, isLiked, idRecipe } = recipeComment;
+    try {
+      const likeComment = await this.repository.SetLikeToComment({ _id, username }, { _idComment, isLiked, idRecipe });
+      return FormateData(likeComment);
+    } catch (err) {
+      console.log("err service = ", err);
+      throw new APIError("Data Not found");
+    }
+  }
+
+  async AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username }) {
+    try {
+      const replyComment = await this.repository.AddReplyComment({ timeComment, content, liked, _idComment, idRecipe, username });
+      return FormateData(replyComment);
+    } catch (err) {
+      console.log("err service = ", err);
+      throw new APIError("Data Not found");
+    }
+  }
 }
 
 module.exports = RecipeService;
