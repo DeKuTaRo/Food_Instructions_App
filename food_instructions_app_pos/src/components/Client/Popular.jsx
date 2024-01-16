@@ -7,6 +7,15 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { IoIosArrowDropright } from "react-icons/io";
 import { Link } from "react-router-dom";
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 function Popular() {
   const [articles, setArticles] = useState([]);
 
@@ -18,7 +27,9 @@ function Popular() {
           `https://newsapi.org/v2/everything?q=Delicious cuisines of the world&apiKey=${apiKey}`
         );
         const data = await response.json();
-        setArticles(data.articles);
+        // Xáo trộn mảng articles và lấy 3 phần tử đầu tiên
+        const shuffledArticles = shuffleArray(data.articles).slice(0, 3);
+        setArticles(shuffledArticles);
       } catch (error) {
         console.error("Error fetching articles:", error);
       }
@@ -60,7 +71,7 @@ function Popular() {
             component="span"
             sx={{ fontWeight: "700", fontSize: "1.5rem" }}
           >
-            Latest Posts
+            News
           </Typography>
         </div>
         <div
@@ -71,23 +82,15 @@ function Popular() {
             columnGap: "0.25rem",
           }}
         >
-          <Typography component="span" sx={{ fontWeight: "700" }}>
-            VIEW
-          </Typography>{" "}
-          <Typography component="span" sx={{ fontStyle: "italic" }}>
-            all
-          </Typography>{" "}
-          <Typography component="span" sx={{ fontWeight: "700" }}>
-            POST
-          </Typography>
-          <IoIosArrowDropright />
+         
+          
         </div>
       </div>
       <Grid container spacing={2}>
         {articles.slice(0, 3).map((article, index) => (
           <Grid key={index} item xs={4}>
           <Link
-              to={`/detail/${index}`}
+              to={`${article.url}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <Card
