@@ -28,6 +28,8 @@ import Wishlist from "./Client/Wishlist";
 import NotFound from "./NotFound";
 import Abot from "./About";
 import About from "./About";
+
+import TopicDetail from "./Client/TopicDetail/TopicDetail";
 function Pages() {
   const location = useLocation();
   return (
@@ -50,6 +52,7 @@ function Pages() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/wishlist" element={<Wishlist />} />
 
+        <Route path="/topic/:label" element={<TopicDetail />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />

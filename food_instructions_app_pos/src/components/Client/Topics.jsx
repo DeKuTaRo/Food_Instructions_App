@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 
 import { FaRainbow } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
@@ -26,7 +26,21 @@ function Topics() {
         <FaRainbow /> <Typography sx={{ fontWeight: "bold", margin: "1rem 0" }}>BROWSE POPULAR TOPICS</Typography>
         <Grid container spacing={2} columns={16}>
           <Grid item xs={2}>
-            <Card>
+            <Link to={`topic/Sandwiches`}
+             style={{ textDecoration: "none", color: "inherit" }}>
+             <Card
+              sx={{
+                 
+                  backgroundColor: "white",
+                  
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "box-shadow 0.3s", // Add transition for smooth effect
+                  "&:hover": {
+                    boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)", // Adjust the shadow on hover
+                  },
+                }}
+             >
               <CardMedia
                 component="img"
                 alt="green iguana"
@@ -34,40 +48,70 @@ function Topics() {
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
-                  Appertizer
+                  Sandwiches
                 </Typography>
               </CardContent>
             </Card>
+            </Link>
+           
           </Grid>
           <Grid item xs={2}>
-            <Card>
+           <Link to={`detail/Sandwiches`}
+             style={{ textDecoration: "none", color: "inherit" }}>
+             <Card
+              sx={{
+                 
+                  backgroundColor: "white",
+                  
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "box-shadow 0.3s", // Add transition for smooth effect
+                  "&:hover": {
+                    boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)", // Adjust the shadow on hover
+                  },
+                }}
+             >
               <CardMedia
                 component="img"
                 alt="green iguana"
-                image={
-                  "https://www.justonecookbook.com/wp-content/uploads/2015/10/Iced-Green-Tea-Latte-III-182x182.jpg"
-                }
+                image={"https://www.justonecookbook.com/wp-content/uploads/2017/07/Gyoza-II-182x182.jpg"}
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
-                  Beverage
+                  Bread
                 </Typography>
               </CardContent>
             </Card>
+            </Link>
           </Grid>
           <Grid item xs={2}>
-            <Card>
+           <Link to={`detail/Sandwiches`}
+             style={{ textDecoration: "none", color: "inherit" }}>
+             <Card
+              sx={{
+                 
+                  backgroundColor: "white",
+                  
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "box-shadow 0.3s", // Add transition for smooth effect
+                  "&:hover": {
+                    boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)", // Adjust the shadow on hover
+                  },
+                }}
+             >
               <CardMedia
                 component="img"
                 alt="green iguana"
-                image={"https://www.justonecookbook.com/wp-content/uploads/2018/05/Souffle-Pancake-III-182x182.jpg"}
+                image={"https://www.justonecookbook.com/wp-content/uploads/2017/07/Gyoza-II-182x182.jpg"}
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
-                  Breakfast
+                  Cear
                 </Typography>
               </CardContent>
             </Card>
+            </Link>
           </Grid>
           <Grid item xs={2}>
             <Card>
@@ -75,34 +119,6 @@ function Topics() {
                 component="img"
                 alt="green iguana"
                 image={"https://www.justonecookbook.com/wp-content/uploads/2016/12/Japanese-Cheesecake-182x182.jpg"}
-              />
-              <CardContent sx={{ color: "black", textAlign: "center" }}>
-                <Typography variant="inherit" component="span">
-                  Dessert
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={2}>
-            <Card>
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                image={"https://www.justonecookbook.com/wp-content/uploads/2017/09/Chicekn-Teriyaki-III-182x182.jpg"}
-              />
-              <CardContent sx={{ color: "black", textAlign: "center" }}>
-                <Typography variant="inherit" component="span">
-                  Entre
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={2}>
-            <Card>
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                image={"https://www.justonecookbook.com/wp-content/uploads/2018/01/Harusame-Salad-II-182x182.jpg"}
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
@@ -116,11 +132,39 @@ function Topics() {
               <CardMedia
                 component="img"
                 alt="green iguana"
+                image={"https://www.justonecookbook.com/wp-content/uploads/2017/09/Chicekn-Teriyaki-III-182x182.jpg"}
+              />
+              <CardContent sx={{ color: "black", textAlign: "center" }}>
+                <Typography variant="inherit" component="span">
+                  Desserts
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={2}>
+            <Card>
+              <CardMedia
+                component="img"
+                alt="green iguana"
+                image={"https://www.justonecookbook.com/wp-content/uploads/2018/01/Harusame-Salad-II-182x182.jpg"}
+              />
+              <CardContent sx={{ color: "black", textAlign: "center" }}>
+                <Typography variant="inherit" component="span">
+                  Drink
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={2}>
+            <Card>
+              <CardMedia
+                component="img"
+                alt="green iguana"
                 image={"https://www.justonecookbook.com/wp-content/uploads/2018/04/Sansai-Gohan-II-182x182.jpg"}
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
-                  Side
+                  Side dish
                 </Typography>
               </CardContent>
             </Card>

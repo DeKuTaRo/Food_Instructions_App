@@ -62,7 +62,7 @@ function Popular() {
               width: 40,
               height: 40,
               fill: "#D0021B",
-              background: "url('YOUR_ICON_URL') center no-repeat",
+              background: "url('') center no-repeat",
               backgroundSize: "contain",
             }}
           ></Typography>
