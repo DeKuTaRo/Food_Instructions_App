@@ -15,52 +15,32 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 
-import img from "../../../images/sandwiches.jpg";
+import inforTopic from './TopicData'
+
 const TopicDetail = () => {
   const { label } = useParams();
-  const [topicDetails, setTopicDetails] = useState({
-    title: "Sandwiches",
-    description:
-      "Sandwiches are a popular and versatile food item that typically consists of one or more layers of bread with various fillings between them. The bread acts as a vessel to hold together the ingredients and provides a convenient way to consume a combination of flavors and textures. Sandwiches can be found in various cuisines around the world, and they come in countless variations, catering to different tastes and preferences.",
-    history: `The sandwich has a long history and dates back to ancient times. Here are some key events in the history of the sandwich:
+ 
+ const topicDetails = inforTopic[label];
 
-  Ancient Times:The emergence of the sandwich can be linked to the use of bread as a protective layer for food. In the centuries before the Common Era, Jewish people often used unleavened bread, called "matzah," to wrap meat and raw vegetables.
-  Medieval Times:In medieval China, there are records of using bread to hold various foods such as meat and raw vegetables.
-  During the Crusades (11th-13th centuries), European warriors returning from the Middle East brought Arab culinary styles, including the use of bread as a layer for food.
-  The English and John Montagu (1718-1792):The most popular theory about the origin of the term "sandwich" comes from John Montagu, the 18th-century Earl of Sandwich. He was a gambling addict and would often stay at the card table all day. He requested that a meal be brought to him between two slices of bread so that he wouldn't have to leave the gaming table. This practice became popular and was called a "sandwich" after him.
-  Development and Popularization:Over the centuries, the sandwich became an integral part of global cuisine. Various types of bread with different fillings and sauces were created.
-  During the Industrial Revolution, industrial production of bread and food increased the popularity of the sandwich.
-20th Century and Modern Times:With the development of restaurant chains and fast food, the sandwich became a convenient and tasty option for many people worldwide.
-Varieties of sandwiches became increasingly diverse, from traditional sandwiches to large bread types such as subs, wraps, and burgers.
-From the simple idea of using bread to hold food, the sandwich has become an icon of global cuisine, contributing to meeting the dietary needs of many people around the world.`,
-    fills:`Proteins: Common proteins include meats (such as ham, turkey, chicken, or beef), seafood, eggs, or tofu for vegetarian options.
-Cheese: Various types of cheese add flavor and texture to sandwiches.
-Vegetables: Fresh vegetables like lettuce, tomatoes, cucumbers, onions, and sprouts are often used.
-Condiments: Sauces, spreads, and condiments like mayonnaise, mustard, ketchup, and pesto enhance the taste.`,
-    type:`Classic Sandwiches: Examples include the club sandwich, BLT (bacon, lettuce, and tomato), and ham and cheese sandwich.
-Grilled or Toasted Sandwiches: Paninis, grilled cheese, and tuna melts fall into this category.
-Subs and Hoagies: Longer sandwiches often filled with a variety of meats, cheeses, and vegetables.
-Wrap or Burrito: Using tortillas instead of traditional bread.`,
-    mainImage: `${img}`,
-  });
-
- console.log(label)
+ const  [data, setdata] = useState([]);
   const [relatedRecipes, setRelatedRecipes] = useState([]);
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const dishType = "sandwiches"; // Replace with the desired dishType
+        const dishType = label; // Replace with the desired dishType
         const appId = process.env.REACT_APP_APP_ID_RECIPE;
         const appKey = process.env.REACT_APP_APP_KEY_RECIPE;
         const response = await axios.get(
-          `https://api.edamam.com/search?q=&dishType=${dishType}&app_id=${appId}&app_key=${appKey}`
+          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${appId}&app_key=${appKey}&dishType=${dishType}`
         );
 
         // Assuming the API response has a hits array containing recipe details
+        
         const recipes = response.data.hits.map((hit) => ({
           id: hit.recipe.uri,
           title: hit.recipe.label,
           image: hit.recipe.image,
+          link: hit._links.self.href,
         }));
 
         setRelatedRecipes(recipes);
@@ -71,7 +51,7 @@ Wrap or Burrito: Using tortillas instead of traditional bread.`,
 
     fetchRecipes();
   }, []);
-
+console.log(relatedRecipes)
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -83,7 +63,7 @@ Wrap or Burrito: Using tortillas instead of traditional bread.`,
       <Headers />
       <NavBar />
       <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
-        Sandwiches
+        {topicDetails.title}
       </Typography>
       <Grid container spacing={2}>
         {/* Left Section with Main Image */}
@@ -177,17 +157,17 @@ Wrap or Burrito: Using tortillas instead of traditional bread.`,
         Related Recipes
       </Typography>
       <Grid container spacing={2}>
-        {relatedRecipes.slice(0, 9).map((recipe)  => (
-          <Grid item xs={12} sm={6} md={4} key={recipe.id} sx={{height:"20 rem"}}>
+        {relatedRecipes.slice(0, 8).map((recipe)  => (
+          <Grid item xs={12} sm={6} md={3} key={recipe.id} sx={{height:"20 rem"}}>
             <Link
-              to={`/recipes/${recipe.id}`}
+              to={`/recipe/${encodeURIComponent(recipe.link)}`}
               style={{ textDecoration: "none", color: "inherit",height:"20rem" }}
             >
-              <Card>
+              <Card sx={{display:"flex" , flexDirection:"column",height:"24rem",width:"18rem"}}>
                 <CardMedia
                   component="img"
                   alt={recipe.title}
-                  height={140}
+                  
                   image={recipe.image}
                   sx={{objectFit:"cover"}}
                 />
