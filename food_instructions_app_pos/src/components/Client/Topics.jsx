@@ -16,6 +16,8 @@ import desserts from "../../images/dessert.jpg";
 import cereals from "../../images/cereals.jpg";
 import drink from "../../images/drink.jpg";
 import soup from "../../images/soup.jpg";
+import preserve from "../../images/preserve.jpg";
+
 function Topics() {
   return (
     <Box>
@@ -97,7 +99,7 @@ function Topics() {
 
 
            <Grid item xs={2}>
-           <Link to={`topic/Cear`}
+           <Link to={`topic/Preserve`}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -115,12 +117,12 @@ function Topics() {
               <CardMedia
                 component="img"
                 alt="green iguana"
-                image={cheese}
+                image={preserve}
                  height={140}
               />
               <CardContent sx={{ color: "black", textAlign: "center" }}>
                 <Typography variant="inherit" component="span">
-                  Cheese
+                  Preserve
                 </Typography>
               </CardContent>
             </Card>

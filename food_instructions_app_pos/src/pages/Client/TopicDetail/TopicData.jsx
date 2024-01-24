@@ -6,6 +6,7 @@ import desserts from "../../../images/dessert.jpg";
 import cerals from "../../../images/cereals.jpg";
 import drink from "../../../images/drink.jpg";
 import soup from "../../../images/soup.jpg";
+import preserve from "../../../images/preserve.jpg";
 const topicDetails = {
   Sandwiches: {
     title: "Sandwiches",
@@ -226,6 +227,47 @@ Cold Soups: Gazpacho, Vichyssoise.
 International Favorites: Pho, Miso soup.`,
     mainImage: `${soup}`,
   },
+
+
+   Preserve : {
+    title: "Preserve",
+    description: `Food preservation is the process of using methods such as vacuum sealing, pickling, canning, drying, freezing, or employing chemicals to extend the shelf life of food, maintaining its quality and nutritional value. This helps prevent spoilage and reduces food waste.`,
+    history: `The history of food preservation spans thousands of years, from sun drying and salt curing to Nicolas Appert's canning technique in 1809. The advent of refrigeration in the 19th century and widespread freezing in the 20th century introduced modern methods to prevent spoilage and reduce food waste.`,
+    fills: `Salt: Used in processes like salting and curing to dry and preserve foods, especially fish and meat.
+
+Sugar: Employed in canning, making jams, and producing marmalade to create an environment resistant to mold and bacteria.
+
+Vinegar: Used in pickling and fermentation to maintain food in an acidic environment.
+
+Low Temperature: The influence of low temperatures, as in freezing or boiling, helps prevent the growth of bacteria and enzymes.
+
+Anti-contaminants: In canning, adding anti-contaminant substances such as vitamin C (ascorbic acid) can help maintain the color and quality of the food.
+
+Antioxidants: In vacuum packaging, adding antioxidants like tocopherol (vitamin E) can protect food from oxidation.
+
+Water: Used in pickling, creating a brine solution with water and salt helps preserve vegetables.
+
+Preservatives: Chemical preservatives such as benzoate or sorbate are added to some packaged foods to prevent the growth of bacteria and mold`,
+    type: `Canning: Sealing food in airtight containers and heating to destroy or inactivate microorganisms. This method is often used for fruits, vegetables, and meats.
+
+Pickling: Submerging food in a solution of salt, vinegar, and sometimes sugar to create an acidic environment, inhibiting the growth of bacteria. Commonly used for vegetables.
+
+Drying/Dehydrating: Removing moisture from food to prevent the growth of microorganisms. Fruits, vegetables, and meats are often dried for preservation.
+
+Freezing: Lowering the temperature to below freezing to slow down the growth of microorganisms and enzymes. Many types of food, including fruits, vegetables, and meats, can be preserved by freezing.
+
+Smoking: Preserving meats and fish by exposing them to smoke, which contains compounds that act as preservatives. This method also imparts a distinct flavor.
+
+Fermentation: Using microorganisms like bacteria and yeast to convert sugars and starches into alcohol or organic acids. Common examples include sauerkraut, kimchi, and pickles.
+
+Salt-Curing: Coating or immersing food in salt to draw out moisture and inhibit bacterial growth. This method is often used for fish and certain meats.
+
+Jam, Jelly, and Preserves: Cooking fruit with sugar and sometimes pectin to create a sweet spread. The high sugar concentration acts as a preservative.
+
+Vacuum Packing: Removing air from a package containing food to slow down oxidation and prevent the growth of aerobic bacteria. Commonly used for meats and cheeses`,
+    mainImage: `${preserve}`,
+  },
+
 };
 
 export default topicDetails;
