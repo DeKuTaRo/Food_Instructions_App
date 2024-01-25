@@ -142,7 +142,7 @@ function RecipeDetail() {
           }
         });
     } catch (err) {
-      console.err(err);
+      console.log(err);
     }
   };
 

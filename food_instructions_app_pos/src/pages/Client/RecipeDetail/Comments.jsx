@@ -66,8 +66,9 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             "Content-Type": "application/json",
           },
         });
-        if (response.statusText === "OK") {
-          toast.success("Bình luận thành công", {
+        if (response.data.statusCode === 200) {
+          getComments();
+          toast.success(response.data.msg, {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -94,23 +95,23 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
     }
   };
 
+  const getComments = async () => {
+    const response = await axios.get(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`, {
+      params: {
+        recipeName: recipeName,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.data.recipes !== null) {
+      setListComments(response.data.recipes.comments);
+      setTotalComments(response.data.recipes.totalComments);
+      setIdRecipe(response.data.recipes._id);
+    }
+  };
   useEffect(() => {
-    const getComments = async () => {
-      const response = await axios.get(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`, {
-        params: {
-          recipeName: recipeName,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.data.recipes !== null) {
-        setListComments(response.data.recipes.comments);
-        setTotalComments(response.data.recipes.totalComments);
-        setIdRecipe(response.data.recipes._id);
-      }
-    };
     getComments();
   }, []);
 
@@ -138,7 +139,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
         }
       );
       if (response.data.recipes !== undefined) {
-        setListComments(response.data.recipes.comments);
+        getComments();
       }
     } catch (err) {
       console.log(err);
@@ -154,7 +155,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   };
 
   const handlePostReplyComments = async (_idComment) => {
-    console.log("reply comments");
     handleCheckLoginStatus();
     if (debounceReplyComment === "") {
       toast.error("Vui lòng nhập bình luận", {
@@ -189,19 +189,11 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             },
           }
         );
-        console.log("response = ", response);
+        if (response.data.statusCode === 200) {
+          getComments();
+        }
       } catch (err) {
         console.error(err);
-        // toast.error("Có lỗi xảy ra", {
-        //   position: "top-right",
-        //   autoClose: 3000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: "dark",
-        // });
       }
     }
   };

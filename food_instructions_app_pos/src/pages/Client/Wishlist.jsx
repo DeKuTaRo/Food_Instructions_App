@@ -24,6 +24,7 @@ import { FaCartPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Headers from "../../components/Client/Headers";
 import NavBar from "../../components/Client/Navbar";
+import { toast } from "react-toastify";
 
 const fadeIn = {
   "0%": { opacity: 0 },
@@ -44,7 +45,28 @@ const StyledCardMedia = styled(CardMedia)({
   },
 });
 
-function SearchedCard({ recipe }) {
+function SearchedCard({ recipe, token, handleRemoveFromWishlist }) {
+  const handleAddToCart = async (name, image, link) => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToCart`,
+        {
+          nameRecipe: name,
+          imageRecipe: image,
+          linkRecipe: link,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -52,30 +74,30 @@ function SearchedCard({ recipe }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       style={{ boxShadow: "5px 5px lightgray" }}>
-      <Link to={`/recipe/${encodeURIComponent(recipe.linkRecipe)}`}>
-        <Card>
-          <CardActionArea
-            component={fadeInAnimation}
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+      <Card>
+        <CardActionArea
+          component={fadeInAnimation}
+          style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+          <Link to={`/recipe/${encodeURIComponent(recipe.linkRecipe)}`}>
             <StyledCardMedia component="img" alt={recipe.nameRecipe} height="140" image={recipe.imageRecipe} />
             <CardContent>
               <Typography variant="h6">{recipe.nameRecipe}</Typography>
             </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Tooltip title="Add to cart" arrow disableInteractive sx={{ textAlign: "right" }}>
-              <IconButton>
-                <FaTrash />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Remove from wishlist" arrow disableInteractive>
-              <IconButton>
-                <FaCartPlus />
-              </IconButton>
-            </Tooltip>
-          </CardActions>
-        </Card>
-      </Link>
+          </Link>
+        </CardActionArea>
+        <CardActions>
+          <Tooltip title="Add to cart" arrow disableInteractive sx={{ textAlign: "right" }}>
+            <IconButton onClick={() => handleAddToCart(recipe.nameRecipe, recipe.imageRecipe, recipe.linkRecipe)}>
+              <FaCartPlus />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Remove from wishlist" arrow disableInteractive>
+            <IconButton onClick={() => handleRemoveFromWishlist(recipe._id)}>
+              <FaTrash />
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+      </Card>
     </motion.div>
   );
 }
@@ -132,6 +154,24 @@ function Wishlist() {
     }
   };
 
+  const handleRemoveFromWishlist = async (_id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/removeItemWishlist`, {
+        params: {
+          idRecipe: _id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.statusCode === 200) {
+        handleGetWishlist();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -183,7 +223,7 @@ function Wishlist() {
             <Grid container spacing={2} sx={{ marginTop: "2rem", marginBottom: "2rem" }}>
               {searchResults.map((food, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <SearchedCard recipe={food} />
+                  <SearchedCard recipe={food} token={token} handleRemoveFromWishlist={handleRemoveFromWishlist} />
                 </Grid>
               ))}
             </Grid>

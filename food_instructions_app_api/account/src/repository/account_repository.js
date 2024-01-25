@@ -132,51 +132,72 @@ class AccountRepository {
     }
   }
 
-  async AddCartItem(customerId, { _id, name, price, banner }, qty, isRemove) {
+  async Cart(_id, search) {
     try {
-      const profile = await AccountModel.findById(customerId).populate("cart");
+      const account = await AccountModel.findById(_id);
 
-      if (profile) {
-        const cartItem = {
-          product: {
-            _id,
-            name,
-            price,
-            banner,
-          },
-          unit: qty,
-        };
-
-        let cartItems = profile.cart;
-
-        if (cartItems.length > 0) {
-          let isExist = false;
-          cartItems.map((item) => {
-            if (item.product._id.toString() === product._id.toString()) {
-              if (isRemove) {
-                cartItems.splice(cartItems.indexOf(item), 1);
-              } else {
-                item.unit = qty;
-              }
-              isExist = true;
-            }
-          });
-
-          if (!isExist) {
-            cartItems.push(cartItem);
-          }
-        } else {
-          cartItems.push(cartItem);
-        }
-
-        profile.cart = cartItems;
-
-        const cartSaveResult = await profile.save();
-
-        return cartSaveResult;
+      if (search === "") {
+        return account.cart;
       }
+
+      const accountResult = [];
+      account.cart.forEach((item) => {
+        if (item.nameRecipe.toUpperCase().includes(search.toUpperCase())) {
+          accountResult.push(item);
+        }
+      });
+
+      return accountResult;
     } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Customer");
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Cart ");
+    }
+  }
+
+  async AddCartItem(accountId, nameRecipe, imageRecipe, linkRecipe) {
+    const recipe = {
+      nameRecipe,
+      imageRecipe,
+      linkRecipe,
+      unit: 1,
+    };
+    try {
+      const account = await AccountModel.findById(accountId);
+
+      const checkNameExist = account.cart.findIndex((item) => item.nameRecipe === nameRecipe);
+
+      if (checkNameExist !== -1) {
+        account.cart[checkNameExist].unit += 1;
+      } else {
+        account.cart.push(recipe);
+      }
+      await account.save();
+      return account.cart;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add to Cart");
+    }
+  }
+
+  async RemoveItemFromWishlist(accountId, recipeId) {
+    try {
+      const account = await AccountModel.findById(accountId);
+      let removeRecipe = account.wishlist.filter((obj) => obj._id.toString() !== recipeId);
+      account.wishlist = removeRecipe;
+      await account.save();
+      return account.wishlist;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add to Cart");
+    }
+  }
+
+  async RemoveItemFromCart(accountId, recipeId) {
+    try {
+      const account = await AccountModel.findById(accountId);
+      let removeRecipe = account.cart.filter((obj) => obj._id.toString() !== recipeId);
+      account.cart = removeRecipe;
+      await account.save();
+      return account.cart;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add to Cart");
     }
   }
 

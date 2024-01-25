@@ -139,6 +139,17 @@ function Headers() {
                 }}>
                 Wishlist
               </Link>
+              <Link
+                href={"/cart"}
+                underline="none"
+                sx={{
+                  padding: "0.5rem 2rem",
+                  color: "black",
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "black", color: "white" },
+                }}>
+                Cart
+              </Link>
               <Button
                 sx={{
                   padding: "0.5rem 2rem",

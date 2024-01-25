@@ -52,13 +52,10 @@ const AccountSchema = new Schema(
     ],
     cart: [
       {
-        product: {
-          _id: { type: String, required: true },
-          name: { type: String },
-          banner: { type: String },
-          price: { type: String },
-        },
-        unit: { type: Number, require: true },
+        nameRecipe: { type: String },
+        imageRecipe: { type: String },
+        linkRecipe: { type: String },
+        unit: { type: Number },
       },
     ],
   },

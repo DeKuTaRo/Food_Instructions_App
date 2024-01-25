@@ -165,6 +165,42 @@ class AccountService {
     }
   }
 
+  async AddToCart(accountId, nameRecipe, imageRecipe, linkRecipe) {
+    try {
+      const cartLists = await this.repository.AddCartItem(accountId, nameRecipe, imageRecipe, linkRecipe);
+      return FormateData(cartLists);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async GetCart(_id, search) {
+    try {
+      const cartItems = await this.repository.Cart(_id, search);
+      return FormateData(cartItems);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async RemoveWishlist(accountId, recipeId) {
+    try {
+      const wishlistItems = await this.repository.RemoveItemFromWishlist(accountId, recipeId);
+      return FormateData(wishlistItems);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async RemoveCart(accountId, recipeId) {
+    try {
+      const cartItems = await this.repository.RemoveItemFromCart(accountId, recipeId);
+      return FormateData(cartItems);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
   async SubscribeEvents(payload) {
     const { event, data, userId } = payload.data;
     switch (event) {

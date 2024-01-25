@@ -290,6 +290,9 @@ function Searched() {
               {/* href={`/searched/${encodeURIComponent(searchResults._links.next.href)} */}
               <Box>
                 <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
+                  First page
+                </Button>
+                <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
                   Previous page
                 </Button>
                 {/* <Button variant="contained" onClick={handleSearch}>

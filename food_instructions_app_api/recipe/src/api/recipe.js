@@ -15,8 +15,10 @@ module.exports = (app) => {
       PublishAccountEvent(dataPayload);
 
       const { data } = await service.AddCommentsToRecipe(recipeInputs);
-
-      res.status(200).json(data);
+      if (data) {
+        res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+      }
+      res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {
       next(err);
     }
@@ -65,7 +67,10 @@ module.exports = (app) => {
       PublishAccountEvent(dataPayload);
 
       const { data } = await service.AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username });
-      res.status(200).json(data);
+      if (data) {
+        res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+      }
+      res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {
       console.log("err api = ", err);
       next(err);
