@@ -26,11 +26,10 @@ import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
 import Wishlist from "./Client/Wishlist";
 import NotFound from "./NotFound";
-import Abot from "./About";
+import Contact from "./Contact";
 import About from "./About";
 
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
-import Cart from "./Client/Cart";
 function Pages() {
   const location = useLocation();
   return (
@@ -52,7 +51,6 @@ function Pages() {
         <Route path="/recipe/:label" element={<RecipeDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/cart" element={<Cart />} />
 
         <Route path="/topic/:label" element={<TopicDetail />} />
         {/* Admin */}
@@ -66,7 +64,7 @@ function Pages() {
         <Route path="/a-recipe/details/:url" element={<ARecipeDetail />} />
 
          <Route path="/about" element={<About />} />
-
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </AnimatePresence>
   );

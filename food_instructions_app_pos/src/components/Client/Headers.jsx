@@ -41,11 +41,11 @@ function Headers() {
         <Link href={"/about"} underline="none" color="inherit">
           <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
         </Link>
-        <Link underline="none" color="inherit">
-          <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
+        <Link underline="none" color="inherit"  href={"/contact"}>
+          <Box sx={{ p: 1, fontSize: "1.5rem" }}>Contact</Box>
         </Link>
         <Link underline="none" color="inherit">
-          <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
+          <Box sx={{ p: 1, fontSize: "1.5rem" }}>Contact</Box>
         </Link>
         {isLoginClient !== "true" && (
           <Link href={"/login-plus"} underline="none" color="inherit">
@@ -138,17 +138,6 @@ function Headers() {
                   "&:hover": { backgroundColor: "black", color: "white" },
                 }}>
                 Wishlist
-              </Link>
-              <Link
-                href={"/cart"}
-                underline="none"
-                sx={{
-                  padding: "0.5rem 2rem",
-                  color: "black",
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "black", color: "white" },
-                }}>
-                Cart
               </Link>
               <Button
                 sx={{

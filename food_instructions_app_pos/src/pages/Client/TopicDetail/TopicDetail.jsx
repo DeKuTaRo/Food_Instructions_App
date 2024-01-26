@@ -11,6 +11,7 @@ import {
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
+import Topics from "../../../components/Client/Topics";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
@@ -18,6 +19,9 @@ import { useParams } from "react-router-dom";
 import inforTopic from './TopicData'
 
 const TopicDetail = () => {
+
+
+
   const { label } = useParams();
  
  const topicDetails = inforTopic[label];
@@ -185,6 +189,7 @@ console.log(relatedRecipes)
           </Grid>
         ))}
       </Grid>
+      <Topics />
       <Footer />
     </motion.div>
   );

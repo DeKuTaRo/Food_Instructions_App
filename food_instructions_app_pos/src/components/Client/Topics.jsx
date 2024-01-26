@@ -4,13 +4,11 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 
 import { FaRainbow } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
+import { Link } from "@mui/material";
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import sandwiches from "../../images/sandwiches.jpg";
 import bread from "../../images/bread.jpeg";
-import cheese from "../../images/cheese.jpg";
 import salad from "../../images/salad.jpg";
 import desserts from "../../images/dessert.jpg";
 import cereals from "../../images/cereals.jpg";
@@ -18,7 +16,8 @@ import drink from "../../images/drink.jpg";
 import soup from "../../images/soup.jpg";
 import preserve from "../../images/preserve.jpg";
 
-function Topics() {
+function topics() {
+   
   return (
     <Box>
       <Box 
@@ -32,10 +31,10 @@ function Topics() {
           textAlign: "center",
           position: "relative",
         }}>
-        <FaRainbow /> <Typography sx={{ fontWeight: "bold", margin: "1rem 0" }}>BROWSE POPULAR TOPICS</Typography>
+        <FaRainbow /> <Typography sx={{ fontWeight: "bold", margin: "1rem 0" }}>BROWSE POPULAR topicS</Typography>
         <Grid container spacing={2} columns={16}>
           <Grid item xs={2}>
-            <Link to={`topic/Sandwiches`}
+            <Link href={"/topic/Sandwiches"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -66,7 +65,7 @@ function Topics() {
            
           </Grid>
           <Grid item xs={2}>
-           <Link to={`topic/Bread`}
+           <Link href={"/topic/Bread"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -99,7 +98,7 @@ function Topics() {
 
 
            <Grid item xs={2}>
-           <Link to={`topic/Preserve`}
+           <Link href={"/topic/Preserve"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -132,7 +131,7 @@ function Topics() {
 
 
             <Grid item xs={2}>
-           <Link to={`topic/Salad`}
+           <Link href={"/topic/Salad"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -162,7 +161,7 @@ function Topics() {
             </Link>
           </Grid>
             <Grid item xs={2}>
-           <Link to={`topic/Desserts`}
+           <Link href={"/topic/Desserts"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -192,7 +191,7 @@ function Topics() {
             </Link>
           </Grid>
             <Grid item xs={2}>
-           <Link to={`topic/Soup`}
+           <Link href={"/topic/Soup"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -225,7 +224,7 @@ function Topics() {
 
 
             <Grid item xs={2}>
-           <Link to={`topic/Drinks`}
+           <Link href={"/topic/Drinks"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -255,7 +254,7 @@ function Topics() {
             </Link>
           </Grid>
             <Grid item xs={2}>
-           <Link to={`topic/Cereals`}
+           <Link href={"/topic/Cereals"}
              style={{ textDecoration: "none", color: "inherit" }}>
              <Card
               sx={{
@@ -290,4 +289,4 @@ function Topics() {
   );
 }
 
-export default Topics;
+export default topics;
