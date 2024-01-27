@@ -33,7 +33,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-
+import DeleteIcon from '@mui/icons-material/Delete';
 const fadeIn = {
   "0%": { opacity: 0 },
   "100%": { opacity: 1 },
@@ -207,6 +207,10 @@ function Cart() {
     }
   };
 
+  const handleAddToOrders = () => {
+    console.log("adđ to carts");
+  };
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -255,7 +259,7 @@ function Cart() {
           <Typography sx={{ margin: "2rem 0rem" }}>Results will show here</Typography>
         ) : (
           <>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ margin: "2rem 0rem" }}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -295,9 +299,9 @@ function Cart() {
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Remove from cart" arrow disableInteractive>
-                          <IconButton aria-label="Remove from cart">
-                            <FaTrash />
-                          </IconButton>
+                          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleRemoveFromCart(item._id)}>
+                            Delete
+                          </Button>
                         </Tooltip>
                       </TableCell>
                     </TableRow>
@@ -309,8 +313,14 @@ function Cart() {
         )}
       </div>
 
-      <Box>
-        <Typography>Mua hàng</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box>
+          <Typography><Checkbox /> Chọn tất cả (100)</Typography>
+          <Typography>Tổng sản phẩm ( 10 )</Typography>
+        </Box>
+        <Button variant="outlined" onClick={handleAddToOrders()}>
+          Mua hàng
+        </Button>
       </Box>
     </motion.div>
   );

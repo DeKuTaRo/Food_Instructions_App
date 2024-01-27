@@ -30,6 +30,7 @@ import Contact from "./Contact";
 import About from "./About";
 
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
+import Cart from "./Client/Cart";
 function Pages() {
   const location = useLocation();
   return (
@@ -51,6 +52,7 @@ function Pages() {
         <Route path="/recipe/:label" element={<RecipeDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/cart" element={<Cart />} />
 
         <Route path="/topic/:label" element={<TopicDetail />} />
         {/* Admin */}
