@@ -38,14 +38,14 @@ function Headers() {
         borderBottom: "1px solid #ccc",
       }}>
       <Box sx={{ display: "flex" }}>
-        <Link href={"/about"} underline="none" color="inherit">
-          <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
+        <Link href={"/"} underline="none" color="inherit">
+          <Box sx={{ p: 1, fontSize: "1.5rem" }}>Home</Box>
         </Link>
         <Link underline="none" color="inherit" href={"/contact"}>
           <Box sx={{ p: 1, fontSize: "1.5rem" }}>Contact</Box>
         </Link>
-        <Link underline="none" color="inherit">
-          <Box sx={{ p: 1, fontSize: "1.5rem" }}>Contact</Box>
+        <Link underline="none" color="inherit"href={"/about"}>
+          <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
         </Link>
         {isLoginClient !== "true" && (
           <Link href={"/login-plus"} underline="none" color="inherit">

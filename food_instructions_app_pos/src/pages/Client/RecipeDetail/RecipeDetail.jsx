@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom"; // Import useHistory
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
+
 import {
   Breadcrumbs,
   Typography,
@@ -16,6 +17,7 @@ import {
   DialogActions,
   IconButton,
   Link,
+  
 } from "@mui/material";
 import Footer from "../../../components/Client/Footer";
 import { Add, Remove } from "@mui/icons-material";
@@ -42,6 +44,7 @@ function RecipeDetail() {
   //modal
   const [open, setOpen] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(1);
+   const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(true);
@@ -59,6 +62,23 @@ function RecipeDetail() {
     if (numberOfPeople > 1) {
       setNumberOfPeople((prev) => prev - 1);
     }
+  };
+
+  const handleBuyIngredients = () => {
+    // Add any logic you need before navigating, if necessary
+    // For example, you can pass some data to the order page using state
+   const orderData = {
+  recipeName,
+  recipeImage,
+  ingredientLines: recipeDetail.recipe.ingredientLines,
+  numberOfPeople,
+  totalNutrients: recipeDetail.recipe.totalNutrients,
+  totalDaily: recipeDetail.recipe.totalDaily,
+  calories: recipeDetail.recipe.calories,
+};
+
+    // Navigate to the order page with the orderData as state
+    navigate("/order", { state: { orderData } });
   };
 
   const [videoId, setVideoId] = useState("");
@@ -207,9 +227,9 @@ function RecipeDetail() {
                 </Box>
 
                 <Box sx={{ margin: "2rem auto " }}>
-                  <Button variant="outlined" onClick={handleOpen}>
-                    Buy
-                  </Button>
+                   <Button variant="outlined" onClick={handleBuyIngredients}>
+    Buy
+  </Button>
                   <Button variant="outlined" onClick={handleAddRecipeToWishlist}>
                     Add to wishlist
                   </Button>
@@ -239,14 +259,15 @@ function RecipeDetail() {
                         </IconButton>
                       </Typography>
                     </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
-                        Cancel
-                      </Button>
-                      <Button onClick={handleClose} color="primary" variant="contained">
-                        Confirm
-                      </Button>
-                    </DialogActions>
+                  <DialogActions>
+    <Button onClick={handleClose} color="primary">
+      Cancel
+    </Button>
+    {/* Change the Confirm button to trigger the order page redirection */}
+    <Button onClick={handleBuyIngredients} color="primary" variant="contained">
+      Confirm
+    </Button>
+  </DialogActions>
                   </Dialog>
                 </Box>
 

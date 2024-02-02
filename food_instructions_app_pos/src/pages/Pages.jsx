@@ -28,6 +28,8 @@ import Wishlist from "./Client/Wishlist";
 import NotFound from "./NotFound";
 import Contact from "./Contact";
 import About from "./About";
+//Order
+import Order from "../pages/Client/Order/Order";
 
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
 import Cart from "./Client/Cart";
@@ -54,6 +56,7 @@ function Pages() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
 
+         <Route path="/order" element={<Order />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
