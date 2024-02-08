@@ -283,7 +283,7 @@ function RecipeDetail() {
                   />
                 </Box>
 
-                <Box
+                {/* <Box
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -292,7 +292,7 @@ function RecipeDetail() {
                     justifyContent: "center",
                   }}>
                   <VideoTutorial videoId={videoId} />
-                </Box>
+                </Box> */}
 
                 <Box sx={{ marginTop: "2rem" }}>
                   <Comments

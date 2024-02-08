@@ -11,20 +11,23 @@ module.exports = (app) => {
     const { _id } = req.user;
     try {
       // get payload // to send account service
-      const dataPayload = await service.GetRecipePayload(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
-      PublishAccountEvent(dataPayload);
+      // const dataPayload = await service.GetRecipePayload(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
+      // PublishAccountEvent(dataPayload);
 
       const { data } = await service.AddCommentsToRecipe(recipeInputs);
       if (data) {
         res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+        // res.status(200).json(data);
+        return;
       }
       res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return;
     } catch (err) {
       next(err);
     }
   });
 
-  app.get("/recipe/getComments", UserAuth, async (req, res, next) => {
+  app.get("/recipe/getComments", async (req, res, next) => {
     const recipeName = req.query.recipeName;
 
     try {
@@ -71,6 +74,31 @@ module.exports = (app) => {
         res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
       }
       res.status(200).json({ msg: "Có lỗi xảy ra" });
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
+
+  // app.put("/recipe/editComment", UserAuth, async (req, res, next) => {
+
+  //   try {
+  //     const _idComment = req.body._idComment;
+
+  //   } catch (err) {
+  //     console.log("err api : ", err);
+  //     next(err);
+  //   }
+  // });
+
+  app.delete("/recipe/removeComment", UserAuth, async (req, res, next) => {
+    try {
+      const { _idComment, idRecipe } = req.body;
+      const { data } = await service.RemoveComment(_idComment, idRecipe);
+      if (data) {
+        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+      }
+      return res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {
       console.log("err api = ", err);
       next(err);

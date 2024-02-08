@@ -101,3 +101,40 @@
 {"level":"error","message":"Tue Jan 16 2024 22:17:59 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
 {"level":"error","message":"Tue Jan 16 2024 22:19:11 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
 {"level":"error","message":"Tue Jan 16 2024 22:25:53 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Thu Feb 01 2024 23:45:58 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 14:50:12 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 14:58:13 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 15:01:15 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 15:08:19 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 15:12:39 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 15:18:40 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 16:22:06 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 16:24:32 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 16:26:07 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Sat Feb 03 2024 16:28:13 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 09:39:03 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 09:41:25 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 09:41:44 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 09:47:05 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 09:52:18 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:24:14 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:24:34 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:25:01 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:26:06 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:27:42 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 11:28:02 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:04:49 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:08:14 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:09:22 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:11:42 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:12:42 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:13:59 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:14:36 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:16:45 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:17:15 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:17:47 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:23:32 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:24:39 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:31:10 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:32:54 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Tue Feb 06 2024 16:34:32 GMT+0700 (Indochina Time)-{}","private":true}

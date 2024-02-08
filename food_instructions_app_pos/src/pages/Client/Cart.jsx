@@ -211,6 +211,12 @@ function Cart() {
     console.log("adđ to carts");
   };
 
+  const [isChecked, setChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -264,7 +270,7 @@ function Cart() {
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      <Checkbox />
+                      <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
                     </TableCell>
                     <TableCell>Image</TableCell>
                     <TableCell>Product</TableCell>

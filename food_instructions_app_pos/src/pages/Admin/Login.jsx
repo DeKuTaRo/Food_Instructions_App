@@ -43,7 +43,7 @@ function Login() {
               progress: undefined,
               theme: "dark",
             });
-            localStorage.setItem("tokenAdmin", res.data.token)
+            localStorage.setItem("token", res.data.token);
             navigate("/dashboard");
           } else {
             toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc bạn không có quyền truy cập", {
@@ -59,7 +59,7 @@ function Login() {
           }
         })
         .catch((err) => {
-          toast.error(err, {
+          toast.error("Có lỗi xảy ra, vui lòng kiểm tra lại kết nối", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,

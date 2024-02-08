@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import useDebounce from "../../../utils/debounce";
-import { getCurrentDateTimeInVietnam } from "../../../utils/dateTimeVietNam";
+import useDebounce from "../../../../utils/debounce";
+import { getCurrentDateTimeInVietnam } from "../../../../utils/dateTimeVietNam";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Typography, Button, TextareaAutosize, Box, TextField, Chip, Tooltip, IconButton } from "@mui/material";
@@ -8,12 +8,14 @@ import { FaStar } from "react-icons/fa";
 import BoltIcon from "@mui/icons-material/Bolt";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import EditIcon from "@mui/icons-material/Edit";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import Avatar from "@mui/material/Avatar";
 import CommentIcon from "@mui/icons-material/Comment";
 
-const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginStatus, token }) => {
+const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
   const [commentsPost, setCommentsPost] = useState("");
   const debouncedComments = useDebounce(commentsPost, 1000);
 
@@ -46,7 +48,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   };
 
   const handlePostComments = async () => {
-    handleCheckLoginStatus();
     if (debouncedComments === "") {
       toast.error("Vui lòng nhập bình luận", {
         position: "top-right",
@@ -62,17 +63,11 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
       try {
         const response = await axios.post(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/comments`, formData, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenAdmin}`,
             "Content-Type": "application/json",
           },
         });
-        console.log("response = ", response);
         if (response.data.statusCode === 200) {
-          // setListComments(response.data.recipes.comments);
-          // setTotalComments(response.data.recipes.totalComments);
-          // setIdRecipe(response.data.recipes._id);
-
-          // setCommentsPost("");
           getComments();
           toast.success(response.data.msg, {
             position: "top-right",
@@ -84,6 +79,8 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             progress: undefined,
             theme: "dark",
           });
+          setCommentsPost("");
+          setRatingComment(null);
         }
       } catch (err) {
         console.error(err);
@@ -102,26 +99,19 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   };
 
   const getComments = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`,
-        {
-          params: {
-            recipeName: recipeName,
-          },
-        }
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        //   "Content-Type": "application/json",
-        // },
-      );
-      if (response.data.recipes !== null) {
-        setListComments(response.data.recipes.comments);
-        setTotalComments(response.data.recipes.totalComments);
-        setIdRecipe(response.data.recipes._id);
-      }
-    } catch (err) {
-      console.log("err get comment = ", err);
+    const response = await axios.get(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`, {
+      params: {
+        recipeName: recipeName,
+      },
+      headers: {
+        Authorization: `Bearer ${tokenAdmin}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.data.recipes !== null) {
+      setListComments(response.data.recipes.comments);
+      setTotalComments(response.data.recipes.totalComments);
+      setIdRecipe(response.data.recipes._id);
     }
   };
   useEffect(() => {
@@ -129,7 +119,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   }, []);
 
   const handleSetLikeComment = async (_idComment) => {
-    handleCheckLoginStatus();
     setIsLiked(!isLiked);
     setLikeEachComment((prevLike) => ({
       ...prevLike,
@@ -146,7 +135,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenAdmin}`,
             "Content-Type": "application/json",
           },
         }
@@ -160,7 +149,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   };
 
   const handleReplyComment = (_id) => {
-    handleCheckLoginStatus();
     setReplyVisible((prevVisibility) => ({
       ...prevVisibility,
       [_id]: !prevVisibility[_id],
@@ -168,7 +156,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   };
 
   const handlePostReplyComments = async (_idComment) => {
-    handleCheckLoginStatus();
     if (debounceReplyComment === "") {
       toast.error("Vui lòng nhập bình luận", {
         position: "top-right",
@@ -197,7 +184,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${tokenAdmin}`,
               "Content-Type": "application/json",
             },
           }
@@ -208,6 +195,64 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
       } catch (err) {
         console.error(err);
       }
+    }
+  };
+  // const [editingIndex, setEditingIndex] = useState(null);
+  // const [editedComment, setEditedComment] = useState("");
+  // const handleEditComment = async (_idComment, comment) => {
+  //   setEditingIndex(_idComment);
+  //   setEditedComment(comment);
+  // };
+
+  // const handleCancelClick = () => {
+  //   setEditingIndex(null);
+  // };
+
+  // const handleCommentChange = (event) => {
+  //   console.log("e =", event.target.value);
+  //   setEditedComment(event.target.value);
+  // };
+
+  // const debounceEditComment = useDebounce(editedComment, 1000);
+
+  // const handleSaveClick = (_idComment) => {
+  //   console.log("_idComment = ", _idComment);
+  //   console.log("debounceEditComment = ", debounceEditComment);
+  //   try {
+  //     const response = axios.put()
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+
+  //   setEditingIndex(null);
+  // };
+
+  const handleDeleteComment = async (_idComment) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/removeComment`, {
+        data: {
+          _idComment: _idComment,
+          idRecipe: idRecipe,
+        },
+        headers: {
+          Authorization: `Bearer ${tokenAdmin}`,
+        },
+      });
+      if (response.data.statusCode === 200) {
+        getComments();
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -287,7 +332,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           }}>
           <TextField placeholder="Search comment" />
 
-          {listComments && listComments.map((item) => (
+          {listComments.map((item) => (
             <Box
               aria-label="comments"
               component="div"
@@ -319,6 +364,27 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                 }}>
                 <AccessTimeIcon /> <Typography>{item.timeComment}</Typography>
               </Box>
+              {/* {editingIndex === item._id ? (
+                <div>
+                  <TextField multiline rows={4} value={editedComment} onChange={handleCommentChange} fullWidth />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      textAlign: "left",
+                      gap: "0.5rem",
+                      margin: "1rem 0",
+                    }}>
+                    <Button variant="outlined" onClick={() => handleSaveClick(item._id)}>
+                      Save
+                    </Button>
+                    <Button variant="contained" onClick={handleCancelClick}>
+                      Cancel
+                    </Button>
+                  </Box>
+                </div>
+              ) : (
+                <Typography>{item.content}</Typography>
+              )} */}
               <Typography>{item.content}</Typography>
               <Box sx={{ display: "flex" }}>
                 {[...Array(5)].map((start, index) => {
@@ -332,11 +398,11 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                   );
                 })}
               </Box>
-              <Typography
+              <Box
                 sx={{
                   display: "flex",
                   textAlign: "left",
-                  gap: "8px",
+                  gap: "0.5rem",
                 }}>
                 <Button
                   variant="outlined"
@@ -352,7 +418,16 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                   onClick={() => handleReplyComment(item._id, isLiked)}>
                   Reply
                 </Button>
-              </Typography>
+                {/* <Button
+                  variant="outlined"
+                  startIcon={<EditIcon />}
+                  onClick={() => handleEditComment(item._id, item.content)}>
+                  Edit
+                </Button> */}
+                <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(item._id)}>
+                  Delete
+                </Button>
+              </Box>
 
               {replyVisible[item._id] && (
                 <>

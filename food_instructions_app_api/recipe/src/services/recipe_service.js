@@ -58,8 +58,25 @@ class RecipeService {
 
   async AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username }) {
     try {
-      const replyComment = await this.repository.AddReplyComment({ timeComment, content, liked, _idComment, idRecipe, username });
+      const replyComment = await this.repository.AddReplyComment({
+        timeComment,
+        content,
+        liked,
+        _idComment,
+        idRecipe,
+        username,
+      });
       return FormateData(replyComment);
+    } catch (err) {
+      console.log("err service = ", err);
+      throw new APIError("Data Not found");
+    }
+  }
+
+  async RemoveComment(_idComment, idRecipe) {
+    try {
+      const deleteComment = await this.repository.RemoveComment(_idComment, idRecipe);
+      return FormateData(deleteComment);
     } catch (err) {
       console.log("err service = ", err);
       throw new APIError("Data Not found");

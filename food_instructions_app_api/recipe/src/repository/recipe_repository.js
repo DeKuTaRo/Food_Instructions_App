@@ -98,6 +98,26 @@ class RecipeRepository {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
     }
   }
+
+  async RemoveComment(_idComment, idRecipe) {
+    try {
+      const deleteComment = await CommentSchema.findByIdAndDelete(_idComment);
+      const checkExistRecipe = await RecipeSchema.findOne({ _id: idRecipe });
+      const updateComments = checkExistRecipe.comments.filter(
+        (item) => item._id.toString() !== deleteComment._id.toString()
+      );
+
+      const updateRecipe = await RecipeSchema.findOneAndUpdate(
+        { _id: idRecipe },
+        { $set: { comments: updateComments, totalComments: updateComments.length } },
+        { new: true }
+      );
+      return updateRecipe;
+    } catch (err) {
+      console.log("err repo = ", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
+    }
+  }
 }
 
 module.exports = RecipeRepository;

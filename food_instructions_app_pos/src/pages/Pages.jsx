@@ -66,7 +66,7 @@ function Pages() {
         <Route path="/a-nutrition" element={<ANutrition />} />
         <Route path="/a-food" element={<Food />} />
         <Route path="/a-recipe" element={<ARecipe />} />
-        <Route path="/a-recipe/details/:url" element={<ARecipeDetail />} />
+        <Route path="/a-recipe/details/:label" element={<ARecipeDetail />} />
 
          <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

@@ -166,7 +166,7 @@ function ARecipe() {
     try {
       const response = await axios.get(linkNextPage === "" ? url : linkNextPage);
       setSearchResults(response.data);
-      setLinkNextPage(response.data._links.next.href);
+      // setLinkNextPage(response.data._links.next.href);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -326,9 +326,9 @@ function ARecipe() {
                       <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
                         Previous page
                       </Button>
-                      <Button variant="contained" onClick={handleSearch}>
+                      {/* <Button variant="contained" onClick={handleSearch}>
                         {searchResults._links.next.title}
-                      </Button>
+                      </Button> */}
                     </Box>
                   </Stack>
                 </>
