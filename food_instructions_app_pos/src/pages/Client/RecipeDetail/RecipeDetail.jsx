@@ -65,9 +65,20 @@ function RecipeDetail() {
   };
 
   const handleBuyIngredients = () => {
-    // Add any logic you need before navigating, if necessary
-    // For example, you can pass some data to the order page using state
-   const orderData = {
+      if (isLoginClient !== "true") {
+      toast.error("Bạn phải đăng nhập mới sử dụng được tính năng này", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  else{
+ const orderData = {
   recipeName,
   recipeImage,
   ingredientLines: recipeDetail.recipe.ingredientLines,
@@ -79,6 +90,11 @@ function RecipeDetail() {
 
     // Navigate to the order page with the orderData as state
     navigate("/order", { state: { orderData } });
+  }
+  
+
+
+  
   };
 
   const [videoId, setVideoId] = useState("");
