@@ -25,14 +25,6 @@ import NutritionFacts from "./NutritionFacts";
 
 const defaultTheme = createTheme();
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  //   padding: theme.spacing(1),
-  //   textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 function ARecipeDetail() {
   const { label } = useParams();
   const [recipeDetail, setRecipeDetail] = useState({});
@@ -43,28 +35,7 @@ function ARecipeDetail() {
 
   const [totalNutrients, setTotalNutrientations] = useState({});
   const [totalDaily, setTotalDaily] = useState({});
-  const [rating, setRating] = useState([false, false, false, false, false]);
-  const username = localStorage.getItem("username");
-  const tokenAdmin = localStorage.getItem("tokenAdmin");
-
-  const i = 1;
-  const handleStarHover = (index) => {
-    const newRating = [...rating];
-    for (let i = 0; i <= index; i++) {
-      newRating[i] = true;
-    }
-    for (let i = index + 1; i < newRating.length; i++) {
-      newRating[i] = false;
-    }
-    setRating(newRating);
-  };
-
-  const handleStarClick = (index) => {
-    // Toggle the active state of the clicked star
-    const newRating = [...rating];
-    newRating[index] = !newRating[index];
-    setRating(newRating);
-  };
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     // let isMounted = true;
@@ -200,8 +171,7 @@ function ARecipeDetail() {
                           recipeName={recipeName}
                           recipeImage={recipeImage}
                           label={label}
-                          username={username}
-                          tokenAdmin={tokenAdmin}
+                          token={token}
                         />
                       </Box>
                     </Grid>

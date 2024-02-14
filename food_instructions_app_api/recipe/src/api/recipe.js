@@ -8,16 +8,15 @@ module.exports = (app) => {
 
   app.post("/recipe/comments", UserAuth, async (req, res, next) => {
     const recipeInputs = req.body;
-    const { _id } = req.user;
+    const { _id, username } = req.user;
     try {
+      const { data } = await service.AddCommentsToRecipe(recipeInputs, username);
       // get payload // to send account service
-      // const dataPayload = await service.GetRecipePayload(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
-      // PublishAccountEvent(dataPayload);
-
-      const { data } = await service.AddCommentsToRecipe(recipeInputs);
+      const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, data, "ADD_COMMENTS_TO_RECIPES");
+      PublishAccountEvent(dataPayload);
+      console.log("data = ", data);
       if (data) {
         res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
-        // res.status(200).json(data);
         return;
       }
       res.status(200).json({ msg: "Có lỗi xảy ra" });
@@ -93,14 +92,20 @@ module.exports = (app) => {
 
   app.delete("/recipe/removeComment", UserAuth, async (req, res, next) => {
     try {
+      const { _id } = req.user;
+
       const { _idComment, idRecipe } = req.body;
       const { data } = await service.RemoveComment(_idComment, idRecipe);
+
+      // get payload to send account service
+      const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
+      PublishAccountEvent(dataPayload);
+      console.log("data = ", data);
       if (data) {
         return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
       }
       return res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });

@@ -147,20 +147,21 @@ class AccountService {
     }
   }
 
-  async AddComments(recipeInputs, userId) {
-    const { nameRecipe, imageRecipe, linkRecipe, comments } = recipeInputs;
+  async AddComments(recipeInputs, userId, comment) {
+    const { nameRecipe, imageRecipe, linkRecipe } = recipeInputs;
     try {
       const commentsResult = await this.repository.AddComments(
         {
           nameRecipe,
           imageRecipe,
           linkRecipe,
-          comments,
+          comment,
         },
         userId
       );
       return FormateData(commentsResult);
     } catch (err) {
+      console.log("err service = ", err);
       throw new APIError("Data Not found", err);
     }
   }
@@ -201,11 +202,23 @@ class AccountService {
     }
   }
 
+  async DeleteComments(commentId, userId) {
+    try {
+      const deleteComment = await this.repository.DeleteComments(commentId, userId);
+      return FormateData(deleteComment);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
   async SubscribeEvents(payload) {
-    const { event, data, userId } = payload.data;
+    const { event, data, comment, userId, commentId } = payload.data;
     switch (event) {
       case "ADD_COMMENTS_TO_RECIPES":
-        this.AddComments(data, userId);
+        this.AddComments(data, userId, comment);
+        break;
+      case "DELETE_COMMENTS_FROM_RECIPES":
+        this.DeleteComments(commentId, userId);
         break;
       default:
         break;

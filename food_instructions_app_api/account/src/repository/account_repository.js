@@ -1,4 +1,4 @@
-const { AccountModel, AddressModel } = require("../model");
+const { AccountModel, AddressModel, CommentModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
@@ -224,9 +224,10 @@ class AccountRepository {
     }
   }
 
-  async AddComments({ nameRecipe, imageRecipe, linkRecipe, comments }, userId) {
-    const { content, rating, timeComment } = comments;
+  async AddComments({ nameRecipe, imageRecipe, linkRecipe, comment }, userId) {
+    const { content, rating, timeComment, _id } = comment;
     const newComments = {
+      _id,
       nameRecipe,
       imageRecipe,
       linkRecipe,
@@ -234,14 +235,35 @@ class AccountRepository {
       rating,
       timeComment,
     };
-
+    const commentResult = new CommentModel(newComments);
+    await commentResult.save();
     try {
       const account = await AccountModel.findById(userId);
       account.comments.push(newComments);
 
       return await account.save();
     } catch (err) {
+      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add Comment");
+    }
+  }
+
+  async DeleteComments(commentId, userId) {
+    try {
+      const deleteComment = await CommentModel.findByIdAndDelete(commentId);
+      const checkExistAccount = await AccountModel.findOne({ _id: userId });
+      const updateComments = checkExistAccount.comments.filter(
+        (item) => item._id.toString() !== deleteComment._id.toString()
+      );
+
+      const updateAccountComment = await AccountModel.findOneAndUpdate(
+        { _id: userId },
+        { $set: { comments: updateComments } },
+        { new: true }
+      );
+      return updateAccountComment;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Delete Comment");
     }
   }
 }

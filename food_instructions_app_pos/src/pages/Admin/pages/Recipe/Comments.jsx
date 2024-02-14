@@ -15,7 +15,7 @@ import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import Avatar from "@mui/material/Avatar";
 import CommentIcon from "@mui/icons-material/Comment";
 
-const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
+const Comments = ({ recipeName, recipeImage, label, token }) => {
   const [commentsPost, setCommentsPost] = useState("");
   const debouncedComments = useDebounce(commentsPost, 1000);
 
@@ -38,7 +38,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
     imageRecipe: recipeImage,
     linkRecipe: label,
     comments: {
-      username: username,
+      username: "",
       content: debouncedComments,
       rating: ratingComment,
       liked: 0,
@@ -63,7 +63,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
       try {
         const response = await axios.post(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/comments`, formData, {
           headers: {
-            Authorization: `Bearer ${tokenAdmin}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -104,7 +104,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
         recipeName: recipeName,
       },
       headers: {
-        Authorization: `Bearer ${tokenAdmin}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -135,7 +135,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${tokenAdmin}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -184,7 +184,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
           },
           {
             headers: {
-              Authorization: `Bearer ${tokenAdmin}`,
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
           }
@@ -235,7 +235,7 @@ const Comments = ({ recipeName, recipeImage, label, username, tokenAdmin }) => {
           idRecipe: idRecipe,
         },
         headers: {
-          Authorization: `Bearer ${tokenAdmin}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.data.statusCode === 200) {

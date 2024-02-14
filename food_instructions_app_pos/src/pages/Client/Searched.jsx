@@ -35,6 +35,9 @@ const StyledCardMedia = styled(CardMedia)({
 });
 
 function SearchedCard({ recipe, link }) {
+  const handleAddRecentlySee = () => {
+    console.log("add recently sees")
+  }
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -42,7 +45,7 @@ function SearchedCard({ recipe, link }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       style={{ boxShadow: "5px 5px lightgray" }}>
-      <Link to={`/recipe/${encodeURIComponent(link)}`}>
+      <Link to={`/recipe/${encodeURIComponent(link)}`} onClick={handleAddRecentlySee}>
         <Card>
           <CardActionArea
             component={fadeInAnimation}

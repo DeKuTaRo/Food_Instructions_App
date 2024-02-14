@@ -2,23 +2,23 @@ const { RecipeSchema, CommentSchema } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 const mongoose = require("mongoose");
 class RecipeRepository {
-  async AddCommentsRecipe({ nameRecipe, imageRecipe, linkRecipe, comments }) {
+  async AddCommentsRecipe({ nameRecipe, imageRecipe, linkRecipe, comments }, username) {
     try {
       const checkRecipeExist = await RecipeSchema.findOne({ nameRecipe: nameRecipe });
       comments.listUserLikeComment = [];
       comments.nameRecipe = nameRecipe;
+      comments.username = username;
       const newComment = new CommentSchema(comments);
       if (checkRecipeExist) {
-        await newComment.save();
         checkRecipeExist.comments.push(newComment);
         checkRecipeExist.totalComments += 1;
-        return await checkRecipeExist.save();
+        await checkRecipeExist.save();
       } else {
         const totalComments = 1;
         const recipe = new RecipeSchema({ nameRecipe, imageRecipe, linkRecipe, comments: newComment, totalComments });
-        await newComment.save();
-        return await recipe.save();
+        await recipe.save();
       }
+      return await newComment.save();
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add Comments");
     }
@@ -94,7 +94,6 @@ class RecipeRepository {
       checkExistRecipe.totalComments += 1;
       return await checkExistRecipe.save();
     } catch (err) {
-      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
     }
   }
@@ -114,7 +113,6 @@ class RecipeRepository {
       );
       return updateRecipe;
     } catch (err) {
-      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
     }
   }

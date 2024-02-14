@@ -20,25 +20,38 @@ class RecipeService {
     }
   }
 
-  async AddCommentsToRecipe(recipeInputs) {
+  async AddCommentsToRecipe(recipeInputs, username) {
     try {
       const { nameRecipe, imageRecipe, linkRecipe, comments } = recipeInputs;
-      const commentsResult = await this.repository.AddCommentsRecipe({
-        nameRecipe,
-        imageRecipe,
-        linkRecipe,
-        comments,
-      });
+      const commentsResult = await this.repository.AddCommentsRecipe(
+        {
+          nameRecipe,
+          imageRecipe,
+          linkRecipe,
+          comments,
+        },
+        username
+      );
       return FormateData(commentsResult);
     } catch (err) {
       throw new APIError("Data Not found");
     }
   }
 
-  async GetRecipePayload(userId, recipeInputs, event) {
+  async GetRecipePayloadAddComment(userId, recipeInputs, comment, event) {
     const payload = {
       event: event,
       data: recipeInputs,
+      comment: comment,
+      userId: userId,
+    };
+    return FormateData(payload);
+  }
+
+  async GetRecipePayloadDeleteComment(userId, commentId, event) {
+    const payload = {
+      event: event,
+      commentId: commentId,
       userId: userId,
     };
     return FormateData(payload);
@@ -51,7 +64,6 @@ class RecipeService {
       const likeComment = await this.repository.SetLikeToComment({ _id, username }, { _idComment, isLiked, idRecipe });
       return FormateData(likeComment);
     } catch (err) {
-      console.log("err service = ", err);
       throw new APIError("Data Not found");
     }
   }
@@ -68,7 +80,6 @@ class RecipeService {
       });
       return FormateData(replyComment);
     } catch (err) {
-      console.log("err service = ", err);
       throw new APIError("Data Not found");
     }
   }
@@ -78,7 +89,6 @@ class RecipeService {
       const deleteComment = await this.repository.RemoveComment(_idComment, idRecipe);
       return FormateData(deleteComment);
     } catch (err) {
-      console.log("err service = ", err);
       throw new APIError("Data Not found");
     }
   }
