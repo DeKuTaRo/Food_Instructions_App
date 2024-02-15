@@ -10,6 +10,7 @@ import NavBar from "../../components/Client/Navbar";
 import Footer from "../../components/Client/Footer";
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
+import Chatbot from "./Chatbot";
 
 function Home() {
   return (
@@ -24,6 +25,7 @@ function Home() {
       <Veggie />
       <Popular />
       <Topics />
+      <Chatbot />
       <Footer />  
     </motion.div>
   );

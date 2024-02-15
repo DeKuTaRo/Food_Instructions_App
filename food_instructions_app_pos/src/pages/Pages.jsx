@@ -25,9 +25,9 @@ import Searched from "./Client/Searched";
 import Profile from "./Client/Profile";
 import Cuisine from "./Client/Cuisine";
 import Wishlist from "./Client/Wishlist";
+import About from "./Client/About";
+import Contact from "./Client/Contact";
 import NotFound from "./NotFound";
-import Contact from "./Contact";
-import About from "./About";
 //Order
 import Order from "../pages/Client/Order/Order";
 

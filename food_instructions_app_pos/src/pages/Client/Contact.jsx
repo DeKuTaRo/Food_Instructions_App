@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Headers from "../components/Client/Headers";
-import NavBar from "../components/Client/Navbar";
-import Topics from "../components/Client/Topics";
-import Footer from "../components/Client/Footer";
-import avatar from "../images/avatar.png";
+import Headers from "../../components/Client/Headers";
+import NavBar from "../../components/Client/Navbar";
+import Topics from "../../components/Client/Topics";
+import Footer from "../../components/Client/Footer";
+import avatar from "../../images/avatar.png";
 import {
   Container,
   Typography,
