@@ -86,11 +86,15 @@ function RecipeDetail() {
   totalNutrients: recipeDetail.recipe.totalNutrients,
   totalDaily: recipeDetail.recipe.totalDaily,
   calories: recipeDetail.recipe.calories,
+  id:id,
+  name:"Cao Thành Tài",
+  phone:"0366812907",
+  address:"Cau Voi",
 };
 
     // Navigate to the order page with the orderData as state
     navigate("/order", { state: { orderData } });
-  }
+}
   
 
 

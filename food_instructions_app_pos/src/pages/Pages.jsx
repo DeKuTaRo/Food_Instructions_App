@@ -30,6 +30,7 @@ import Contact from "./Client/Contact";
 import NotFound from "./NotFound";
 //Order
 import Order from "../pages/Client/Order/Order";
+import History from "../pages/Client/Order/History";
 
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
 import Cart from "./Client/Cart";
@@ -57,6 +58,7 @@ function Pages() {
         <Route path="/cart" element={<Cart />} />
 
          <Route path="/order" element={<Order />} />
+           <Route path="/history" element={<History />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
