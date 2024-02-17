@@ -129,6 +129,17 @@ function Headers() {
                 Profile
               </Link>
               <Link
+                href={"/history"}
+                underline="none"
+                sx={{
+                  padding: "0.5rem 2rem",
+                  color: "black",
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "black", color: "white" },
+                }}>
+                History
+              </Link>
+              <Link
                 href={"/wishlist"}
                 underline="none"
                 sx={{
