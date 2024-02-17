@@ -61,7 +61,6 @@ function Pages() {
 
         <Route path="/order" element={<Order />} />
         <Route path="/history" element={<History />} />
-        <Route path="/order" element={<Order />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
 
         {/* Admin */}

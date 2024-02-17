@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { motion } from "framer-motion";
 import CssBaseline from "@mui/material/CssBaseline";
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
+import { toast } from "react-toastify";
 
 import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../../../utils/searchData";
 import RecipeDialog from "./RecipeDialog";
@@ -162,15 +163,51 @@ function ARecipe() {
   });
 
   const url = `${process.env.REACT_APP_RECIPE_URL}?${queryParams.toString()}`;
-  const handleSearch = async () => {
+
+  const [countPage, setCountPage] = useState(0);
+  const [arrayLinkPage, setArrayLinkPage] = useState([]);
+  const [countRecipe, setCountRecipe] = useState(0);
+  const [fromRecipe, setFromRecipe] = useState(0);
+  const [toRecipe, setToRecipe] = useState(0);
+  
+  const handleSearchDebounce = async (urlSearch) => {
     try {
-      const response = await axios.get(linkNextPage === "" ? url : linkNextPage);
-      setSearchResults(response.data);
-      // setLinkNextPage(response.data._links.next.href);
+      const response = await axios.get(urlSearch);
+      if (response.data) {
+        setSearchResults(response.data);
+        setLinkNextPage(response.data._links.next.href);
+        setCountRecipe(response.data.count);
+        setFromRecipe(response.data.from);
+        setToRecipe(response.data.to);
+      }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Có lỗi xảy ra khi tải dữ liệu", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } finally {
       setLoading(false);
+    }
+  };
+  const handleSearch = (e, type) => {
+    if (type === "firstPage") {
+      setArrayLinkPage([]);
+      setArrayLinkPage((prevArray) => [...prevArray, url]);
+      setCountPage(0);
+      handleSearchDebounce(url);
+    } else if (type === "nextPage") {
+      setArrayLinkPage((prevArray) => [...prevArray, linkNextPage]);
+      setCountPage(countPage + 1);
+      handleSearchDebounce(linkNextPage);
+    } else if (type === "prevPage") {
+      setCountPage(countPage - 1);
+      handleSearchDebounce(arrayLinkPage[countPage - 1]);
     }
   };
 
@@ -306,33 +343,36 @@ function ARecipe() {
                       </Grid>
                     ))}
                   </Grid>
-                  <Stack
-                    spacing={{ xs: 1, sm: 2 }}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    useFlexGap
-                    flexWrap="wrap">
-                    <Stack>
-                      <Typography>Found {searchResults.count} recipes</Typography>
-                      <Stack spacing={1} direction="row">
-                        <Typography>Show on page</Typography>
-                        <Typography>from {searchResults.from}</Typography>
-                        <Typography>to {searchResults.to}</Typography>
-                      </Stack>
-                    </Stack>
-                    {/* href={`/searched/${encodeURIComponent(searchResults._links.next.href)} */}
-                    <Box>
-                      <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
-                        Previous page
-                      </Button>
-                      {/* <Button variant="contained" onClick={handleSearch}>
-                        {searchResults._links.next.title}
-                      </Button> */}
-                    </Box>
-                  </Stack>
                 </>
               )}
+              <Stack
+                spacing={{ xs: 1, sm: 2 }}
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                useFlexGap
+                flexWrap="wrap">
+                <Stack>
+                  <Typography>Found {countRecipe} recipes</Typography>
+                  <Stack spacing={1} direction="row">
+                    <Typography>Show on page</Typography>
+                    <Typography>from {fromRecipe}</Typography>
+                    <Typography>to {toRecipe}</Typography>
+                  </Stack>
+                </Stack>
+                <Typography>Page: {countPage + 1}</Typography>
+                <Box>
+                  <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "firstPage")}>
+                    First page
+                  </Button>
+                  <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "prevPage")}>
+                    Previous page
+                  </Button>
+                  <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "nextPage")}>
+                    Next page
+                  </Button>
+                </Box>
+              </Stack>
             </div>
           </Box>
         </Box>

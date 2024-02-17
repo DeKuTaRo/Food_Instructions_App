@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { Autocomplete, Box, Button, TextField, styled, Stack } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../utils/searchData";
+import { toast } from "react-toastify";
 
 import { motion } from "framer-motion";
 import Headers from "../../components/Client/Headers";
@@ -36,8 +37,8 @@ const StyledCardMedia = styled(CardMedia)({
 
 function SearchedCard({ recipe, link }) {
   const handleAddRecentlySee = () => {
-    console.log("add recently sees")
-  }
+    console.log("add recently sees");
+  };
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -149,15 +150,51 @@ function Searched() {
   });
 
   const url = `${process.env.REACT_APP_RECIPE_URL}?${queryParams.toString()}`;
-  const handleSearch = async () => {
+  // setLinkFirstPage(url);
+  const [countPage, setCountPage] = useState(0);
+  const [arrayLinkPage, setArrayLinkPage] = useState([]);
+  const [countRecipe, setCountRecipe] = useState(0);
+  const [fromRecipe, setFromRecipe] = useState(0);
+  const [toRecipe, setToRecipe] = useState(0);
+
+  const handleSearchDebounce = async (urlSearch) => {
     try {
-      const response = await axios.get(linkNextPage === "" ? url : linkNextPage);
-      setSearchResults(response.data);
-      setLinkNextPage(response.data._links.next.href);
+      const response = await axios.get(urlSearch);
+      if (response.data) {
+        setSearchResults(response.data);
+        setLinkNextPage(response.data._links.next.href);
+        setCountRecipe(response.data.count);
+        setFromRecipe(response.data.from);
+        setToRecipe(response.data.to);
+      }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Có lỗi xảy ra khi tải dữ liệu", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } finally {
       setLoading(false);
+    }
+  };
+  const handleSearch = (e, type) => {
+    if (type === "firstPage") {
+      setArrayLinkPage([]);
+      setArrayLinkPage((prevArray) => [...prevArray, url]);
+      setCountPage(0);
+      handleSearchDebounce(url);
+    } else if (type === "nextPage") {
+      setArrayLinkPage((prevArray) => [...prevArray, linkNextPage]);
+      setCountPage(countPage + 1);
+      handleSearchDebounce(linkNextPage);
+    } else if (type === "prevPage") {
+      setCountPage(countPage - 1);
+      handleSearchDebounce(arrayLinkPage[countPage - 1]);
     }
   };
 
@@ -189,7 +226,7 @@ function Searched() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
               />
-              <Button type="button" onClick={handleSearch}>
+              <Button type="button" onClick={(e) => handleSearch(e, "firstPage")}>
                 <FaSearch />
               </Button>
             </Box>
@@ -275,36 +312,36 @@ function Searched() {
                 </Grid>
               ))}
             </Grid>
-            <Stack
-              spacing={{ xs: 1, sm: 2 }}
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              useFlexGap
-              flexWrap="wrap">
-              <Stack>
-                <Typography>Found {searchResults.count} recipes</Typography>
-                <Stack spacing={1} direction="row">
-                  <Typography>Show on page</Typography>
-                  <Typography>from {searchResults.from}</Typography>
-                  <Typography>to {searchResults.to}</Typography>
-                </Stack>
-              </Stack>
-              {/* href={`/searched/${encodeURIComponent(searchResults._links.next.href)} */}
-              <Box>
-                <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
-                  First page
-                </Button>
-                <Button sx={{ margin: "1rem" }} variant="contained" onClick={handleSearch}>
-                  Previous page
-                </Button>
-                {/* <Button variant="contained" onClick={handleSearch}>
-                  {searchResults._links.next.title}
-                </Button> */}
-              </Box>
-            </Stack>
           </>
         )}
+        <Stack
+          spacing={{ xs: 1, sm: 2 }}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          useFlexGap
+          flexWrap="wrap">
+          <Stack>
+            <Typography>Found {countRecipe} recipes</Typography>
+            <Stack spacing={1} direction="row">
+              <Typography>Show on page</Typography>
+              <Typography>from {fromRecipe}</Typography>
+              <Typography>to {toRecipe}</Typography>
+            </Stack>
+          </Stack>
+          <Typography>Page: {countPage + 1}</Typography>
+          <Box>
+            <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "firstPage")}>
+              First page
+            </Button>
+            <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "prevPage")}>
+              Previous page
+            </Button>
+            <Button sx={{ margin: "1rem" }} variant="contained" onClick={(e) => handleSearch(e, "nextPage")}>
+              Next page
+            </Button>
+          </Box>
+        </Stack>
       </div>
     </motion.div>
   );
