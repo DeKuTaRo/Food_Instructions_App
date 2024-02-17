@@ -3,6 +3,7 @@
 # node_modules
 food_instructions_app_api/account/node_modules
 food_instructions_app_api/recipe/node_modules
+food_instructions_app_api/topic/node_modules
 food_instructions_app_pos/node_modules
 
 # production
@@ -20,6 +21,8 @@ food_instructions_app_api/account/.env
 food_instructions_app_api/account/.env.dev
 food_instructions_app_api/recipe/.env
 food_instructions_app_api/recipe/.env.dev
+food_instructions_app_api/topic/.env
+food_instructions_app_api/topic/.env.dev
 food_instructions_app_pos/.env
 
 npm-debug.log*

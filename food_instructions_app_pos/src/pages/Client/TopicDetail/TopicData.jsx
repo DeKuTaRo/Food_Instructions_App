@@ -204,7 +204,6 @@ Chocolate Indulgences: Chocolate Flavored, Cocoa Clusters`,
     mainImage: `${cerals}`,
   },
 
-
   Soup: {
     title: "Soup",
     description: `A warm, comforting bowl of soup is a timeless culinary delight. Crafted with a medley of ingredients, soups come in various forms, from hearty stews to brothy classics. The rich flavors, nourishing broth, and diverse textures create a satisfying and soul-warming experience. Explore the world of soups, where each spoonful tells a tale of culinary expertise and wholesome goodness.`,
@@ -228,8 +227,7 @@ International Favorites: Pho, Miso soup.`,
     mainImage: `${soup}`,
   },
 
-
-   Preserve : {
+  Preserve: {
     title: "Preserve",
     description: `Food preservation is the process of using methods such as vacuum sealing, pickling, canning, drying, freezing, or employing chemicals to extend the shelf life of food, maintaining its quality and nutritional value. This helps prevent spoilage and reduces food waste.`,
     history: `The history of food preservation spans thousands of years, from sun drying and salt curing to Nicolas Appert's canning technique in 1809. The advent of refrigeration in the 19th century and widespread freezing in the 20th century introduced modern methods to prevent spoilage and reduce food waste.`,
@@ -267,7 +265,6 @@ Jam, Jelly, and Preserves: Cooking fruit with sugar and sometimes pectin to crea
 Vacuum Packing: Removing air from a package containing food to slow down oxidation and prevent the growth of aerobic bacteria. Commonly used for meats and cheeses`,
     mainImage: `${preserve}`,
   },
-
 };
 
 export default topicDetails;

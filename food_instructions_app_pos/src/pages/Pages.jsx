@@ -14,6 +14,8 @@ import ANutrition from "./Admin/pages/Nutrition/Nutrition";
 import Food from "./Admin/pages/Food/Food";
 import ARecipe from "./Admin/pages/Recipe/Recipe";
 import ARecipeDetail from "./Admin/pages/Recipe/RecipeDetail";
+import ATopic from "./Admin/pages/Topic/Topic";
+import ATopicForm from "./Admin/pages/Topic/TopicForm";
 // Client
 import Home from "./Client/Home";
 import SignUp from "./Client/SignUp";
@@ -57,9 +59,11 @@ function Pages() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
 
-         <Route path="/order" element={<Order />} />
-           <Route path="/history" element={<History />} />
+        <Route path="/order" element={<Order />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/order" element={<Order />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
+
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -69,8 +73,10 @@ function Pages() {
         <Route path="/a-food" element={<Food />} />
         <Route path="/a-recipe" element={<ARecipe />} />
         <Route path="/a-recipe/details/:label" element={<ARecipeDetail />} />
+        <Route path="/a-topic" element={<ATopic />} />
+        <Route path="/a-topic/topics/:id" element={<ATopicForm />} />
 
-         <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </AnimatePresence>

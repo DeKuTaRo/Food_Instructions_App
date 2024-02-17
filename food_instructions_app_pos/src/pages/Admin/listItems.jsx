@@ -42,12 +42,12 @@ export const mainListItems = (
         <ListItemText primary="Ingredients" />
       </ListItemButton>
     </Link>
-    <Link href={"/a-food"} underline="none" color="inherit">
+    <Link href={"/a-topic"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <MenuBookIcon />
         </ListItemIcon>
-        <ListItemText primary="Food" />
+        <ListItemText primary="Topic" />
       </ListItemButton>
     </Link>
     <Link href={"/a-nutrition"} underline="none" color="inherit">

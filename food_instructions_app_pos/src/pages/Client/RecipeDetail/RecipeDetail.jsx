@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useNavigate  } from "react-router-dom"; // Import useHistory
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
@@ -17,7 +17,6 @@ import {
   DialogActions,
   IconButton,
   Link,
-  
 } from "@mui/material";
 import Footer from "../../../components/Client/Footer";
 import { Add, Remove } from "@mui/icons-material";
@@ -44,11 +43,7 @@ function RecipeDetail() {
   //modal
   const [open, setOpen] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(1);
-   const navigate = useNavigate();
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
@@ -65,7 +60,7 @@ function RecipeDetail() {
   };
 
   const handleBuyIngredients = () => {
-      if (isLoginClient !== "true") {
+    if (isLoginClient !== "true") {
       toast.error("Bạn phải đăng nhập mới sử dụng được tính năng này", {
         position: "top-right",
         autoClose: 3000,
@@ -76,29 +71,23 @@ function RecipeDetail() {
         progress: undefined,
         theme: "dark",
       });
+    } else {
+      const orderData = {
+        recipeName,
+        recipeImage,
+        ingredientLines: recipeDetail.recipe.ingredientLines,
+        numberOfPeople,
+        totalNutrients: recipeDetail.recipe.totalNutrients,
+        totalDaily: recipeDetail.recipe.totalDaily,
+        calories: recipeDetail.recipe.calories,
+        id: id,
+        name: "Cao Thành Tài",
+        phone: "0366812907",
+        address: "Cau Voi",
+      };
+      // Navigate to the order page with the orderData as state
+      navigate("/order", { state: { orderData } });
     }
-  else{
- const orderData = {
-  recipeName,
-  recipeImage,
-  ingredientLines: recipeDetail.recipe.ingredientLines,
-  numberOfPeople,
-  totalNutrients: recipeDetail.recipe.totalNutrients,
-  totalDaily: recipeDetail.recipe.totalDaily,
-  calories: recipeDetail.recipe.calories,
-  id:id,
-  name:"Cao Thành Tài",
-  phone:"0366812907",
-  address:"Cau Voi",
-};
-
-    // Navigate to the order page with the orderData as state
-    navigate("/order", { state: { orderData } });
-}
-  
-
-
-  
   };
 
   const [videoId, setVideoId] = useState("");
@@ -247,9 +236,9 @@ function RecipeDetail() {
                 </Box>
 
                 <Box sx={{ margin: "2rem auto " }}>
-                   <Button variant="outlined" onClick={handleBuyIngredients}>
-    Buy
-  </Button>
+                  <Button variant="outlined" onClick={handleBuyIngredients}>
+                    Buy
+                  </Button>
                   <Button variant="outlined" onClick={handleAddRecipeToWishlist}>
                     Add to wishlist
                   </Button>
@@ -279,15 +268,14 @@ function RecipeDetail() {
                         </IconButton>
                       </Typography>
                     </DialogContent>
-                  <DialogActions>
-    <Button onClick={handleClose} color="primary">
-      Cancel
-    </Button>
-    {/* Change the Confirm button to trigger the order page redirection */}
-    <Button onClick={handleBuyIngredients} color="primary" variant="contained">
-      Confirm
-    </Button>
-  </DialogActions>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={handleBuyIngredients} color="primary" variant="contained">
+                        Confirm
+                      </Button>
+                    </DialogActions>
                   </Dialog>
                 </Box>
 
@@ -303,7 +291,7 @@ function RecipeDetail() {
                   />
                 </Box>
 
-                {/* <Box
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -312,7 +300,7 @@ function RecipeDetail() {
                     justifyContent: "center",
                   }}>
                   <VideoTutorial videoId={videoId} />
-                </Box> */}
+                </Box>
 
                 <Box sx={{ marginTop: "2rem" }}>
                   <Comments

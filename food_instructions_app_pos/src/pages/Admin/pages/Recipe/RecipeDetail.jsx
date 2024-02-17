@@ -4,9 +4,7 @@ import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
 
-import { Grid, Breadcrumbs, Box, Paper, Link } from "@mui/material";
-
-import { styled } from "@mui/material/styles";
+import { Grid, Breadcrumbs, Box, Link } from "@mui/material";
 
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -155,7 +153,7 @@ function ARecipeDetail() {
                         />
                       </Box>
 
-                      {/* <Box
+                      <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -164,15 +162,10 @@ function ARecipeDetail() {
                           justifyContent: "center",
                         }}>
                         <VideoTutorial videoId={videoId} />
-                      </Box> */}
+                      </Box>
 
                       <Box sx={{ marginTop: "2rem" }}>
-                        <Comments
-                          recipeName={recipeName}
-                          recipeImage={recipeImage}
-                          label={label}
-                          token={token}
-                        />
+                        <Comments recipeName={recipeName} recipeImage={recipeImage} label={label} token={token} />
                       </Box>
                     </Grid>
 
