@@ -29,3 +29,23 @@
 {"level":"error","message":"Sat Feb 17 2024 16:50:59 GMT+0700 (Indochina Time)-{\"errno\":-4058,\"code\":\"ENOENT\",\"syscall\":\"stat\",\"path\":\"D:\\\\DACNTT2\\\\food_instructions_app\\\\food_instructions_app_api\\\\topic\\\\uploads\\\\1708102275012-sandwiches.jpg :\",\"expose\":false,\"statusCode\":404,\"status\":404}","private":true}
 {"level":"error","message":"Sat Feb 17 2024 17:12:33 GMT+0700 (Indochina Time)-{}","private":true}
 {"level":"error","message":"Sat Feb 17 2024 17:12:55 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:06:17 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:06:17 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:08:30 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:08:30 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:09:56 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:09:56 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:17:32 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:17:35 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:20 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:47 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:47 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:47 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:47 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:18:47 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:19:05 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:19:06 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:19:57 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:20:28 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:20:32 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Sun Feb 18 2024 22:20:52 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}

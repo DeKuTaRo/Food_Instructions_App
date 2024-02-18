@@ -35,7 +35,8 @@ module.exports = (app) => {
 
   app.get("/topic/getData", async (req, res, next) => {
     try {
-      const { data } = await service.GetAllData();
+      const searchTopicDebounce = req.query.searchTopicDebounce;
+      const { data } = await service.GetAllData(searchTopicDebounce);
       res.status(200).json(data);
     } catch (err) {
       next(err);

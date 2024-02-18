@@ -17,9 +17,9 @@ class RecipeService {
     }
   }
 
-  async GetAllData() {
+  async GetAllData(searchTopicDebounce) {
     try {
-      const topics = await this.repository.GetAllData();
+      const topics = await this.repository.GetAllData(searchTopicDebounce);
       return FormateData({ topics });
     } catch (err) {
       throw new APIError("Data Not found");

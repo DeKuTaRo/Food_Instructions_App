@@ -12,6 +12,7 @@ import {
   Container,
   Paper,
   CssBaseline,
+  TextField,
 } from "@mui/material";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -19,9 +20,11 @@ import { motion } from "framer-motion";
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
 import Title from "../../Title";
 import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import withAuthorization from "../../utils/auth";
+import useDebounce from "../../../../utils/debounce";
 import { toast } from "react-toastify";
 import AvatarDefault from "../../../../images/avatar.png";
 
@@ -37,9 +40,17 @@ const defaultTheme = createTheme();
 
 function ATopic() {
   const [allTopicData, setAllTopicData] = useState({ topics: [] });
+
+  const [searchTopic, setSearchTopic] = useState("");
+
+  const searchTopicDebounce = useDebounce(searchTopic, 1000);
   const getTopicDatas = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_URL_TOPIC_SERVICE}/topic/getData`);
+      const response = await axios.get(`${process.env.REACT_APP_URL_TOPIC_SERVICE}/topic/getData`, {
+        params: {
+          searchTopicDebounce: searchTopicDebounce,
+        },
+      });
       setAllTopicData(response.data);
     } catch (err) {
       toast.success("Có lỗi xảy ra", {
@@ -92,6 +103,7 @@ function ATopic() {
       });
     }
   };
+
   return (
     <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <ThemeProvider theme={defaultTheme}>
@@ -115,6 +127,15 @@ function ATopic() {
                   <Title>
                     <Button variant="outlined" href="/a-topic/topics/0">
                       Add new <AddIcon />
+                    </Button>
+                    <TextField
+                      label="Search title"
+                      placeholder="Enter title here ..."
+                      value={searchTopic}
+                      onChange={(e) => setSearchTopic(e.target.value)}
+                    />
+                    <Button variant="outlined" onClick={getTopicDatas}>
+                      Search <SearchIcon />
                     </Button>
                   </Title>
                   <Table size="small">

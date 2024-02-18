@@ -20,8 +20,11 @@ class TopicRepository {
     }
   }
 
-  async GetAllData() {
+  async GetAllData(searchTopicDebounce) {
     try {
+      if (searchTopicDebounce !== "") {
+        return await TopicSchema.find({ title: { $regex: searchTopicDebounce, $options: "i" } });
+      }
       return await TopicSchema.find();
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Datas");
