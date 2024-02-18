@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import bgImage from "../../images/bg1.png";
+import bgImage from "../../../images/bg1.png";
 import { Box, Typography } from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
 import TextField from "@mui/material/TextField";
@@ -8,8 +8,8 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 import { motion } from "framer-motion";
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

@@ -22,8 +22,8 @@ import { MdClearAll } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 import { toast } from "react-toastify";
 
 const fadeIn = {

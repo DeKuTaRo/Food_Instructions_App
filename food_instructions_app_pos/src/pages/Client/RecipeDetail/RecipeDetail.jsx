@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
+import Footer from "../../../components/Client/Footer";
 
 import {
   Breadcrumbs,
@@ -18,7 +19,6 @@ import {
   IconButton,
   Link,
 } from "@mui/material";
-import Footer from "../../../components/Client/Footer";
 import { Add, Remove } from "@mui/icons-material";
 import { toast } from "react-toastify";
 

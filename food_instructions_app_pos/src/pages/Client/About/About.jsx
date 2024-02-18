@@ -1,17 +1,16 @@
 import React from "react";
 import { Container, Typography, Grid, Paper, Box, Button } from "@mui/material";
-import soup from "../../images/soup.jpg";
-import preserve from "../../images/preserve.jpg";
+import soup from "../../../images/soup.jpg";
+import preserve from "../../../images/preserve.jpg";
 import Link from "@mui/material/Link";
-import Popular from "../../components/Client/Popular";
 
-import Topics from "../../components/Client/Topics";
+import Topics from "../../../components/Client/Topics";
 
 import { motion } from "framer-motion";
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 
-import Footer from "../../components/Client/Footer";
+import Footer from "../../../components/Client/Footer";
 const About = () => {
   return (
     <motion.div

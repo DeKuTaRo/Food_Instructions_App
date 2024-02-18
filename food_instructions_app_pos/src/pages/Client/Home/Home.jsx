@@ -1,16 +1,15 @@
-import Veggie from "../../components/Client/Veggie";
-import Popular from "../../components/Client/Popular";
+import Veggie from "../../../components/Client/Veggie";
+import Popular from "../../../components/Client/Popular";
 
-import Topics from "../../components/Client/Topics";
+import Topics from "../../../components/Client/Topics";
 
 import { motion } from "framer-motion";
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 
-import Footer from "../../components/Client/Footer";
+import Footer from "../../../components/Client/Footer";
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
-import Chatbot from "./Chatbot";
+import Chatbot from "../Chatbot/Chatbot";
 
 function Home() {
   return (

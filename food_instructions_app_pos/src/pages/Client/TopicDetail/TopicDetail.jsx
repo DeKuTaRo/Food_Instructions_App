@@ -53,7 +53,9 @@ const TopicDetail = () => {
           label: label.toLowerCase(),
         },
       });
-      setDetailsTopic(response.data);
+      if (response.data.topics) {
+        setDetailsTopic(response.data);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -74,7 +76,7 @@ const TopicDetail = () => {
       <NavBar />
       <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
         {/* {topicDetails.title} */}
-        {detailsTopic.topics.title}
+        {detailsTopic.topics.title ? detailsTopic.topics.title : topicDetails.title}
       </Typography>
       <Grid container spacing={2}>
         {/* Left Section with Main Image */}
@@ -83,10 +85,14 @@ const TopicDetail = () => {
             <CardMedia
               component="img"
               // alt={topicDetails.title}
-              alt={detailsTopic.topics.title}
+              alt={detailsTopic.topics.title ? detailsTopic.topics.title : topicDetails.title}
               height="500"
               // image={topicDetails.mainImage}
-              image={`${process.env.REACT_APP_URL_TOPIC_SERVICE}/${detailsTopic.topics.mainImage}`}
+              image={
+                detailsTopic.topics.mainImage
+                  ? `${process.env.REACT_APP_URL_TOPIC_SERVICE}/${detailsTopic.topics.mainImage}`
+                  : topicDetails.mainImage
+              }
               sx={{
                 boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)", // Đường viền mờ
                 borderRadius: "8px", // Cong tròn mép
@@ -107,7 +113,7 @@ const TopicDetail = () => {
             </Typography>
             <Typography variant="h6">
               {/* {topicDetails.description} */}
-              {detailsTopic.topics.description}
+              {detailsTopic.topics.description ? detailsTopic.topics.description : topicDetails.description}
             </Typography>
           </Box>
         </Grid>
@@ -116,49 +122,57 @@ const TopicDetail = () => {
         <Typography variant="h5" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
           History
         </Typography>
-        {detailsTopic.topics.history}
-        {/* <ul>
-          {topicDetails.history.split("\n\n").map((paragraph, index) => (
-            <li key={index}>
-              <Typography variant="h6" component="div">
-                {paragraph}
-              </Typography>
-            </li>
-          ))}
-        </ul> */}
+        {detailsTopic.topics.history ? (
+          detailsTopic.topics.history
+        ) : (
+          <ul>
+            {topicDetails.history.split("\n\n").map((paragraph, index) => (
+              <li key={index}>
+                <Typography variant="h6" component="div">
+                  {paragraph}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        )}
       </Box>
 
       <Box>
         <Typography variant="h5" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
           Fillings
         </Typography>
-        {detailsTopic.topics.fills}
-
-        {/* <ul>
-          {topicDetails.fills.split("\n\n").map((paragraph, index) => (
-            <li key={index}>
-              <Typography variant="h6" component="div">
-                {paragraph}
-              </Typography>
-            </li>
-          ))}
-        </ul> */}
+        {detailsTopic.topics.fills ? (
+          detailsTopic.topics.fills
+        ) : (
+          <ul>
+            {topicDetails.fills.split("\n\n").map((paragraph, index) => (
+              <li key={index}>
+                <Typography variant="h6" component="div">
+                  {paragraph}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        )}
       </Box>
 
       <Box>
         <Typography variant="h5" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
           Types of Sandwiches
         </Typography>
-        {detailsTopic.topics.type}
-        {/* <ul>
-          {topicDetails.type.split("\n\n").map((paragraph, index) => (
-            <li key={index}>
-              <Typography variant="h6" component="div">
-                {paragraph}
-              </Typography>
-            </li>
-          ))}
-        </ul> */}
+        {detailsTopic.topics.type ? (
+          detailsTopic.topics.type
+        ) : (
+          <ul>
+            {topicDetails.type.split("\n\n").map((paragraph, index) => (
+              <li key={index}>
+                <Typography variant="h6" component="div">
+                  {paragraph}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        )}
       </Box>
 
       {/* Related Recipes Section */}

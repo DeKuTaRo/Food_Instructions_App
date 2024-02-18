@@ -1,11 +1,11 @@
-import bgImage from "../../images/bg1.png";
+import bgImage from "../../../images/bg1.png";
 import { Box } from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 function ForgotPassword() {
   return (
     <div style={{ margin: "0% 10%" }}>

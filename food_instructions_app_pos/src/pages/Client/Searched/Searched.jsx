@@ -9,12 +9,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Autocomplete, Box, Button, TextField, styled, Stack } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../utils/searchData";
+import { dietSearch, healthSearch, cuisineSearch, mealSearch, dishSearch } from "../../../utils/searchData";
 import { toast } from "react-toastify";
 
 import { motion } from "framer-motion";
-import Headers from "../../components/Client/Headers";
-import NavBar from "../../components/Client/Navbar";
+import Headers from "../../../components/Client/Headers";
+import NavBar from "../../../components/Client/Navbar";
 
 const fadeIn = {
   "0%": { opacity: 0 },
