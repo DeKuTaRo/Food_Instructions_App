@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState,useEffect, } from "react";
+import { useLocation,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
@@ -34,7 +34,30 @@ function OrderPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [detailAccount, setDetailAccount] = useState({});
   // Calculate total price
+const navigate = useNavigate();
+ useEffect(() => {
+    const getAccountDetail = async () => {
+      try {
+        axios
+          .get(`http://localhost:8001/account/profile`, {
+            headers: {
+              Authorization: `Bearer ${orderData.token}`,
+            },
+          })
+          .then((res) => {
+            console.log("res =", res);
+            setDetailAccount(res.data);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAccountDetail();
+  }, []);
+  
+
   const totalPrice = orderData ? orderData.calories * quantity : 0;
 
   // Function to handle quantity changes
@@ -53,45 +76,35 @@ const [paymentMethod, setPaymentMethod] = useState("momo"); // Thêm state cho p
   // Thêm hàm xác nhận mua hàng
 
 
-   const handleConfirmPurchase = () => {
-    setConfirmDialogOpen(true);
-  };
+const handleConfirmPurchase = () => {
+  setConfirmDialogOpen(true);
+};
 
-  const handleCloseConfirmDialog = () => {
-    setConfirmDialogOpen(false);
-  };
-//  const fetchUserDetails = async () => {
-//   try {
-//     const response = await axios.get(
-//       `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account`,
-//       {
-//         params: {
-//           _id: orderData.id,
-//         },
-//         transformResponse: [(data) => {
-//           const userData = JSON.parse(data);
-//           // Assuming your _id property is stored as a string
-//           userData._id = new ObjectId(userData._id);
-//           return userData;
-//         }],
-//       }
-//     );
-//     const userData = response.data;
-//     setName(userData.name);
-//     setPhone(userData.phone);
-//     setAddress(userData.address);
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
+const handleCloseConfirmDialog = () => {
+  setConfirmDialogOpen(false);
+};
 
-//   useEffect(() => {
-//     fetchUserDetails();
-//   }, [orderData.id]);
+const handleConfirmPayment = () => {
+  // Đóng dialog
+  setConfirmDialogOpen(false);
 
-console.log(name,phone,address)
+  // Chuyển hướng dựa trên phương thức thanh toán
+  if (paymentMethod === 'momo') {
+    // Chuyển hướng đến trang thanh toán Momo
+    navigate('/momo');
+  } else if (paymentMethod === 'bank') {
+    // Chuyển hướng đến trang thanh toán Internet Banking
+    navigate('/banking');
+  }
+};
+
+const handleCancelPayment = () => {
+  // Đóng dialog
+  setConfirmDialogOpen(false);
+};
+
+console.log(detailAccount.username)
+const fname=detailAccount.username;
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -111,7 +124,7 @@ console.log(name,phone,address)
       <Typography variant="h6">User Information</Typography>
       <TextField
         label="Name"
-        defaultValue={name}
+        value={fname}
         InputProps={{
           readOnly: true,
            style: { background: 'lightgray',
@@ -123,7 +136,7 @@ console.log(name,phone,address)
       />
       <TextField
         label="Phone"
-        defaultValue={phone}
+        defaultValue="1025412522"
         InputProps={{
           readOnly: true,
            style: { background: 'lightgray',
@@ -134,7 +147,7 @@ console.log(name,phone,address)
       />
       <TextField
         label="Address"
-        defaultValue={address}
+        defaultValue={fname}
         fullWidth
         margin="normal"
       />
@@ -295,32 +308,29 @@ console.log(name,phone,address)
         </Paper>
         {/* Confirm Dialog */}
          <Dialog
-          open={confirmDialogOpen}
-          onClose={handleCloseConfirmDialog}
-          fullWidth
-        >
-          <DialogTitle>Confirm Purchase</DialogTitle>
-          <DialogContent>
-            <Typography>{`Quantity: ${quantity}`}</Typography>
-            <Typography>{`Total Price: $${totalPrice.toFixed(2)}`}</Typography>
-            {/* Add any other information you want to display in the dialog */}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseConfirmDialog} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                handleCloseConfirmDialog();
-                // Implement logic for confirming purchase
-              }}
-              color="primary"
-              variant="contained"
-            >
-              Confirm
-            </Button>
-          </DialogActions>
-        </Dialog>
+  open={confirmDialogOpen}
+  onClose={handleCloseConfirmDialog}
+  fullWidth
+>
+  <DialogTitle>Confirm Purchase</DialogTitle>
+  <DialogContent>
+    <Typography>{`Quantity: ${quantity}`}</Typography>
+    <Typography>{`Total Price: $${totalPrice.toFixed(2)}`}</Typography>
+    {/* Add any other information you want to display in the dialog */}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCancelPayment} color="primary">
+      Cancel
+    </Button>
+    <Button
+      onClick={handleConfirmPayment}
+      color="primary"
+      variant="contained"
+    >
+      Confirm
+    </Button>
+  </DialogActions>
+</Dialog>
       </div>
 
       <Footer />

@@ -32,6 +32,8 @@ import Cart from "./Client/Cart/Cart";
 //Order
 import Order from "../pages/Client/Order/Order";
 import History from "../pages/Client/Order/History";
+//payment
+import Momo from "../pages/Client/Payment/Momo";
 
 
 import NotFound from "./NotFound";
@@ -63,7 +65,7 @@ function Pages() {
         <Route path="/topic/:label" element={<TopicDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-
+        <Route path="/momo" element={<Momo />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
