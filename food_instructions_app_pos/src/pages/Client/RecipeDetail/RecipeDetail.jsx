@@ -58,7 +58,6 @@ function RecipeDetail() {
       setNumberOfPeople((prev) => prev - 1);
     }
   };
-
   const handleBuyIngredients = () => {
     if (isLoginClient !== "true") {
       toast.error("Bạn phải đăng nhập mới sử dụng được tính năng này", {
@@ -84,6 +83,8 @@ function RecipeDetail() {
         name: "Cao Thành Tài",
         phone: "0366812907",
         address: "Cau Voi",
+        token:token,
+        link:window.location.href,
       };
       // Navigate to the order page with the orderData as state
       navigate("/order", { state: { orderData } });

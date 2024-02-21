@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
-import bgImage from "../../../images/bg1.png";
-import { Box, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Avatar,
+  InputAdornment,
+} from "@mui/material";
 import { GiKnifeFork } from "react-icons/gi";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Link from "@mui/material/Link";
+import EditIcon from "@mui/icons-material/Edit";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
@@ -14,19 +17,21 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function Profile() {
+const Profile = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [userData, setUserData] = useState({
+    fullName: "",
     username: "",
-    password: "",
+    phone: "",
+    email: "",
+    address: "",
+    avatar: "",
   });
-
-  const [detailAccount, setDetailAccount] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setUserData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -34,44 +39,36 @@ function Profile() {
 
   const token = localStorage.getItem("token");
   useEffect(() => {
-    const getAccountDetail = async () => {
+    const getUserData = async () => {
       try {
-        axios
-          .get(`http://localhost:8001/account/profile`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            console.log("res =", res);
-            setDetailAccount(res.data);
-          });
+        const res = await axios.get(`http://localhost:8001/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(res.data);
       } catch (err) {
         console.log(err);
       }
     };
-    getAccountDetail();
-  }, []);
+    getUserData();
+  }, [token]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      axios.post(`http://localhost:8001/account/login`, formData).then((res) => {
-        if (res.data.status) {
-          toast.success("Đăng nhập thành công", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
-        localStorage.setItem("isLogin", "true");
-        localStorage.setItem("token", res.data.token);
-        navigate("/");
+      // Gửi dữ liệu cập nhật lên server, bạn có thể sử dụng axios.put hoặc endpoint tương ứng
+      // Ví dụ: const res = await axios.put('http://localhost:8001/account/profile', userData);
+
+      toast.success("Cập nhật thông tin thành công", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
       });
     } catch (err) {
       toast.error(err, {
@@ -86,51 +83,78 @@ function Profile() {
       });
     }
   };
+
+  
+
+  const [fileInput, setFileInput] = useState(null);
+
+  const handleAvatarClick = () => {
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    // Handle the selected file as needed (e.g., upload to server, update state, etc.)
+  };
+
   return (
     <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <div style={{ margin: "0% 10%" }}>
         <Headers />
         <NavBar />
-        <Box
-          sx={{
-            backgroundImage: `url(${bgImage})`,
-            backgroundRepeat: "repeat",
-            backgroundPosition: "left top",
-            padding: "3rem 0",
-            margin: "0 auto 1.25rem",
-            position: "absolute",
-            left: "-10%",
-            right: "-9%",
-            width: "100vw",
-          }}></Box>
-        <Box
+       <Box
           sx={{
             display: "flex",
-            position: "relative",
-            top: "1.5rem",
-            left: "5rem",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: "1.5rem",
           }}>
-          <GiKnifeFork style={{ fontSize: "6rem" }} />
-
-          <Box sx={{ pl: 3, width: "80%" }}>
+          <Box
+            component={Paper}
+            elevation={3}
+            sx={{
+              mt: 2,
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              padding: "1rem",
+              alignItems: "center",
+            }}>
+            <Avatar
+              src={userData.avatar}
+              alt="Avatar"
+              sx={{ cursor: "pointer", width: 120, height: 120, mb: 2 }}
+              onClick={handleAvatarClick}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              ref={(input) => setFileInput(input)}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
             <Typography
               sx={{
                 color: "black",
                 fontSize: "2.8rem",
                 fontWeight: 700,
-                margin: "1.5rem 12px ",
+                mb: 2, // Adjust bottom margin
               }}>
               Profile
             </Typography>
-
-            <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box
+                component={Paper}
+                elevation={3}
                 sx={{
                   mt: 8,
                   display: "flex",
                   flexDirection: "column",
                   width: "100vh",
                   margin: "",
+                  padding: "1rem",
                 }}>
                 <form onSubmit={handleSubmit}>
                   <div
@@ -142,14 +166,60 @@ function Profile() {
                       fontSize: "24px",
                       fontWeight: "bold",
                     }}>
+                    <Avatar
+                      src={userData.avatar}
+                      alt="Avatar"
+                      sx={{ cursor: "pointer" }}
+                      onClick={handleAvatarClick}
+                    />
+                    <TextField
+                      fullWidth
+                      id="fullName"
+                      name="fullName"
+                      label="Full Name *"
+                      variant="outlined"
+                      value={userData.fullName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "100px",
+                      margin: "12px 12px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
                     <TextField
                       fullWidth
                       id="username"
                       name="username"
                       label="Username *"
                       variant="outlined"
-                      value={detailAccount.username}
+                      value={userData.username}
                       onChange={handleChange}
+                      InputProps={{ readOnly: true, style: { color: "gray" } }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "100px",
+                      margin: "12px 12px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
+                    <TextField
+                      fullWidth
+                      id="phone"
+                      name="phone"
+                      label="Phone *"
+                      variant="outlined"
+                      value={userData.phone}
+                      onChange={handleChange}
+                      InputProps={{ readOnly: true, style: { color: "gray" } }}
                     />
                   </div>
                   <div
@@ -165,10 +235,11 @@ function Profile() {
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email Address *"
+                      label="Email *"
                       variant="outlined"
-                      value={detailAccount.email}
+                      value={userData.email}
                       onChange={handleChange}
+                      InputProps={{ readOnly: true, style: { color: "gray" } }}
                     />
                   </div>
                   <div
@@ -182,31 +253,12 @@ function Profile() {
                     }}>
                     <TextField
                       fullWidth
-                      id="password"
-                      name="password"
-                      label="Password *"
+                      id="address"
+                      name="address"
+                      label="Address"
                       variant="outlined"
-                      value={formData.password}
+                      value={userData.address}
                       onChange={handleChange}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "100px",
-                      margin: "12px 12px",
-                      fontSize: "24px",
-                      fontWeight: "bold",
-                    }}>
-                    <TextField
-                      fullWidth
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      label="Confirm password *"
-                      variant="outlined"
-                      //   value={confirmPassword}
-                      //   onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
                   <div
@@ -225,29 +277,9 @@ function Profile() {
                         width: "100%",
                         marginLeft: "10px",
                       }}>
-                      <FormControlLabel
-                        color="success"
-                        labelPlacement="end"
-                        label="Are you sure of the above information
-"
-                        control={<Checkbox defaultChecked />}
-                      />{" "}
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "97% ",
-                        margin: "12px",
-                      }}>
                       <Button type="submit" variant="contained" style={{ width: "100%", padding: "12px" }}>
-                        Register
+                        Update Profile
                       </Button>
-                    </div>
-
-                    <div style={{ display: "flex", gap: "8px", margin: "12px 12px" }}>
-                      <p>Have an account ? </p>
-                      <Link href={"/login-plus"}>Login</Link>
                     </div>
                   </div>
                 </form>
@@ -258,6 +290,6 @@ function Profile() {
       </div>
     </motion.div>
   );
-}
+};
 
 export default Profile;

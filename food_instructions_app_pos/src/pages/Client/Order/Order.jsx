@@ -1,5 +1,5 @@
-import React, { useState,useEffect, } from "react";
-import { useLocation,useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
@@ -18,11 +18,12 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  TextField ,
-  Radio, RadioGroup, FormControlLabel,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
-
 
 function OrderPage() {
   const location = useLocation();
@@ -36,27 +37,25 @@ function OrderPage() {
   const [address, setAddress] = useState("");
   const [detailAccount, setDetailAccount] = useState({});
   // Calculate total price
-const navigate = useNavigate();
- useEffect(() => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
     const getAccountDetail = async () => {
       try {
-        axios
-          .get(`http://localhost:8001/account/profile`, {
-            headers: {
-              Authorization: `Bearer ${orderData.token}`,
-            },
-          })
-          .then((res) => {
-            console.log("res =", res);
-            setDetailAccount(res.data);
-          });
+        const response = await axios.get(`http://localhost:8001/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${orderData.token}`,
+          },
+        });
+        setDetailAccount(response.data);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
     getAccountDetail();
-  }, []);
-  
+  }, [orderData.token]);
 
   const totalPrice = orderData ? orderData.calories * quantity : 0;
 
@@ -71,40 +70,51 @@ const navigate = useNavigate();
     setQuantity((prev) => prev + 1);
   };
 
-const [paymentMethod, setPaymentMethod] = useState("momo"); // Thêm state cho phương thức thanh toán
+  const [paymentMethod, setPaymentMethod] = useState("momo"); // Thêm state cho phương thức thanh toán
 
   // Thêm hàm xác nhận mua hàng
+  const handleConfirmPurchase = () => {
+    setConfirmDialogOpen(true);
+  };
 
-
-const handleConfirmPurchase = () => {
-  setConfirmDialogOpen(true);
-};
-
-const handleCloseConfirmDialog = () => {
-  setConfirmDialogOpen(false);
-};
+  const handleCloseConfirmDialog = () => {
+    setConfirmDialogOpen(false);
+  };
 
 const handleConfirmPayment = () => {
   // Đóng dialog
+
+ const paymentInfo = {
+    productName: orderData.recipeName,
+    userName: detailAccount.username,
+    accountName: name,
+    phone: phone || detailAccount.phone,
+    address: address || detailAccount.address,
+    productLink: orderData.link,  // Đây là link của trang thông tin sản phẩm
+    quantity,
+    totalPrice,
+  };
+
   setConfirmDialogOpen(false);
 
-  // Chuyển hướng dựa trên phương thức thanh toán
+  // Chuẩn bị thông tin cần chuyển đi
+ 
+
   if (paymentMethod === 'momo') {
-    // Chuyển hướng đến trang thanh toán Momo
-    navigate('/momo');
+    // Chuyển hướng đến trang thanh toán Momo và truyền thông tin qua URL
+    
+    navigate("/momo",{ state: { paymentInfo } });
   } else if (paymentMethod === 'bank') {
-    // Chuyển hướng đến trang thanh toán Internet Banking
-    navigate('/banking');
+    // Gọi API thanh toán Internet Banking và truyền thông tin qua body của request              
+    navigate("/banking",{ state: { paymentInfo } });
   }
 };
 
-const handleCancelPayment = () => {
-  // Đóng dialog
-  setConfirmDialogOpen(false);
-};
+  const handleCancelPayment = () => {
+    // Đóng dialog
+    setConfirmDialogOpen(false);
+  };
 
-console.log(detailAccount.username)
-const fname=detailAccount.username;
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -117,41 +127,38 @@ const fname=detailAccount.username;
       <NavBar />
 
       <div style={{ textAlign: "center" }}>
-        <Typography variant="h4">Order Details</Typography>
+        <Typography variant="h4" margin={3}>Order Details</Typography>
 
         {/* User Information */}
-           <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
-      <Typography variant="h6">User Information</Typography>
-      <TextField
-        label="Name"
-        value={fname}
-        InputProps={{
-          readOnly: true,
-           style: { background: 'lightgray',
-           pointerEvents: 'none', },
-          
-        }}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Phone"
-        defaultValue="1025412522"
-        InputProps={{
-          readOnly: true,
-           style: { background: 'lightgray',
-           pointerEvents: 'none', },
-        }}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Address"
-        defaultValue={fname}
-        fullWidth
-        margin="normal"
-      />
-    </Paper>
+        <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
+          <Typography variant="h6">User Information</Typography>
+          <TextField
+            label="Name"
+            value={name || (detailAccount && detailAccount.username) || ""}
+            InputProps={{
+              readOnly: true,
+              style: { background: "lightgray", pointerEvents: "none" },
+            }}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Phone"
+            value={phone || (detailAccount && detailAccount.phone) || ""}
+            InputProps={{
+              readOnly: true,
+              style: { background: "lightgray", pointerEvents: "none" },
+            }}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Address"
+            value={address || (detailAccount && detailAccount.address) || ""}
+            fullWidth
+            margin="normal"
+          />
+        </Paper>
 
         {/* Product Information */}
         <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
@@ -166,20 +173,28 @@ const fname=detailAccount.username;
               }}
             >
               <Paper
-              sx={{
-                width:"92%",
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"center",
-                borderRadius:"50%",
-                
-              }}>
+                sx={{
+                  width: "92%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "50%",
+                }}
+              >
                 {/* Product Image */}
                 {orderData && (
                   <img
                     src={orderData.recipeImage}
                     alt="Recipe"
-                    style={{ width: "98%",height:"98%",display:"flex",alignItems:"center",borderRadius:"50%",border:"1px solid smokegray",objectFit:"fill" }}
+                    style={{
+                      width: "98%",
+                      height: "98%",
+                      display: "flex",
+                      alignItems: "center",
+                      borderRadius: "50%",
+                      border: "1px solid smokegray",
+                      objectFit: "fill",
+                    }}
                   />
                 )}
               </Paper>
@@ -203,18 +218,15 @@ const fname=detailAccount.username;
                     display: "flex",
                     alignItems: "start",
                     flexDirection: "column",
-                    justifyContent:"center",
-                    textAlign:"left"
+                    justifyContent: "center",
+                    textAlign: "left",
                   }}
                 >
                   {orderData &&
                     orderData.ingredientLines.map((item, index) => (
-                      <li
-                        key={index}
-                       
-                      > <Typography variant="h6">  {" "}
-                        {`${quantity} x ${item}`}</Typography>
-                      
+                      <li key={index}>
+                        {" "}
+                        <Typography variant="h6">{`${quantity} x ${item}`}</Typography>
                       </li>
                     ))}
                 </ul>
@@ -262,7 +274,7 @@ const fname=detailAccount.username;
                     label={
                       <>
                         <img
-                          src= {momo}
+                          src={momo}
                           alt="Momo Icon"
                           style={{ marginRight: "8px", height: "24px" }}
                         />
@@ -306,31 +318,24 @@ const fname=detailAccount.username;
             </Grid>
           </Grid>
         </Paper>
+
         {/* Confirm Dialog */}
-         <Dialog
-  open={confirmDialogOpen}
-  onClose={handleCloseConfirmDialog}
-  fullWidth
->
-  <DialogTitle>Confirm Purchase</DialogTitle>
-  <DialogContent>
-    <Typography>{`Quantity: ${quantity}`}</Typography>
-    <Typography>{`Total Price: $${totalPrice.toFixed(2)}`}</Typography>
-    {/* Add any other information you want to display in the dialog */}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCancelPayment} color="primary">
-      Cancel
-    </Button>
-    <Button
-      onClick={handleConfirmPayment}
-      color="primary"
-      variant="contained"
-    >
-      Confirm
-    </Button>
-  </DialogActions>
-</Dialog>
+        <Dialog open={confirmDialogOpen} onClose={handleCloseConfirmDialog} fullWidth>
+          <DialogTitle>Confirm Purchase</DialogTitle>
+          <DialogContent>
+            <Typography>{`Quantity: ${quantity}`}</Typography>
+            <Typography>{`Total Price: $${totalPrice.toFixed(2)}`}</Typography>
+            {/* Add any other information you want to display in the dialog */}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelPayment} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmPayment} color="primary" variant="contained">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
 
       <Footer />

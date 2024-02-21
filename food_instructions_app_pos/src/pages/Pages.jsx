@@ -34,7 +34,7 @@ import Order from "../pages/Client/Order/Order";
 import History from "../pages/Client/Order/History";
 //payment
 import Momo from "../pages/Client/Payment/Momo";
-
+import Banking from "../pages/Client/Payment/Banking";
 
 import NotFound from "./NotFound";
 import NotPermission from "./NotPermission";
@@ -66,6 +66,7 @@ function Pages() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/momo" element={<Momo />} />
+         <Route path="/banking" element={<Banking />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
