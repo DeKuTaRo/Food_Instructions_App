@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import QRCode from "qrcode.react";
 import {
   Card,
   CardContent,

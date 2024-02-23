@@ -29,6 +29,7 @@ import About from "./Client/About/About";
 import Contact from "./Client/Contact/Contact";
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
 import Cart from "./Client/Cart/Cart";
+import ResetPassword from "./Client/ResetPassword/ResetPassword";
 //Order
 import Order from "../pages/Client/Order/Order";
 import History from "../pages/Client/Order/History";
@@ -54,6 +55,7 @@ function Pages() {
         <Route path="/" element={<Home />} />
         <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
         <Route path="/nutrition-facts" element={<Nutrition />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/recipe/:label" element={<RecipeDetail />} />
@@ -66,7 +68,7 @@ function Pages() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/momo" element={<Momo />} />
-         <Route path="/banking" element={<Banking />} />
+        <Route path="/banking" element={<Banking />} />
         {/* Admin */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -78,8 +80,6 @@ function Pages() {
         <Route path="/a-recipe/details/:label" element={<ARecipeDetail />} />
         <Route path="/a-topic" element={<ATopic />} />
         <Route path="/a-topic/topics/:id" element={<ATopicForm />} />
-
- 
       </Routes>
     </AnimatePresence>
   );

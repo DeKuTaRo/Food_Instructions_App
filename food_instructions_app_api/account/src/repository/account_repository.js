@@ -1,8 +1,14 @@
+const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+
+const { APP_SECRET } = require("../config");
+
 const { AccountModel, AddressModel, CommentModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
-  async CreateAccount({ username, email, password, salt }) {
+  async CreateAccount({ username, email, password, salt, token }) {
     try {
       const account = new AccountModel({
         username,
@@ -11,6 +17,7 @@ class AccountRepository {
         salt,
         isAdmin: false,
         role: "user",
+        token: token,
         address: [],
         wishlist: [],
         orders: [],
@@ -74,6 +81,16 @@ class AccountRepository {
   async FindAccount({ username, role }) {
     try {
       const existingAccount = await AccountModel.findOne({ username: username, role: role });
+      return existingAccount;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");
+    }
+  }
+
+  async SaveTokenToModel({ username, role, token }) {
+    try {
+      const existingAccount = await AccountModel.findOne({ username: username, role: role });
+      existingAccount.token = token;
       return existingAccount;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");
@@ -264,6 +281,66 @@ class AccountRepository {
       return updateAccountComment;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Delete Comment");
+    }
+  }
+
+  async ForgotPassword(email) {
+    try {
+      const checkExistAccount = await AccountModel.findOne({ email: email });
+
+      if (!checkExistAccount) {
+        return { error: "User not found" };
+      }
+      const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
+      const resetToken = await jwt.sign({ email, iat: fixedIssuedAt }, APP_SECRET, { expiresIn: "10m" });
+      await checkExistAccount.save({ validateBeforeSave: false });
+
+      const resetURL = `${process.env.URL_REACT_APP}/resetPassword/${resetToken}`;
+
+      const message = `Bạn đã quên mật khẩu? Hãy nhập lại mật khẩu mới của bạn tại <a href="${resetURL}">đây</a>.<br>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.`;
+      const transporter = nodemailer.createTransport({
+        // service: 'gmail',
+        host: process.env.EMAIL_HOST,
+        port: 25,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+        tls: { rejectUnauthorized: false },
+      });
+      const emailOptions = {
+        from: `food_instructions_app@gmail.com`,
+        to: checkExistAccount.email,
+        subject: "Mã đặt lại mật khẩu của bạn có giá trị trong 10 phút",
+        text: message,
+        html: message,
+      };
+
+      const emailReult = await transporter.sendMail(emailOptions);
+      if (emailReult) {
+        return { msg: "Vui lòng kiểm tra địa chỉ email của bạn", statusCode: 200 };
+      }
+
+      return { msg: "Có lỗi xảy ra khi gửi email.", statusCode: 500 };
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Send New Password To Email");
+    }
+  }
+
+  async ResetPassword(password, token) {
+    try {
+      const checkExistAccount = await AccountModel.findOne({ token: token });
+
+      if (!checkExistAccount) {
+        return { msg: "User not found", statusCode: 500 };
+      }
+
+      const newPassword = await bcrypt.hash(password, checkExistAccount.salt);
+      checkExistAccount.password = newPassword;
+      await checkExistAccount.save();
+      return { msg: "Đổi mật khẩu thành công", statusCode: 200 };
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reset New Password");
     }
   }
 }

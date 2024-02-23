@@ -6,7 +6,7 @@ function Chatbot() {
   const chatbox = document.querySelector(".chatbox");
 
   let userMessage;
-  const API_KEY = "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";
+  const API_KEY = "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";
   //   const inputInitHeight = chatInput.scrollHeight;
 
   const createChatLi = (message, className) => {
@@ -31,7 +31,8 @@ function Chatbot() {
         Authorization: `Bearer ${API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        // model: "gpt-3.5-turbo",
+        model: "gpt-4",
         messages: [
           // {
           //   role: "system",

@@ -25,6 +25,7 @@ const AccountSchema = new Schema(
     isAdmin: {
       type: Boolean,
     },
+    token: String,
     address: [{ type: Schema.Types.ObjectId, ref: "address", require: true }],
     wishlist: [
       {

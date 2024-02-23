@@ -15,10 +15,9 @@ class AccountService {
       if (existingAccount) {
         const validPassword = await ValidatePassword(password, existingAccount.password, existingAccount.salt);
         if (validPassword) {
-          const token = await GenerateSignature({ username: existingAccount.username, _id: existingAccount._id });
           return FormateData({
             id: existingAccount._id,
-            token,
+            token: existingAccount.token,
             status: true,
             isAdmin: existingAccount.isAdmin,
             username: existingAccount.username,
@@ -39,10 +38,16 @@ class AccountService {
       let salt = await GenerateSalt();
 
       let userPassword = await GeneratePassword(password, salt);
+      const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
+      const token = await GenerateSignature({ email: email, iat: fixedIssuedAt });
 
-      const existingCustomer = await this.repository.CreateAccount({ username, email, password: userPassword, salt });
-
-      const token = await GenerateSignature({ username: username, _id: existingCustomer._id });
+      const existingCustomer = await this.repository.CreateAccount({
+        username,
+        email,
+        password: userPassword,
+        salt,
+        token,
+      });
 
       return FormateData({ id: existingCustomer._id, token, status: true });
     } catch (err) {
@@ -222,6 +227,26 @@ class AccountService {
         break;
       default:
         break;
+    }
+  }
+
+  async ForgotPassword(email) {
+    try {
+      const password = await this.repository.ForgotPassword(email);
+      return FormateData(password);
+    } catch (err) {
+      console.log("err ser : ", err);
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async ResetPassword(password, token) {
+    try {
+      const resetPassword = await this.repository.ResetPassword(password, token);
+      return FormateData(resetPassword);
+    } catch (err) {
+      console.log("err ser : ", err);
+      throw new APIError("Data Not found", err);
     }
   }
 }

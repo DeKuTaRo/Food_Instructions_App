@@ -18,7 +18,7 @@ module.exports.ValidatePassword = async (enteredPassword, savedPassword, salt) =
 
 module.exports.GenerateSignature = async (payload) => {
   try {
-    return await jwt.sign(payload, APP_SECRET, { expiresIn: "30d" });
+    return await jwt.sign(payload, APP_SECRET, { expiresIn: "10m" });
   } catch (error) {
     console.log(error);
     return error;

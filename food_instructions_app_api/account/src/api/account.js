@@ -161,4 +161,52 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.post("/account/forgotPassword", async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const { data } = await service.ForgotPassword(email);
+      return res.status(200).json(data);
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
+
+  app.post("/account/resetPassword", async (req, res, next) => {
+    try {
+      const { password, token } = req.body.params;
+      const { data } = await service.ResetPassword(password, token);
+      return res.status(200).json(data);
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
+
+  // Handle callback from Google OAuth2 consent screen
+  // app.get("/auth/google/callback", async (req, res) => {
+  //   // OAuth2 credentials
+  //   const CLIENT_ID = "231520596345-l0vhvo8fgqvk3gfp31ff4e6f870ufi1j.apps.googleusercontent.com";
+  //   const CLIENT_SECRET = "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";
+  //   const REDIRECT_URI = "http://localhost:3000/auth/google/callback"; // This needs to match the one you set in the Google Cloud Console
+
+  //   // Create OAuth2 client
+  //   const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+  //   const { code } = req.body;
+  //   try {
+  //     // Exchange authorization code for tokens
+  //     const { tokens } = await oauth2Client.getToken(code);
+  //     const refreshToken = tokens.refresh_token;
+
+  //     // Store the refresh token securely (e.g., in a database)
+  //     // You can associate this refresh token with the user's account
+  //     console.log("Refresh token:", refreshToken);
+
+  //     res.send("Refresh token obtained successfully!");
+  //   } catch (error) {
+  //     console.error("Error exchanging authorization code for tokens:", error);
+  //     res.status(500).send("Error obtaining refresh token");
+  //   }
+  // });
 };
