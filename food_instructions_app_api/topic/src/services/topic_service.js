@@ -61,6 +61,18 @@ class RecipeService {
       throw new APIError("Data Not found");
     }
   }
+
+  async GetTopics() {
+    try {
+      const topics = await this.repository.GetTopics();
+
+      return FormateData({
+        topics,
+      });
+    } catch (err) {
+      throw new APIError("Data Not found");
+    }
+  }
 }
 
 module.exports = RecipeService;

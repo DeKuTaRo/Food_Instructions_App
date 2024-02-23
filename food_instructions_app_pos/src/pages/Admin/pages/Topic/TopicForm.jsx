@@ -13,6 +13,7 @@ import {
   Grid,
   CssBaseline,
   Typography,
+  Autocomplete,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -25,6 +26,25 @@ import ImageUpload from "./ImageUpload";
 
 const defaultTheme = createTheme();
 
+const titleTopic = [
+  "Biscuits and cookies",
+  "Bread",
+  "Cereals",
+  "Condiments and sauces",
+  "Desserts",
+  "Drinks",
+  "Main course",
+  "Pancake",
+  "Preps",
+  "Preserve",
+  "Salad",
+  "Sandwitches",
+  "Side dish",
+  "Soup",
+  "Starter",
+  "Sweets",
+];
+
 function ATopicForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,7 +53,7 @@ function ATopicForm() {
     setMainImage(imageValue);
   };
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(null);
   const [description, setDescription] = useState("");
   const [history, setHistory] = useState("");
   const [fills, setFills] = useState("");
@@ -196,18 +216,13 @@ function ATopicForm() {
                   <ImageUpload onImageUpload={handleImageChange} imageData={mainImage} titleImage={title} />
                 </Grid>
                 <Grid item xs={8}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
+                  <Autocomplete
+                    disablePortal
                     id="titleTopic"
-                    type="text"
-                    label="Title"
-                    variant="standard"
-                    fullWidth
-                    name="title"
+                    options={titleTopic}
+                    onChange={(e, newValue) => setTitle(newValue)}
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Title topic here ..."
+                    renderInput={(params) => <TextField {...params} label="Title" placeholder="Title" />}
                   />
 
                   <InputLabel htmlFor="descriptionTopic">Desciption</InputLabel>

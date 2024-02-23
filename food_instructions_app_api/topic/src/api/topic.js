@@ -104,6 +104,15 @@ module.exports = (app) => {
     }
   });
 
+  app.get("/topic/getAllData", async (req, res, next) => {
+    try {
+      const { data } = await service.GetTopics();
+      return res.status(200).json(data);
+    } catch (err) {
+      next(err)
+    }
+  })
+
   app.get("/", (req, res, next) => {
     res.send("Topic Service");
   });

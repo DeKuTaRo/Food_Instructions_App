@@ -85,6 +85,14 @@ class TopicRepository {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Delete Topic");
     }
   }
+
+  async GetTopics() {
+    try {
+      return await TopicSchema.find();
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Accounts");
+    }
+  }
 }
 
 module.exports = TopicRepository;

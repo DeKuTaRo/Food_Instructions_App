@@ -236,6 +236,9 @@ const dishSearch = [
     title: "Salad",
   },
   {
+    title: "Sandwitches",
+  },
+  {
     title: "Side dish",
   },
   {
