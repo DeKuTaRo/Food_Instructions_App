@@ -84,11 +84,11 @@ function NavBar() {
             isHovered={hoverMenuHeader === "header2" ? true : false}
             title="Course"
             listItems={[
-              { content: "Appetizer", href: "/" },
-              { content: "Beverage", href: "/" },
-              { content: "Breakfast", href: "/" },
-              { content: "Lunch", href: "/" },
-              { content: "Dinner", href: "/" },
+              { content: "Breakfast", href: "/topic2/Breakfast" },   
+              { content: "Lunch", href: "/topic2/Lunch" },
+              { content: "Dinner", href: "/topic2/Dinner" },
+              { content: "Snack", href: "/topic2/Snack" },
+              { content: "Teatime", href: "/topic2/Teatime" },
             ]}
           />
         </ListItem>

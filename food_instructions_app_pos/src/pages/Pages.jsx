@@ -28,6 +28,7 @@ import Wishlist from "./Client/Wishlist/Wishlist";
 import About from "./Client/About/About";
 import Contact from "./Client/Contact/Contact";
 import TopicDetail from "./Client/TopicDetail/TopicDetail";
+import Topic2Detail from "./Client/TopicDetail/Topic2Detail";
 import Cart from "./Client/Cart/Cart";
 import ResetPassword from "./Client/ResetPassword/ResetPassword";
 //Order
@@ -65,6 +66,7 @@ function Pages() {
         <Route path="/order" element={<Order />} />
         <Route path="/history" element={<History />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
+         <Route path="/topic2/:label" element={<Topic2Detail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/momo" element={<Momo />} />
