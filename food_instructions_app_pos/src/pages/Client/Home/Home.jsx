@@ -6,7 +6,7 @@ import Topics from "../../../components/Client/Topics";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
-
+import FoodTypes from "../../../components/Client/TypeOfFood"
 import Footer from "../../../components/Client/Footer";
 import React from "react";
 import Chatbot from "../Chatbot/Chatbot";
@@ -23,6 +23,7 @@ function Home() {
       <NavBar />
       <Veggie />
       <Popular />
+      <FoodTypes/>
       <Topics />
       <Chatbot />
       <Footer />  

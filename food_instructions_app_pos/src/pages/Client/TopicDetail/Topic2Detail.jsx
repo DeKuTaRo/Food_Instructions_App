@@ -121,6 +121,16 @@ useEffect(() => {
       </Grid>
 
 
+                  {/* Benefits Section */}
+      <Box>
+        <Typography variant="h5" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
+          Benefits of {detailsTopic.topics.title ? detailsTopic.topics.title : topicDetails.title}
+        </Typography>
+        <Typography variant="body1" component="div">
+                  {topicDetails.benefits}
+        </Typography>
+      </Box>
+
       {/* Related Recipes Section */}
       <Typography variant="h5" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
         Related Recipes
