@@ -20,11 +20,11 @@ function Headers() {
   const [hoverDialogAccount, setHoverDialogAccount] = useState(null);
   const navigate = useNavigate();
 
-  const isLoginClient = localStorage.getItem("isLoginClient");
+  const isLogin = localStorage.getItem("isLogin");
   const showDialogAccount = hoverDialogAccount === "account" ? true : false;
 
   const handleLogout = () => {
-    localStorage.setItem("isLoginClient", "false");
+    localStorage.setItem("isLogin", "false");
     localStorage.removeItem("token");
     navigate("/");
   };
@@ -47,7 +47,7 @@ function Headers() {
         <Link underline="none" color="inherit"href={"/about"}>
           <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
         </Link>
-        {isLoginClient !== "true" && (
+        {isLogin !== "true" && (
           <Link href={"/login-plus"} underline="none" color="inherit">
             <Box sx={{ p: 1, fontSize: "1.5rem" }}>Login</Box>
           </Link>
@@ -97,7 +97,7 @@ function Headers() {
             <FontAwesomeIcon icon={faYoutube} style={{ padding: "0.5rem", fontSize: "1.5rem", color: "#FF0000" }} />
           </Link>
         </Tooltip>
-        {isLoginClient === "true" && (
+        {isLogin === "true" && (
           <Box
             component="div"
             sx={{ position: "relative" }}

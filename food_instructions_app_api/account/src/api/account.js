@@ -91,11 +91,15 @@ module.exports = (app) => {
     }
   });
 
-  app.post("/account/addToWishList", async (req, res, next) => {
+  app.post("/account/addToWishList", UserAuth, async (req, res, next) => {
     try {
-      const { _id, nameRecipe, imageRecipe, linkRecipe } = req.body;
+      const { _id } = req.user;
+      const { nameRecipe, imageRecipe, linkRecipe } = req.body;
       const { data } = await service.AddToWishlist({ _id, nameRecipe, imageRecipe, linkRecipe });
-      return res.json(data);
+      if (data) {
+        return res.status(200).json({ msg: "Thêm yêu thích thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Có lỗi xảy ra, vui lòng thử lại sau", statusCode: 500 });
     } catch (err) {
       next(err);
     }
@@ -117,7 +121,10 @@ module.exports = (app) => {
       const { _id } = req.user;
       const { nameRecipe, imageRecipe, linkRecipe } = req.body;
       const { data } = await service.AddToCart(_id, nameRecipe, imageRecipe, linkRecipe);
-      return res.status(200).json(data);
+      if (data) {
+        return res.status(200).json({ msg: "Thêm vào giỏ hàng thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Có lỗi xảy ra, vui lòng thử lại sau", statusCode: 500 });
     } catch (err) {
       next(err);
     }
@@ -168,7 +175,6 @@ module.exports = (app) => {
       const { data } = await service.ForgotPassword(email);
       return res.status(200).json(data);
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });
@@ -179,7 +185,6 @@ module.exports = (app) => {
       const { data } = await service.ResetPassword(password, token);
       return res.status(200).json(data);
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });

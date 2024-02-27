@@ -14,6 +14,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -41,15 +42,25 @@ function Nutrition() {
     setTextValue(event.target.value);
   };
   const handleSearchNutritionFacts = async (e) => {
-    console.log("textValue = ", encodeURIComponent(JSON.stringify(textValue.split("\n"))));
+    console.log("textValue = ", textValue);
+    // console.log("textValue = ", encodeURIComponent(JSON.stringify(textValue.split("\n"))));
     try {
-      const data = await fetch(
-        `https://api.edamam.com/api/nutrition-data?app_id=${process.env.REACT_APP_APP_ID_NUTRITION}&app_key=${process.env.REACT_APP_APP_KEY_NUTRITION}&nutrition-type=cooking&ingr=${encodeURIComponent(JSON.stringify(textValue.split(",")))}`
-      );
+      // const data = await axios.get(
+      //   `https://api.edamam.com/api/nutrition-data?app_id=${process.env.REACT_APP_APP_ID_NUTRITION}&app_key=${process.env.REACT_APP_APP_KEY_NUTRITION}`,
+      //   { ingr: ["1 cup rice,", "10 oz chickpeas"] }
+      // );
+      const queryParams = new URLSearchParams({
+        app_id: "47379841",
+        app_key: "d28718060b8adfd39783ead254df7f92",
+        ingr: ["1 cup rice", "10 oz chickpeas"],
+      });
 
-      const detailData = await data.json();
+      const data = await axios.get(`https://api.edamam.com/api/nutrition-data?${queryParams.toString()}`);
 
-      setDetails(detailData);
+      console.log("data = ", data);
+      // const detailData = await data.json();
+
+      // setDetails(detailData);
     } catch (error) {
       console.error("There was an error:", error);
     }

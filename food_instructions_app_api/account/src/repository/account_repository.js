@@ -8,7 +8,7 @@ const { AccountModel, AddressModel, CommentModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
-  async CreateAccount({ username, email, password, salt, token }) {
+  async CreateAccount({ username, email, password, salt, tokenResetPassword }) {
     try {
       const account = new AccountModel({
         username,
@@ -17,7 +17,7 @@ class AccountRepository {
         salt,
         isAdmin: false,
         role: "user",
-        token: token,
+        tokenResetPassword: tokenResetPassword,
         address: [],
         wishlist: [],
         orders: [],
@@ -289,7 +289,7 @@ class AccountRepository {
       const checkExistAccount = await AccountModel.findOne({ email: email });
 
       if (!checkExistAccount) {
-        return { error: "User not found" };
+        return { error: "Không tìm thấy địa chỉ email hợp lệ", statusCode: 500 };
       }
       const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
       const resetToken = await jwt.sign({ email, iat: fixedIssuedAt }, APP_SECRET, { expiresIn: "10m" });
@@ -329,10 +329,10 @@ class AccountRepository {
 
   async ResetPassword(password, token) {
     try {
-      const checkExistAccount = await AccountModel.findOne({ token: token });
+      const checkExistAccount = await AccountModel.findOne({ tokenResetPassword: token });
 
       if (!checkExistAccount) {
-        return { msg: "User not found", statusCode: 500 };
+        return { error: "Không tìm thấy địa chỉ email hợp lệ", statusCode: 500 };
       }
 
       const newPassword = await bcrypt.hash(password, checkExistAccount.salt);

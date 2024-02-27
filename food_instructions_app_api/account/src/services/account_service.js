@@ -1,5 +1,12 @@
 const AccountRepository = require("../repository/account_repository");
-const { FormateData, GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } = require("../utils");
+const {
+  FormateData,
+  GeneratePassword,
+  GenerateSalt,
+  GenerateSignature,
+  ValidatePassword,
+  SetRequestUser,
+} = require("../utils");
 const { APIError, BadRequestError } = require("../utils/app-errors");
 
 // All Business logic will be here
@@ -14,18 +21,26 @@ class AccountService {
       const existingAccount = await this.repository.FindAccount({ username, role });
       if (existingAccount) {
         const validPassword = await ValidatePassword(password, existingAccount.password, existingAccount.salt);
+        const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
+
+        const token = await GenerateSignature({
+          _id: existingAccount._id,
+          username: existingAccount.username,
+          email: existingAccount.email,
+          iat: fixedIssuedAt,
+        });
+
         if (validPassword) {
           return FormateData({
-            id: existingAccount._id,
-            token: existingAccount.token,
-            status: true,
+            token: token,
+            statusCode: 200,
             isAdmin: existingAccount.isAdmin,
-            username: existingAccount.username,
+            msg: "Đăng nhập thành công",
           });
         }
       }
 
-      return FormateData(null);
+      return FormateData({ msg: "Không tìm thấy tài khoản ", statusCode: 500 });
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
@@ -39,17 +54,17 @@ class AccountService {
 
       let userPassword = await GeneratePassword(password, salt);
       const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
-      const token = await GenerateSignature({ email: email, iat: fixedIssuedAt });
+      const tokenResetPassword = await GenerateSignature({ email: email, iat: fixedIssuedAt });
 
       const existingCustomer = await this.repository.CreateAccount({
         username,
         email,
         password: userPassword,
         salt,
-        token,
+        tokenResetPassword,
       });
 
-      return FormateData({ id: existingCustomer._id, token, status: true });
+      return FormateData({ id: existingCustomer._id, status: true });
     } catch (err) {
       throw new APIError("Data Not found", err);
     }

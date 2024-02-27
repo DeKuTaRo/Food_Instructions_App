@@ -28,7 +28,7 @@ module.exports.GenerateSignature = async (payload) => {
 module.exports.ValidateSignature = async (req) => {
   try {
     const signature = req.get("Authorization");
-    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET);
+    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET, { ignoreExpiration: true });
     req.user = payload;
     return true;
   } catch (error) {
@@ -42,5 +42,15 @@ module.exports.FormateData = (data) => {
     return { data };
   } else {
     throw new Error("Data Not found!");
+  }
+};
+
+module.exports.SetRequestUser = async (req, data) => {
+  try {
+    req.user = data;
+    console.log("req = ", req);
+    return true;
+  } catch (err) {
+    return false;
   }
 };

@@ -60,6 +60,17 @@ function ForgotPassword() {
             progress: undefined,
             theme: "dark",
           });
+        } else if (response.data.statusCode === 500) {
+          toast.error(response.data.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         }
         console.log("response = ", response);
       } catch (err) {
@@ -123,7 +134,10 @@ function ForgotPassword() {
                 </Button>
               </form>
               <Typography>
-                Return to<Link href="/login-plus" underline="hover">login page</Link>
+                Return to
+                <Link href="/login-plus" underline="hover">
+                  login page
+                </Link>
               </Typography>
             </Box>
           </Box>

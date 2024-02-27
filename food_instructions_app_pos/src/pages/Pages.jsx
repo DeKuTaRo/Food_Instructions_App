@@ -46,7 +46,6 @@ function Pages() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/cuisine/:type" element={<Cuisine />} />
-        <Route path="/searched/" element={<Searched />} />
         {/* <Route path="/recipe/:name" element={<Recipe />} /> */}
 
         <Route path="*" element={<NotFound />} />
@@ -54,6 +53,7 @@ function Pages() {
 
         {/* Client page */}
         <Route path="/" element={<Home />} />
+        <Route path="/searched/" element={<Searched />} />
         <Route path="/login-plus" element={<LoginClient />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/resetPassword/:token" element={<ResetPassword />} />

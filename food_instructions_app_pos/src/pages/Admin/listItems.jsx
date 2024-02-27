@@ -34,14 +34,6 @@ export const mainListItems = (
         <ListItemText primary="User account" />
       </ListItemButton>
     </Link>
-    <Link href={"/ingredient"} underline="none" color="inherit">
-      <ListItemButton>
-        <ListItemIcon>
-          <EmojiFoodBeverageIcon />
-        </ListItemIcon>
-        <ListItemText primary="Ingredients" />
-      </ListItemButton>
-    </Link>
     <Link href={"/a-topic"} underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
@@ -66,17 +58,11 @@ export const mainListItems = (
         <ListItemText primary="Recipe" />
       </ListItemButton>
     </Link>
-    <ListItemButton>
+    <ListItemButton href={"/a-order"} underline="none" color="inherit">
       <ListItemIcon>
         <FoodBankIcon />
       </ListItemIcon>
-      <ListItemText primary="Category" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <TipsAndUpdatesIcon />
-      </ListItemIcon>
-      <ListItemText primary="Tips" />
+      <ListItemText primary="Order" />
     </ListItemButton>
   </React.Fragment>
 );

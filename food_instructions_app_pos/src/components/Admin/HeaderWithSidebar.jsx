@@ -35,11 +35,8 @@ function HeaderContent({ open, toggleDrawer, title }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // window.location.reload();
-    localStorage.setItem("isLogin", false);
     localStorage.removeItem("token");
     localStorage.setItem("isAdmin", false);
-    // window.href = "/login";
     navigate("/login");
   };
   return (

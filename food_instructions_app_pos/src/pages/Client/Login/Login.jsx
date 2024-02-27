@@ -34,8 +34,22 @@ function LoginClient() {
     e.preventDefault();
     try {
       axios.post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/login`, formData).then((res) => {
-        if (res.data.status) {
-          toast.success("Đăng nhập thành công", {
+        if (res.data.statusCode === 200) {
+          toast.success(res.data.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          localStorage.setItem("isLogin", "true");
+          localStorage.setItem("token", res.data.token);
+          navigate("/");
+        } else if (res.data.statusCode === 500) {
+          toast.error(res.data.msg, {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -46,14 +60,9 @@ function LoginClient() {
             theme: "dark",
           });
         }
-        localStorage.setItem("isLoginClient", "true");
-        localStorage.setItem("id", res.data.id);
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("username", res.data.username);
-        navigate("/");
       });
     } catch (err) {
-      toast.error(err, {
+      toast.error("Có lỗi xảy ra khi đăng nhập", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -178,7 +187,6 @@ function LoginClient() {
           </Box>
         </Box>
       </div>
-     
     </motion.div>
   );
 }

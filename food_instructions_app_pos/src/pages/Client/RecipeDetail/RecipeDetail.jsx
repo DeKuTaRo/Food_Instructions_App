@@ -44,6 +44,8 @@ function RecipeDetail() {
   const [open, setOpen] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const navigate = useNavigate();
+  const isLogin = localStorage.getItem("isLogin");
+  const token = localStorage.getItem("token");
 
   const handleClose = () => {
     setOpen(false);
@@ -59,7 +61,7 @@ function RecipeDetail() {
     }
   };
   const handleBuyIngredients = () => {
-    if (isLoginClient !== "true") {
+    if (isLogin !== "true") {
       toast.error("Bạn phải đăng nhập mới sử dụng được tính năng này", {
         position: "top-right",
         autoClose: 3000,
@@ -79,12 +81,11 @@ function RecipeDetail() {
         totalNutrients: recipeDetail.recipe.totalNutrients,
         totalDaily: recipeDetail.recipe.totalDaily,
         calories: recipeDetail.recipe.calories,
-        id: id,
         name: "Cao Thành Tài",
         phone: "0366812907",
         address: "Cau Voi",
-        token:token,
-        link:window.location.href,
+        token: token,
+        link: window.location.href,
       };
       // Navigate to the order page with the orderData as state
       navigate("/order", { state: { orderData } });
@@ -125,10 +126,8 @@ function RecipeDetail() {
     fetchRecipeDetails();
   }, []);
 
-  const isLoginClient = localStorage.getItem("isLoginClient");
-
   const handleCheckLoginStatus = () => {
-    if (isLoginClient !== "true") {
+    if (isLogin !== "true") {
       toast.error("Bạn phải đăng nhập mới sử dụng được tính năng này", {
         position: "top-right",
         autoClose: 3000,
@@ -142,42 +141,114 @@ function RecipeDetail() {
     }
   };
 
-  const id = localStorage.getItem("id");
-  const username = localStorage.getItem("username");
-  const token = localStorage.getItem("token");
-
-  const handleAddRecipeToWishlist = () => {
+  const handleAddRecipeToWishlist = async () => {
     handleCheckLoginStatus();
 
     try {
-      axios
-        .post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToWishList`, {
-          _id: id,
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToWishList`,
+        {
           nameRecipe: recipeName,
           imageRecipe: recipeImage,
           linkRecipe: label,
-        })
-        .then((res) => {
-          if (res.data.statusText === "OK") {
-            toast.success("Thêm vào danh sách yêu thích thành công", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
         });
+      } else if (response.data.statusCode === 500) {
+        toast.error(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
     } catch (err) {
-      console.log(err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
-  const handleAddRecipeToCart = () => {
+  const handleAddRecipeToCart = async () => {
     handleCheckLoginStatus();
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToCart`,
+        {
+          nameRecipe: recipeName,
+          imageRecipe: recipeImage,
+          linkRecipe: label,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else if (response.data.statusCode === 500) {
+        toast.error(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (err) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -197,7 +268,7 @@ function RecipeDetail() {
           <>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
               <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="">
+                <Link underline="hover" color="inherit" href="/searched">
                   Recipe
                 </Link>
                 <Typography color="text.primary">{recipeName}</Typography>
@@ -308,7 +379,6 @@ function RecipeDetail() {
                     recipeName={recipeName}
                     recipeImage={recipeImage}
                     label={label}
-                    username={username}
                     handleCheckLoginStatus={handleCheckLoginStatus}
                     token={token}
                   />

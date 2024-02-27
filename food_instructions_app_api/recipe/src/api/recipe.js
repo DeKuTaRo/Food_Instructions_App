@@ -14,7 +14,6 @@ module.exports = (app) => {
       // get payload // to send account service
       const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, data, "ADD_COMMENTS_TO_RECIPES");
       PublishAccountEvent(dataPayload);
-      console.log("data = ", data);
       if (data) {
         res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
         return;
