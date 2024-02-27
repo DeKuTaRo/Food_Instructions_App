@@ -38,6 +38,7 @@ function OrderPage() {
   const [detailAccount, setDetailAccount] = useState({});
   // Calculate total price
   const navigate = useNavigate();
+  console.log("orderdata",orderData)
 
   useEffect(() => {
     const getAccountDetail = async () => {
@@ -56,7 +57,7 @@ function OrderPage() {
     };
     getAccountDetail();
   }, [orderData.token]);
-
+  console.log("setDetailAccount",detailAccount)
   const totalPrice = orderData ? orderData.calories * quantity : 0;
 
   // Function to handle quantity changes
@@ -94,7 +95,6 @@ const handleConfirmPayment = () => {
     quantity,
     totalPrice,
   };
-
   setConfirmDialogOpen(false);
 
   // Chuẩn bị thông tin cần chuyển đi
@@ -134,7 +134,7 @@ const handleConfirmPayment = () => {
           <Typography variant="h6">User Information</Typography>
           <TextField
             label="Name"
-            value={name || (detailAccount && detailAccount.username) || ""}
+            value={ orderData.name  }
             InputProps={{
               readOnly: true,
               style: { background: "lightgray", pointerEvents: "none" },
@@ -144,7 +144,7 @@ const handleConfirmPayment = () => {
           />
           <TextField
             label="Phone"
-            value={phone || (detailAccount && detailAccount.phone) || ""}
+            value={ (orderData.phone) || ""}
             InputProps={{
               readOnly: true,
               style: { background: "lightgray", pointerEvents: "none" },
@@ -154,7 +154,7 @@ const handleConfirmPayment = () => {
           />
           <TextField
             label="Address"
-            value={address || (detailAccount && detailAccount.address) || ""}
+            value={ (detailAccount.address) || ""}
             fullWidth
             margin="normal"
           />
