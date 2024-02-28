@@ -6,7 +6,7 @@ module.exports = (app) => {
   const service = new OrderService();
 
   // Tạo đơn hàng
-  app.post("/order/create", async (req, res, next) => {
+  app.post("/order/create", UserAuth, async (req, res, next) => {
     try {
       const {
         customerId,
@@ -24,6 +24,7 @@ module.exports = (app) => {
       } = req.body;
 
       const { data } = await service.CreateOrder({
+        customerId,
         accountName,
         email,
         customerName,
@@ -36,29 +37,31 @@ module.exports = (app) => {
         productLink,
         productImage,
       });
+
+      console.log(req.body);
       return res.json(data);
     } catch (err) {
+      console.log(`err api`, err);
       next(err);
     }
   });
-
-
 
   // Xem tất cả đơn hàng
   app.get("/order/all", UserAuth, async (req, res, next) => {
     try {
-      const { data } = await orderService.GetAllOrders();
+      const  data  = await service.GetAllOrders(); // Use the correct instance of OrderService
 
       if (data) {
-        res.status(200).json(data);
-        return;
+        res.status(200).json( data ); // Send data within an object for consistency
+      } else {
+        res.status(404).json({ msg: "Không tìm thấy đơn hàng nào." }); // Adjusted response message
       }
-
-      res.status(200).json({ msg: "Có lỗi xảy ra khi lấy tất cả đơn hàng" });
     } catch (err) {
+      console.error("api", err); // Use console.error for error messages
       next(err);
     }
   });
+
 
   // Xem đơn hàng theo trạng thái
   app.get("/order/status/:status", UserAuth, async (req, res, next) => {

@@ -5,10 +5,13 @@ const { APIError, STATUS_CODES } = require("../utils/app-errors");
 class OrderRepository {
   async CreateOrder(orderDetails) {
     try {
-      const newOrder = new OrderModel(orderDetails);
+
+      const newOrder = new OrderSchema(orderDetails);
       const savedOrder = await newOrder.save();
       return savedOrder;
     } catch (err) {
+
+      console.log(`err respon `, err);
       throw new Error("Unable to create order");
     }
   }
@@ -18,6 +21,7 @@ class OrderRepository {
       const orders = await OrderSchema.find();
       return FormateData(orders);
     } catch (err) {
+      console.log("res",err)
       throw new APIError(
         "API Error",
         STATUS_CODES.INTERNAL_ERROR,

@@ -23,45 +23,38 @@ class OrderService {
       productImage,
     } = paymentInfo;
     try {
-         const existingCustomer = await this.repository.CreateAccount({
-           customerId,
-           accountName,
-           email,
-           customerName,
-           phoneNumber,
-           address,
-           quantity,
-           totalAmount,
-           status,
-           productName,
-           productLink,
-           productImage,
-         });
-         return FormateData({
-           customerId,
-           accountName,
-           email,
-           customerName,
-           phoneNumber,
-           address,
-           quantity,
-           totalAmount,
-           status,
-           productName,
-           productLink,
-           productImage,
-         });
+      const newOrder = await this.repository.CreateOrder({
+        customerId,
+        accountName,
+        email,
+        customerName,
+        phoneNumber,
+        address,
+        quantity,
+        totalAmount,
+        status,
+        productName,
+        productLink,
+        productImage,
+      });
+      return FormateData({
+        newOrder,
+      });
     } catch (err) {
-     throw new APIError("Data Not found", err);
+      console.log(`err service`, err);
+      throw new APIError("Data Not found", err);
     }
   }
 
   async GetAllOrders() {
     try {
-      const orders = await this.repository.GetAllOrders();
-      return FormatData(orders);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
+      const orders = await this.repository.GetOrders();
+      const formattedOrders = FormateData(orders);
+
+      return formattedOrders;
+    } catch (error) {
+      console.error("Error in GetAllOrders service:", error);
+      throw new APIError("Error retrieving orders", error);
     }
   }
 

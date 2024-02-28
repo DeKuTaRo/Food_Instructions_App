@@ -84,8 +84,8 @@ function RecipeDetail() {
         name: "Cao Thành Tài",
         phone: "0366812907",
         address: "Cau Voi",
-        token: token,
-        link: window.location.href,
+        token:token,
+        link:label,
       };
       // Navigate to the order page with the orderData as state
       navigate("/order", { state: { orderData } });
