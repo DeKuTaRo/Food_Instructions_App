@@ -61,7 +61,7 @@ class OrderService {
   async GetOrderByStatus(status) {
     try {
       const orders = await this.repository.GetOrderByStatus(status);
-      return FormatData(orders);
+      return FormateData(orders);
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
@@ -69,11 +69,8 @@ class OrderService {
 
   async UpdateOrder(orderId, orderUpdates) {
     try {
-      const updatedOrder = await this.repository.UpdateOrder(
-        orderId,
-        orderUpdates
-      );
-      return FormatData(updatedOrder);
+      const updatedOrder = await this.repository.UpdateOrder(orderId, orderUpdates);
+      return FormateData(updatedOrder);
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
@@ -86,7 +83,17 @@ class OrderService {
       order: data,
       userId: userId,
     };
-    return FormatData(payload);
+    return FormateData(payload);
+  }
+
+  async UpdatePaymentOrder(idOrder) {
+    try {
+      const payment = await this.repository.UpdatePaymentOrder(idOrder);
+      return FormateData(payment);
+    } catch (err) {
+      console.log("err ser = ", err);
+      throw new APIError("Data Not found", err);
+    }
   }
 }
 

@@ -4,6 +4,7 @@
 food_instructions_app_api/account/node_modules
 food_instructions_app_api/recipe/node_modules
 food_instructions_app_api/topic/node_modules
+food_instructions_app_api/order/node_modules
 food_instructions_app_pos/node_modules
 
 # production

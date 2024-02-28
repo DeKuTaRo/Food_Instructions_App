@@ -5,12 +5,10 @@ const { APIError, STATUS_CODES } = require("../utils/app-errors");
 class OrderRepository {
   async CreateOrder(orderDetails) {
     try {
-
       const newOrder = new OrderSchema(orderDetails);
       const savedOrder = await newOrder.save();
       return savedOrder;
     } catch (err) {
-
       console.log(`err respon `, err);
       throw new Error("Unable to create order");
     }
@@ -21,12 +19,8 @@ class OrderRepository {
       const orders = await OrderSchema.find();
       return FormateData(orders);
     } catch (err) {
-      console.log("res",err)
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Orders"
-      );
+      console.log("res", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders");
     }
   }
 
@@ -35,28 +29,25 @@ class OrderRepository {
       const orders = await OrderSchema.find({ status });
       return FormateData(orders);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Orders by Status"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders by Status");
     }
   }
 
   async UpdateOrderStatus(orderId, newStatus) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(
-        orderId,
-        { status: newStatus },
-        { new: true }
-      );
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(orderId, { status: newStatus }, { new: true });
       return FormateData(updatedOrder);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Update Order Status"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Order Status");
+    }
+  }
+
+  async UpdatePaymentOrder(idOrder) {
+    try {
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: "PaymentSuccess" }, { new: true });
+      return FormateData(updatedOrder);
+    } catch (err) {
+      console.log("err repo = ", err);
     }
   }
 }

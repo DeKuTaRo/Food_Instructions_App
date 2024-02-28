@@ -37,8 +37,6 @@ module.exports = (app) => {
         productLink,
         productImage,
       });
-
-      console.log(req.body);
       return res.json(data);
     } catch (err) {
       console.log(`err api`, err);
@@ -49,10 +47,10 @@ module.exports = (app) => {
   // Xem tất cả đơn hàng
   app.get("/order/all", UserAuth, async (req, res, next) => {
     try {
-      const  data  = await service.GetAllOrders(); // Use the correct instance of OrderService
+      const data = await service.GetAllOrders(); // Use the correct instance of OrderService
 
       if (data) {
-        res.status(200).json( data ); // Send data within an object for consistency
+        res.status(200).json(data); // Send data within an object for consistency
       } else {
         res.status(404).json({ msg: "Không tìm thấy đơn hàng nào." }); // Adjusted response message
       }
@@ -62,21 +60,18 @@ module.exports = (app) => {
     }
   });
 
-
   // Xem đơn hàng theo trạng thái
   app.get("/order/status/:status", UserAuth, async (req, res, next) => {
     try {
       const { status } = req.params;
-      const { data } = await orderService.GetOrderByStatus(status);
+      const { data } = await service.GetOrderByStatus(status);
 
       if (data) {
         res.status(200).json(data);
         return;
       }
 
-      res
-        .status(200)
-        .json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
+      res.status(200).json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
     } catch (err) {
       next(err);
     }
@@ -87,12 +82,10 @@ module.exports = (app) => {
     try {
       const { orderId } = req.params;
       const orderUpdates = req.body;
-      const { data } = await orderService.UpdateOrder(orderId, orderUpdates);
+      const { data } = await service.UpdateOrder(orderId, orderUpdates);
 
       if (data) {
-        res
-          .status(200)
-          .json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
+        res.status(200).json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
         return;
       }
 
@@ -102,7 +95,19 @@ module.exports = (app) => {
     }
   });
 
-  // Thêm các định tuyến khác theo yêu cầu của ứng dụng
+  app.put("/order/payment", UserAuth, async (req, res, next) => {
+    try {
+      const { idOrder } = req.body;
+      const { data } = await service.UpdatePaymentOrder(idOrder);
+      if (data) {
+        return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau", statusCode: 500 });
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
 
   app.get("/", (req, res, next) => {
     res.send("Order Service");

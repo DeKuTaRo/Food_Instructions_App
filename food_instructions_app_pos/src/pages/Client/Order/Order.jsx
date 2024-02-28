@@ -26,7 +26,6 @@ import {
 import { Add, Remove } from "@mui/icons-material";
 import { toast } from "react-toastify";
 
-
 function OrderPage() {
   const location = useLocation();
   const { orderData } = location.state || {};
@@ -41,8 +40,7 @@ function OrderPage() {
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
-  const status = "Ordered";
- 
+
   const [detailAccount, setDetailAccount] = useState({});
   const token = localStorage.getItem("token");
   // Calculate total price
@@ -51,14 +49,11 @@ function OrderPage() {
   useEffect(() => {
     const getAccountDetail = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8001/account/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${orderData.token}`,
-            },
-          }
-        );
+        const response = await axios.get(`http://localhost:8001/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${orderData.token}`,
+          },
+        });
         setDetailAccount(response.data);
         setAccountName(response.data.username);
         setPhoneNumber(response.data.phone);
@@ -67,7 +62,6 @@ function OrderPage() {
         setCustomerName(response.data.username);
         setEmail(response.data.email);
         setTotalAmount(orderData.calories);
-       
       } catch (err) {
         console.log(err);
       } finally {
@@ -100,29 +94,18 @@ function OrderPage() {
     setConfirmDialogOpen(false);
   };
 
-  
   // Chuẩn bị thông tin cần chuyển đi
   // const [quantity, setQuantity] = useState(1);
 
   const handleConfirmPayment = async () => {
     // Đóng dialog
 
-    const paymentInfo = {
-      productName: orderData.recipeName,
-      userName: detailAccount.username,
-      accountName: accountName,
-      phone: phoneNumber,
-      address: address || detailAccount.address,
-      productLink: orderData.link, // Đây là link của trang thông tin sản phẩm
-      quantity,
-      totalPrice,
-    };
     setConfirmDialogOpen(false);
-    
+
     if (paymentMethod === "momo") {
       try {
         const data = new FormData();
-        data.append("paymentMethod",paymentMethod)
+        data.append("paymentMethod", paymentMethod);
         data.append("customerId", customerId);
         data.append("accountName", accountName);
         data.append("customerName", customerName);
@@ -130,18 +113,28 @@ function OrderPage() {
         data.append("phoneNumber", phoneNumber);
         data.append("quantity", quantity);
         data.append("totalAmount", totalAmount);
-        data.append("status", status);
+        data.append("status", "NotPayment");
         data.append("productName", orderData.recipeName);
         data.append("productImage", orderData.recipeImage);
         data.append("productLink", orderData.link);
-        const response = await axios.post(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/create`, data,{
-           headers: {
+        const response = await axios.post(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/create`, data, {
+          headers: {
             Authorization: `Bearer ${token}`,
-             "Content-Type": "application/json",
+            "Content-Type": "application/json",
           },
         });
-        console.log(response)
-         navigate("/momo", { state: { paymentInfo } });
+        const paymentInfo = {
+          productName: orderData.recipeName,
+          userName: detailAccount.username,
+          accountName: accountName,
+          phone: phoneNumber,
+          address: address || detailAccount.address,
+          productLink: orderData.link, // Đây là link của trang thông tin sản phẩm
+          quantity,
+          totalPrice,
+          idOrder: response.data.newOrder._id,
+        };
+        navigate("/momo", { state: { paymentInfo } });
         if (response.data.statusCode === 200) {
           toast.success(response.data.msg, {
             position: "top-right",
@@ -153,8 +146,6 @@ function OrderPage() {
             progress: undefined,
             theme: "dark",
           });
-          
-          
         } else {
           toast.error(response.data.msg, {
             position: "top-right",
@@ -178,15 +169,14 @@ function OrderPage() {
           progress: undefined,
           theme: "dark",
         });
-      // }yển hướng đến trang thanh toán Momo và truyền thông tin qua URL
-    
-    
-    } if (paymentMethod === "bank") {
-      // Gọi API thanh toán Internet Banking và truyền thông tin qua body của request
-      navigate("/banking", { state: { paymentInfo } });
+        // }yển hướng đến trang thanh toán Momo và truyền thông tin qua URL
+      }
+      if (paymentMethod === "bank") {
+        // Gọi API thanh toán Internet Banking và truyền thông tin qua body của request
+        // navigate("/banking", { state: { paymentInfo } });
+      }
     }
   };
-}
 
   const handleCancelPayment = () => {
     // Đóng dialog
@@ -199,8 +189,7 @@ function OrderPage() {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%" }}
-    >
+      style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
 
@@ -232,12 +221,7 @@ function OrderPage() {
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Address"
-            value={detailAccount.address || ""}
-            fullWidth
-            margin="normal"
-          />
+          <TextField label="Address" value={detailAccount.address || ""} fullWidth margin="normal" />
         </Paper>
 
         {/* Product Information */}
@@ -250,8 +234,7 @@ function OrderPage() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "start",
-              }}
-            >
+              }}>
               <Paper
                 sx={{
                   width: "92%",
@@ -259,8 +242,7 @@ function OrderPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: "50%",
-                }}
-              >
+                }}>
                 {/* Product Image */}
                 {orderData && (
                   <img
@@ -288,8 +270,7 @@ function OrderPage() {
                 flexDirection: "column",
                 alignItems: "start",
                 justifyContent: "space-around",
-              }}
-            >
+              }}>
               <Box sx={{ marginLeft: "12px" }}>
                 <Typography variant="h5">Ingredients</Typography>
                 <ul
@@ -300,8 +281,7 @@ function OrderPage() {
                     flexDirection: "column",
                     justifyContent: "center",
                     textAlign: "left",
-                  }}
-                >
+                  }}>
                   {orderData &&
                     orderData.ingredientLines.map((item, index) => (
                       <li key={index}>
@@ -319,8 +299,7 @@ function OrderPage() {
                   justifyContent: "center",
                   gap: "0.5rem",
                   marginLeft: "12px",
-                }}
-              >
+                }}>
                 <Typography variant="h6">AMOUNT</Typography>
                 <IconButton onClick={handleDecrease}>
                   <Remove />
@@ -346,18 +325,13 @@ function OrderPage() {
                   aria-label="payment-method"
                   name="payment-method"
                   value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                >
+                  onChange={(e) => setPaymentMethod(e.target.value)}>
                   <FormControlLabel
                     value="momo"
                     control={<Radio />}
                     label={
                       <>
-                        <img
-                          src={momo}
-                          alt="Momo Icon"
-                          style={{ marginRight: "8px", height: "24px" }}
-                        />
+                        <img src={momo} alt="Momo Icon" style={{ marginRight: "8px", height: "24px" }} />
                         Momo
                       </>
                     }
@@ -367,11 +341,7 @@ function OrderPage() {
                     control={<Radio />}
                     label={
                       <>
-                        <img
-                          src={bank}
-                          alt="Internet Banking Icon"
-                          style={{ marginRight: "8px", height: "24px" }}
-                        />
+                        <img src={bank} alt="Internet Banking Icon" style={{ marginRight: "8px", height: "24px" }} />
                         Internet Banking
                       </>
                     }
@@ -387,11 +357,7 @@ function OrderPage() {
               </Box>
 
               <Box mt={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleConfirmPurchase}
-                >
+                <Button variant="contained" color="primary" onClick={handleConfirmPurchase}>
                   Confirm Purchase
                 </Button>
               </Box>
@@ -400,11 +366,7 @@ function OrderPage() {
         </Paper>
 
         {/* Confirm Dialog */}
-        <Dialog
-          open={confirmDialogOpen}
-          onClose={handleCloseConfirmDialog}
-          fullWidth
-        >
+        <Dialog open={confirmDialogOpen} onClose={handleCloseConfirmDialog} fullWidth>
           <DialogTitle>Confirm Purchase</DialogTitle>
           <DialogContent>
             <Typography>{`Quantity: ${quantity}`}</Typography>
@@ -415,11 +377,7 @@ function OrderPage() {
             <Button onClick={handleCancelPayment} color="primary">
               Cancel
             </Button>
-            <Button
-              onClick={handleConfirmPayment}
-              color="primary"
-              variant="contained"
-            >
+            <Button onClick={handleConfirmPayment} color="primary" variant="contained">
               Confirm
             </Button>
           </DialogActions>

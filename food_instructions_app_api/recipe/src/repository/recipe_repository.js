@@ -66,7 +66,6 @@ class RecipeRepository {
       }
       return await checkExistRecipe.save();
     } catch (err) {
-      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Like This Comment");
     }
   }

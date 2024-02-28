@@ -29,10 +29,11 @@ const OrderSchema = new Schema(
     totalAmount: {
       type: Number,
     },
+    // NotPayment: Chưa thanh toán, PaymentSuccess: Đặt thành công, Delivered: Đang giao, Completed: Giao thành công,  Cancelled: Đã hủy
     status: {
       type: String,
-      enum: ["Pending", "Processing", "Completed", "Ordered"],
-      default: "Pending",
+      enum: ["NotPayment", "PaymentSuccess", "Delivered", "Completed", "Cancelled"],
+      default: "NotPayment",
     },
     // Thêm các trường mới cho đơn hàng
     productName: {
@@ -49,6 +50,5 @@ const OrderSchema = new Schema(
     timestamps: true,
   }
 );
-
 
 module.exports = mongoose.model("order", OrderSchema);
