@@ -141,3 +141,27 @@
 {"level":"error","message":"Wed Feb 14 2024 23:48:20 GMT+0700 (Indochina Time)-{}","private":true}
 {"level":"error","message":"Wed Feb 14 2024 23:49:07 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
 {"level":"error","message":"Wed Feb 14 2024 23:50:31 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Thu Feb 29 2024 14:08:51 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:15:44 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:16:54 GMT+0700 (Indochina Time)-{\"code\":\"ERR_HTTP_HEADERS_SENT\"}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:27:05 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:27:13 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:30:50 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:32:11 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:41:19 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:41:38 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:42:15 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:42:57 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:43:05 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 10:43:35 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:40:03 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:41:10 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:42:30 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:43:28 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:43:58 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:45:51 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 17:47:43 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 18:03:04 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 18:03:44 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 18:04:12 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}
+{"level":"error","message":"Mon Mar 04 2024 18:05:43 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":500,\"isOperational\":true}","private":true}

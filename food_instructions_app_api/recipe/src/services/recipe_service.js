@@ -92,6 +92,15 @@ class RecipeService {
       throw new APIError("Data Not found");
     }
   }
+
+  async RemoveReplyComment(_idReplyComment, _idComment, idRecipe) {
+    try {
+      const deleteComment = await this.repository.RemoveReplyComment(_idReplyComment, _idComment, idRecipe);
+      return FormateData(deleteComment);
+    } catch (err) {
+      throw new APIError("Data Not found");
+    }
+  }
 }
 
 module.exports = RecipeService;

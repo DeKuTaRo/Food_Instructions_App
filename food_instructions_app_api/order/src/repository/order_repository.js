@@ -45,9 +45,20 @@ class OrderRepository {
   async UpdatePaymentOrder(idOrder) {
     try {
       const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: "PaymentSuccess" }, { new: true });
-      return FormateData(updatedOrder);
+      return updatedOrder;
     } catch (err) {
       console.log("err repo = ", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Payment Order Success");
+    }
+  }
+
+  async GetDetailOrder(idOrder) {
+    try {
+      const detailOrder = await OrderSchema.find({ _id: ObjectId(idOrder) });
+      return detailOrder;
+    } catch (err) {
+      console.log("err repo = ", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Detail Order");
     }
   }
 }

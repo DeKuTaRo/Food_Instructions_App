@@ -155,9 +155,68 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
     }));
   };
 
+  const [replyInputs, setReplyInputs] = useState([]);
+  const handleChangeCommentReply = (id, value) => {
+    const newInputs = [...replyInputs];
+    newInputs[id] = value;
+    setReplyInputs(newInputs);
+  };
+
   const handlePostReplyComments = async (_idComment) => {
-    if (debounceReplyComment === "") {
-      toast.error("Vui lòng nhập bình luận", {
+    const reply = replyInputs[_idComment];
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
+        {
+          timeComment: getCurrentDateTimeInVietnam,
+          content: reply,
+          liked: 0,
+          rating: 0,
+          _idComment: _idComment,
+          idRecipe: idRecipe,
+          nameRecipe: recipeName,
+          imageRecipe: recipeImage,
+          linkRecipe: label,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        getComments();
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        // Clear the input field after posting
+        const newInputs = [...replyInputs];
+        newInputs[_idComment] = "";
+        setReplyInputs(newInputs);
+        handleReplyComment(_idComment);
+      } else {
+        toast.error(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (err) {
+      toast.error("Có lỗi xảy ra", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -167,70 +226,43 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
         progress: undefined,
         theme: "dark",
       });
-    } else {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
-          {
-            timeComment: getCurrentDateTimeInVietnam,
-            content: debounceReplyComment,
-            liked: 0,
-            rating: 0,
-            _idComment: _idComment,
-            idRecipe: idRecipe,
-            nameRecipe: recipeName,
-            imageRecipe: recipeImage,
-            linkRecipe: label,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.data.statusCode === 200) {
-          getComments();
-        }
-      } catch (err) {
-        console.error(err);
-      }
     }
   };
-  // const [editingIndex, setEditingIndex] = useState(null);
-  // const [editedComment, setEditedComment] = useState("");
-  // const handleEditComment = async (_idComment, comment) => {
-  //   setEditingIndex(_idComment);
-  //   setEditedComment(comment);
-  // };
-
-  // const handleCancelClick = () => {
-  //   setEditingIndex(null);
-  // };
-
-  // const handleCommentChange = (event) => {
-  //   console.log("e =", event.target.value);
-  //   setEditedComment(event.target.value);
-  // };
-
-  // const debounceEditComment = useDebounce(editedComment, 1000);
-
-  // const handleSaveClick = (_idComment) => {
-  //   console.log("_idComment = ", _idComment);
-  //   console.log("debounceEditComment = ", debounceEditComment);
-  //   try {
-  //     const response = axios.put()
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-
-  //   setEditingIndex(null);
-  // };
 
   const handleDeleteComment = async (_idComment) => {
     try {
       const response = await axios.delete(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/removeComment`, {
         data: {
+          _idComment: _idComment,
+          idRecipe: idRecipe,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.statusCode === 200) {
+        getComments();
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDeleteReplyComment = async (_idReplyComment, _idComment) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/removeReplyComment`, {
+        data: {
+          _idReplyComment: _idReplyComment,
           _idComment: _idComment,
           idRecipe: idRecipe,
         },
@@ -364,27 +396,7 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
                 }}>
                 <AccessTimeIcon /> <Typography>{item.timeComment}</Typography>
               </Box>
-              {/* {editingIndex === item._id ? (
-                <div>
-                  <TextField multiline rows={4} value={editedComment} onChange={handleCommentChange} fullWidth />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      textAlign: "left",
-                      gap: "0.5rem",
-                      margin: "1rem 0",
-                    }}>
-                    <Button variant="outlined" onClick={() => handleSaveClick(item._id)}>
-                      Save
-                    </Button>
-                    <Button variant="contained" onClick={handleCancelClick}>
-                      Cancel
-                    </Button>
-                  </Box>
-                </div>
-              ) : (
-                <Typography>{item.content}</Typography>
-              )} */}
+
               <Typography>{item.content}</Typography>
               <Box sx={{ display: "flex" }}>
                 {[...Array(5)].map((start, index) => {
@@ -418,17 +430,12 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
                   onClick={() => handleReplyComment(item._id, isLiked)}>
                   Reply
                 </Button>
-                {/* <Button
-                  variant="outlined"
-                  startIcon={<EditIcon />}
-                  onClick={() => handleEditComment(item._id, item.content)}>
-                  Edit
-                </Button> */}
                 <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteComment(item._id)}>
                   Delete
                 </Button>
               </Box>
 
+              {/* Box show reply comment */}
               {replyVisible[item._id] && (
                 <>
                   <TextareaAutosize
@@ -442,21 +449,23 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
                       border: "1px solid #ccc",
                       borderRadius: "1rem",
                     }}
-                    value={commentReply}
-                    onChange={(e) => setCommentReply(e.target.value)}
+                    // value={commentReply}
+                    value={replyInputs[item._id] || ""}
+                    // onChange={(e) => setCommentReply(e.target.value)}
+                    onChange={(e) => handleChangeCommentReply(item._id, e.target.value)}
                   />
                   <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                     <Button
                       variant="contained"
                       sx={{ textAlign: "center", marginTop: "1rem" }}
                       onClick={() => handlePostReplyComments(item._id)}>
-                      Post comment
+                      Post reply
                     </Button>
                   </Box>
                 </>
               )}
 
-              {item.replies.map((reply) => (
+              {item.replies.map((reply, index) => (
                 <Box
                   key={reply._id}
                   sx={{
@@ -485,9 +494,51 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
                       textAlign: "left",
                       gap: "0.5rem",
                     }}>
-                    <ThumbUpOffAltIcon /> {reply.liked}
-                    <QuickreplyIcon /> Reply
+                    <Button variant="outlined" startIcon={<ThumbUpOffAltIcon />}>
+                      {reply.liked}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      startIcon={<QuickreplyIcon />}
+                      onClick={() => handleReplyComment(reply._id, isLiked)}>
+                      Reply
+                    </Button>
+                    <Button
+                      variant="contained"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => handleDeleteReplyComment(reply._id, item._id)}>
+                      Delete
+                    </Button>
                   </Typography>
+
+                  {/* Box show reply comment */}
+                  {replyVisible[reply._id] && (
+                    <>
+                      <TextareaAutosize
+                        aria-label="comments"
+                        minRows={3}
+                        placeholder="Leave your reply here"
+                        style={{
+                          width: "100%",
+                          padding: "1rem",
+                          fontSize: "1rem",
+                          border: "1px solid #ccc",
+                          borderRadius: "1rem",
+                        }}
+                        value={commentReply}
+                        onChange={(e) => setCommentReply(e.target.value)}
+                        // onChange={(e) => handleChangeCommentReply(index, e.target.value)}
+                      />
+                      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                        <Button
+                          variant="contained"
+                          sx={{ textAlign: "center", marginTop: "1rem" }}
+                          onClick={() => handlePostReplyComments(item._id)}>
+                          Post reply
+                        </Button>
+                      </Box>
+                    </>
+                  )}
                 </Box>
               ))}
             </Box>

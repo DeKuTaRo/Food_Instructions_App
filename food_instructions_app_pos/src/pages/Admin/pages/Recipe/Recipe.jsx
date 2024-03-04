@@ -169,7 +169,7 @@ function ARecipe() {
   const [countRecipe, setCountRecipe] = useState(0);
   const [fromRecipe, setFromRecipe] = useState(0);
   const [toRecipe, setToRecipe] = useState(0);
-  
+
   const handleSearchDebounce = async (urlSearch) => {
     try {
       const response = await axios.get(urlSearch);
@@ -249,7 +249,7 @@ function ARecipe() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyPress}
                     />
-                    <Button type="button" onClick={handleSearch}>
+                    <Button type="button" onClick={(e) => handleSearch(e, "firstPage")}>
                       <FaSearch />
                     </Button>
                   </Box>

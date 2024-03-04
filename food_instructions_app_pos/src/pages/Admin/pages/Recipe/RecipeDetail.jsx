@@ -153,7 +153,7 @@ function ARecipeDetail() {
                         />
                       </Box>
 
-                      <Box
+                      {/* <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -162,7 +162,7 @@ function ARecipeDetail() {
                           justifyContent: "center",
                         }}>
                         <VideoTutorial videoId={videoId} />
-                      </Box>
+                      </Box> */}
 
                       <Box sx={{ marginTop: "2rem" }}>
                         <Comments recipeName={recipeName} recipeImage={recipeImage} label={label} token={token} />

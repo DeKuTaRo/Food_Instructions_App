@@ -95,6 +95,16 @@ class OrderService {
       throw new APIError("Data Not found", err);
     }
   }
+
+  async GetDetailOrder(idOrder) {
+    try {
+      const detailOrder = await this.repository.GetDetailOrder(idOrder);
+      return FormateData(detailOrder);
+    } catch (err) {
+      console.log("err ser = ", err);
+      throw new APIError("Data Not found", err);
+    }
+  }
 }
 
 module.exports = OrderService;

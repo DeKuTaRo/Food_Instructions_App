@@ -95,12 +95,27 @@ module.exports = (app) => {
     }
   });
 
+  // Cập nhật đơn hàng đã được thanh toán
   app.put("/order/payment", UserAuth, async (req, res, next) => {
     try {
       const { idOrder } = req.body;
       const { data } = await service.UpdatePaymentOrder(idOrder);
       if (data) {
         return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau", statusCode: 500 });
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
+
+  app.get("/order/getDetailOrder", UserAuth, async (req, res, next) => {
+    try {
+      const { idOrder } = req.body;
+      const { data } = await service.GetDetailOrder(idOrder);
+      if (data) {
+        return res.status(200).json(data);
       }
       return res.status(200).json({ msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau", statusCode: 500 });
     } catch (err) {

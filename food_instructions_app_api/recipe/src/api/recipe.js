@@ -63,15 +63,18 @@ module.exports = (app) => {
       comments,
     };
     try {
+      if (content === "") {
+        return res.status(200).json({ msg: "Bình luận không được để trống" });
+      }
       // get payload // to send account service
-      const dataPayload = await service.GetRecipePayload(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
+      const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
       PublishAccountEvent(dataPayload);
 
       const { data } = await service.AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username });
       if (data) {
-        res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
       }
-      res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {
       console.log("err api = ", err);
       next(err);
@@ -99,7 +102,25 @@ module.exports = (app) => {
       // get payload to send account service
       const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
       PublishAccountEvent(dataPayload);
-      console.log("data = ", data);
+      if (data) {
+        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+      }
+      return res.status(200).json({ msg: "Có lỗi xảy ra" });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.delete("/recipe/removeReplyComment", UserAuth, async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+
+      const { _idReplyComment, _idComment, idRecipe } = req.body;
+      const { data } = await service.RemoveReplyComment(_idReplyComment, _idComment, idRecipe);
+
+      // get payload to send account service
+      // const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
+      // PublishAccountEvent(dataPayload);
       if (data) {
         return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
       }

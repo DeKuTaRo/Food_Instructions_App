@@ -23,7 +23,6 @@ import drink from "../../../images/drink.jpg";
 import soup from "../../../images/soup.jpg";
 import axios from "axios";
 
-
 function DeliveryHistoryPage() {
   const [tabValue, setTabValue] = useState(0);
   const [cancelOrderId, setCancelOrderId] = useState(null);
@@ -40,7 +39,6 @@ function DeliveryHistoryPage() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("API Response:", res.data);
         setOrderData(res.data.data.data);
       } catch (err) {
         console.log(err);
@@ -50,22 +48,41 @@ function DeliveryHistoryPage() {
   }, [token]);
 
   useEffect(() => {
-    console.log("Order Data:", orderData); // Log the orderData
   }, [orderData]);
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const handleCancelOrder = (orderId) => {
-    setCancelOrderId(orderId);
-    setOpenCancelDialog(true);
+  const handleCancelOrder = async (orderId) => {
+    // setCancelOrderId(orderId);
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/getDetailOrder`,
+        {
+          idOrder: orderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response = ", response);
+    } catch (err) {
+      console.log("err = ", err);
+    }
+    // setOpenCancelDialog(true);
   };
 
   const handleCloseCancelDialog = () => {
     setOpenCancelDialog(false);
     setCancelOrderId(null);
   };
+
+  const handleContinueToCompleteOrder = () => {};
 
   const handleConfirmCancelOrder = () => {
     // Handle cancel order logic here
@@ -82,18 +99,13 @@ function DeliveryHistoryPage() {
     // You can redirect or perform other actions here
   };
 
-  const filteredOrders = (status) =>
-    orderData.filter((order) => order.status === status);
+  const filteredOrders = (status) => orderData.filter((order) => order.status === status);
 
-  const PendingTabContent = () => (
+  const NotPaymentTabContent = () => (
     <div>
-      <Typography variant="h5">Pending Orders</Typography>
-      {filteredOrders("Pending").map((order) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
+      <Typography variant="h5">Not Payment Orders</Typography>
+      {filteredOrders("NotPayment").map((order, index) => (
+        <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <CardMedia
@@ -106,7 +118,7 @@ function DeliveryHistoryPage() {
             </Grid>
             <Grid item xs={6}>
               <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{order.id}</Typography>
+                <Typography variant="h6">Order #{index + 1}</Typography>
                 <Typography variant="subtitle2" color="textSecondary">
                   Số lượng: {order.quantity}
                 </Typography>
@@ -117,18 +129,13 @@ function DeliveryHistoryPage() {
                   Status: {order.status}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
                   Phone: {order.phoneNumber}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleCancelOrder(order.id)}
-                >
-                  Cancel Order
+                <Button variant="outlined" color="secondary" onClick={() => handleCancelOrder(order.id)}>
+                  Continue to complete order?
                 </Button>
               </div>
             </Grid>
@@ -137,14 +144,68 @@ function DeliveryHistoryPage() {
       ))}
       <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
         <DialogTitle>Confirm Order Cancellation</DialogTitle>
-        <DialogContent>
-          Are you sure you want to cancel this order?
-        </DialogContent>
+        <DialogContent>Are you sure you want to cancel this order?</DialogContent>
         <DialogActions>
           <Button onClick={handleCloseCancelDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleConfirmCancelOrder} color="secondary">
+          <Button onClick={handleContinueToCompleteOrder} color="secondary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+
+  const PaymentSuccessTabContent = () => (
+    <div>
+      <Typography variant="h5">Not Payment Orders</Typography>
+      {filteredOrders("NotPayment").map((order, index) => (
+        <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <CardMedia
+                component="img"
+                alt={order.productName}
+                height="240"
+                image={order.productImage}
+                style={{ borderRadius: "8px", width: "100%" }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <div style={{ padding: "0 1rem" }}>
+                <Typography variant="h6">Order #{index + 1}</Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Số lượng: {order.quantity}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Date: {order.createdAt}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Status: {order.status}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Phone: {order.phoneNumber}
+                </Typography>
+                <Button variant="outlined" color="secondary" onClick={() => handleCancelOrder(order.id)}>
+                  Continue to complete order?
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+        </Paper>
+      ))}
+      <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+        <DialogTitle>Confirm Order Cancellation</DialogTitle>
+        <DialogContent>Are you sure you want to cancel this order?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCancelDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleContinueToCompleteOrder} color="secondary">
             Confirm
           </Button>
         </DialogActions>
@@ -156,11 +217,7 @@ function DeliveryHistoryPage() {
     <div>
       <Typography variant="h5">Delivered Orders</Typography>
       {filteredOrders("Delivered").map((order) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
+        <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <CardMedia
@@ -184,17 +241,12 @@ function DeliveryHistoryPage() {
                   Status: {order.status}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
                   Ngày giờ nhận hàng: {order.deliveryTime}
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorder(order.id)}
-                >
+                <Button variant="contained" color="primary" onClick={() => handleReorder(order.id)}>
                   Order Again
                 </Button>
               </div>
@@ -205,65 +257,11 @@ function DeliveryHistoryPage() {
     </div>
   );
 
-  const CancelledTabContent = () => (
-    <div>
-      <Typography variant="h5"> Cancelled Orders</Typography>
-      {filteredOrders("Cancelled").map((order) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt=" "
-                height="240"
-                image={order.productLink}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{order.id}</Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Số lượng: {order.quantity}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Date: {order.date}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorder(order.id)}
-                >
-                  Order Again
-                </Button>
-              </div>
-            </Grid>
-          </Grid>
-        </Paper>
-      ))}
-    </div>
-  );
-
-  const OrderedTabContent = () => (
+  const CompletedTabContent = () => (
     <div>
       <Typography variant="h5">Orders Placed</Typography>
-      {filteredOrders("Ordered").map((order) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
+      {filteredOrders("Completed").map((order) => (
+        <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <CardMedia
@@ -287,14 +285,9 @@ function DeliveryHistoryPage() {
                   Status: {order.status}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleCancelOrder(order.id)}
-                >
+                <Button variant="outlined" color="secondary" onClick={() => handleCancelOrder(order.id)}>
                   Cancel Order
                 </Button>
               </div>
@@ -304,9 +297,7 @@ function DeliveryHistoryPage() {
       ))}
       <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
         <DialogTitle>Confirm Order Cancellation</DialogTitle>
-        <DialogContent>
-          Are you sure you want to cancel this order?
-        </DialogContent>
+        <DialogContent>Are you sure you want to cancel this order?</DialogContent>
         <DialogActions>
           <Button onClick={handleCloseCancelDialog} color="primary">
             Cancel
@@ -319,10 +310,52 @@ function DeliveryHistoryPage() {
     </div>
   );
 
+  const CancelledTabContent = () => (
+    <div>
+      <Typography variant="h5"> Cancelled Orders</Typography>
+      {filteredOrders("Cancelled").map((order) => (
+        <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <CardMedia
+                component="img"
+                alt=" "
+                height="240"
+                image={order.productLink}
+                style={{ borderRadius: "8px", width: "100%" }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <div style={{ padding: "0 1rem" }}>
+                <Typography variant="h6">Order #{order.id}</Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Số lượng: {order.quantity}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Date: {order.date}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Status: {order.status}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                </Typography>
+                <Button variant="contained" color="primary" onClick={() => handleReorder(order.id)}>
+                  Order Again
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+        </Paper>
+      ))}
+    </div>
+  );
+
   const tabsContent = [
-    <OrderedTabContent />,
-    PendingTabContent(), // Call the function
+    <NotPaymentTabContent />,
+    <PaymentSuccessTabContent />,
     <DeliveredTabContent />,
+    <CompletedTabContent />,
     <CancelledTabContent />,
   ];
 
@@ -332,21 +365,15 @@ function DeliveryHistoryPage() {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%" }}
-    >
+      style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
 
       <div style={{ textAlign: "center", margin: "0% 10%" }}>
         <Typography variant="h4">Delivery History</Typography>
 
-        <Tabs
-          value={tabValue}
-          onChange={handleChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
+        <Tabs value={tabValue} onChange={handleChangeTab} indicatorColor="primary" textColor="primary" centered>
+          <Tab label="Đợi thanh toán" />
           <Tab label="Đã đặt hàng" />
           <Tab label="Đang vận chuyển" />
           <Tab label="Giao hàng thành công" />

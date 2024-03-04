@@ -107,10 +107,41 @@ class RecipeRepository {
 
       const updateRecipe = await RecipeSchema.findOneAndUpdate(
         { _id: idRecipe },
-        { $set: { comments: updateComments, totalComments: updateComments.length } },
+        {
+          $set: {
+            comments: updateComments,
+            totalComments: checkExistRecipe.totalComments - (1 + updateComments.length),
+          },
+        },
         { new: true }
       );
       return updateRecipe;
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
+    }
+  }
+
+  async RemoveReplyComment(_idReplyComment, _idComment, idRecipe) {
+    try {
+      const checkExistComment = await CommentSchema.findOne({ _id: _idComment });
+      const updateComments = checkExistComment.replies.filter((item) => item._id.toString() !== _idReplyComment);
+
+      const newComment = await CommentSchema.findOneAndUpdate(
+        { _id: _idComment },
+        { $set: { replies: updateComments } },
+        { new: true }
+      );
+
+      const checkExistRecipe = await RecipeSchema.findOne({ _id: idRecipe });
+
+      const index = checkExistRecipe.comments.findIndex((obj) => obj._id.toString() === newComment._id.toString());
+
+      // If the object is found, replace it with the new object
+      if (index !== -1) {
+        checkExistRecipe.comments.splice(index, 1, newComment);
+        checkExistRecipe.totalComments -= 1;
+      }
+      return await checkExistRecipe.save();
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reply This Comment");
     }

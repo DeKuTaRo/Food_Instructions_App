@@ -49,7 +49,7 @@ function OrderPage() {
   useEffect(() => {
     const getAccountDetail = async () => {
       try {
-        const response = await axios.get(`http://localhost:8001/account/profile`, {
+        const response = await axios.get(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/profile`, {
           headers: {
             Authorization: `Bearer ${orderData.token}`,
           },

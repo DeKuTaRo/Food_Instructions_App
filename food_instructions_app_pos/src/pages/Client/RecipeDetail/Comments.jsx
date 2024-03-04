@@ -66,13 +66,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             "Content-Type": "application/json",
           },
         });
-        console.log("response = ", response);
         if (response.data.statusCode === 200) {
-          // setListComments(response.data.recipes.comments);
-          // setTotalComments(response.data.recipes.totalComments);
-          // setIdRecipe(response.data.recipes._id);
-
-          // setCommentsPost("");
           getComments();
           toast.success(response.data.msg, {
             position: "top-right",
