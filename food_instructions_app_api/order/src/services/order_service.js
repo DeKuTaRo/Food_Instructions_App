@@ -9,6 +9,7 @@ class OrderService {
 
   async CreateOrder(paymentInfo) {
     const {
+      paymentMethod,
       customerId,
       accountName,
       email,
@@ -21,9 +22,11 @@ class OrderService {
       productName,
       productLink,
       productImage,
+      timeCreate
     } = paymentInfo;
     try {
       const newOrder = await this.repository.CreateOrder({
+        paymentMethod,
         customerId,
         accountName,
         email,
@@ -36,6 +39,7 @@ class OrderService {
         productName,
         productLink,
         productImage,
+        timeCreate
       });
       return FormateData({
         newOrder,

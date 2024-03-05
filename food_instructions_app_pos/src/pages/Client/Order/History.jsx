@@ -22,6 +22,57 @@ import Footer from "../../../components/Client/Footer";
 import drink from "../../../images/drink.jpg";
 import soup from "../../../images/soup.jpg";
 import axios from "axios";
+import { getCurrentDateTimeInVietnam } from "../../../utils/dateTimeVietNam";
+
+function calculateDeliveryTime(databaseDateTimeString, minute) {
+  // Parse the database date time string
+  const parts = databaseDateTimeString.split(/[\s/,:]+/); // Split by space, /, and :
+  const month = parseInt(parts[0], 10) - 1; // Months are zero based in JavaScript
+  const day = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+  const hours = parseInt(parts[3], 10);
+  const minutes = parseInt(parts[4], 10);
+
+  // Create a Date object
+  const databaseDateTime = new Date(year, month, day, hours, minutes);
+
+  // Calculate delivery time
+  const deliveryTime = new Date(databaseDateTime.getTime() + minute * 60000); // 10 minutes in milliseconds
+
+  return deliveryTime;
+}
+
+const compareWithCurrentTimeInVietnam = (dateTimeString) => {
+  // Parse the given date time string
+  const [datePart, timePart] = dateTimeString.split(" ");
+  const [day, month, year] = datePart.split("/");
+  const [hour, minute] = timePart.split(":");
+
+  // Create a Date object for the given date time
+  const givenDateTime = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+
+  // Adjust the given date time to Vietnam time zone
+  const givenDateTimeVietnam = new Date(givenDateTime.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+
+  // Get the current time in Vietnam time zone
+  const currentDateTimeVietnam = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+
+  // Compare the given date time with the current date time in Vietnam time zone
+  return givenDateTimeVietnam.getTime() >= currentDateTimeVietnam.getTime();
+};
+
+function isMatchPresentTime(deliveryTime) {
+  // Get the current time
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+  console.log("deliveryTime = ", deliveryTime);
+  console.log(`now.getHours().toString()`, now.getHours().toString() === deliveryTime.split(":")[0]);
+  console.log(`now.getMinutes().toString() `, now.getMinutes().toString() === deliveryTime.split(":")[1]);
+  return (
+    (now.getHours().toString() === deliveryTime.split(":")[0] &&
+      now.getMinutes().toString() === deliveryTime.split(":")[1]) ||
+    compareWithCurrentTimeInVietnam(deliveryTime)
+  );
+}
 
 function DeliveryHistoryPage() {
   const [tabValue, setTabValue] = useState(0);
@@ -45,9 +96,42 @@ function DeliveryHistoryPage() {
       }
     };
     getUserData();
-  }, [token]);
+
+    const interval = setInterval(() => {
+      getUserData(); // Fetch orders every minute
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
+    const updateOrders = async () => {
+      const updatedOrders = await Promise.all(
+        orderData.map(async (order) => {
+          const match = isMatchPresentTime(order.timeCreate);
+          console.log("match = ", match);
+          // If the current time matches the delivery time and the status is "PaymentSucces", update the status
+          if (
+            (isMatchPresentTime(order.timeCreate) || compareWithCurrentTimeInVietnam(order.timeCreate)) &&
+            order.status === "PaymentSucces"
+          ) {
+            // const updatedOrder = { ...order, status: "Delivery" };
+            const response = await axios.post("/order/updateStatusOrder", order); // Example endpoint, replace it with your server endpoint
+            console.log("res = ", response);
+            // return updatedOrder;
+          } else {
+            return order;
+          }
+        })
+      );
+
+      setOrderData(updatedOrders);
+    };
+
+    const updateInterval = setInterval(() => {
+      updateOrders(); // Fetch orders every minute
+    }, 60000); // Check every minute
+    return () => clearInterval(updateInterval);
   }, [orderData]);
 
   const handleChangeTab = (event, newValue) => {
@@ -120,19 +204,16 @@ function DeliveryHistoryPage() {
               <div style={{ padding: "0 1rem" }}>
                 <Typography variant="h6">Order #{index + 1}</Typography>
                 <Typography variant="subtitle2" color="textSecondary">
+                  Tên: {order.productName}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
                   Số lượng: {order.quantity}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Date: {order.createdAt}
+                  Ngày đặt: {order.timeCreate}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Phone: {order.phoneNumber}
+                  Tổng tiền: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
                 </Typography>
                 <Button variant="outlined" color="secondary" onClick={() => handleCancelOrder(order.id)}>
                   Continue to complete order?
@@ -160,7 +241,7 @@ function DeliveryHistoryPage() {
   const PaymentSuccessTabContent = () => (
     <div>
       <Typography variant="h5">Not Payment Orders</Typography>
-      {filteredOrders("NotPayment").map((order, index) => (
+      {filteredOrders("PaymentSuccess").map((order, index) => (
         <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -176,19 +257,19 @@ function DeliveryHistoryPage() {
               <div style={{ padding: "0 1rem" }}>
                 <Typography variant="h6">Order #{index + 1}</Typography>
                 <Typography variant="subtitle2" color="textSecondary">
+                  Tên: {order.productName}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">
                   Số lượng: {order.quantity}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Date: {order.createdAt}
+                  Ngày đặt: {order.timeCreate}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
+                  Đơn hàng đang được chuẩn bị
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
                   Total: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Phone: {order.phoneNumber}
                 </Typography>
                 <Button variant="outlined" color="secondary" onClick={() => handleCancelOrder(order.id)}>
                   Continue to complete order?
@@ -231,6 +312,9 @@ function DeliveryHistoryPage() {
             <Grid item xs={6}>
               <div style={{ padding: "0 1rem" }}>
                 <Typography variant="h6">Order #{order.id}</Typography>
+                <Typography variant="subtitle2" color="textSecondary">
+                  Số lượng: {order.productName}
+                </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
                   Số lượng: {order.date}
                 </Typography>

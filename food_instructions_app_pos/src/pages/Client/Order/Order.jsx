@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { getCurrentDateTimeInVietnam } from "../../../utils/dateTimeVietNam";
 
 function OrderPage() {
   const location = useLocation();
@@ -39,7 +40,6 @@ function OrderPage() {
   const [customerId, setCustomerId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
 
   const [detailAccount, setDetailAccount] = useState({});
   const token = localStorage.getItem("token");
@@ -61,7 +61,6 @@ function OrderPage() {
         setCustomerId(response.data._id);
         setCustomerName(response.data.username);
         setEmail(response.data.email);
-        setTotalAmount(orderData.calories);
       } catch (err) {
         console.log(err);
       } finally {
@@ -112,11 +111,12 @@ function OrderPage() {
         data.append("email", email);
         data.append("phoneNumber", phoneNumber);
         data.append("quantity", quantity);
-        data.append("totalAmount", totalAmount);
+        data.append("totalAmount", totalPrice);
         data.append("status", "NotPayment");
         data.append("productName", orderData.recipeName);
         data.append("productImage", orderData.recipeImage);
         data.append("productLink", orderData.link);
+        data.append("timeCreate", getCurrentDateTimeInVietnam);
         const response = await axios.post(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/create`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -124,14 +124,19 @@ function OrderPage() {
           },
         });
         const paymentInfo = {
-          productName: orderData.recipeName,
-          userName: detailAccount.username,
+          paymentMethod: paymentMethod,
+          customerId: customerId,
           accountName: accountName,
+          customerName: customerName,
+          email: email,
           phone: phoneNumber,
-          address: address || detailAccount.address,
-          productLink: orderData.link, // Đây là link của trang thông tin sản phẩm
           quantity,
-          totalPrice,
+          totalAmount: totalPrice,
+          status: "NotPayment",
+          productName: orderData.recipeName,
+          productImage:orderData.recipeImage,
+          productLink: orderData.link, // Đây là link của trang thông tin sản phẩm
+          address: address || detailAccount.address,
           idOrder: response.data.newOrder._id,
         };
         navigate("/momo", { state: { paymentInfo } });
@@ -182,6 +187,8 @@ function OrderPage() {
     // Đóng dialog
     setConfirmDialogOpen(false);
   };
+
+  console.log("orderData = ", orderData);
 
   return (
     <motion.div
@@ -272,6 +279,7 @@ function OrderPage() {
                 justifyContent: "space-around",
               }}>
               <Box sx={{ marginLeft: "12px" }}>
+                <Typography variant="h4">{orderData.recipeName}</Typography>
                 <Typography variant="h5">Ingredients</Typography>
                 <ul
                   style={{

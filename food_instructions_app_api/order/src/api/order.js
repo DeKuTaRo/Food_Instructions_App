@@ -9,6 +9,7 @@ module.exports = (app) => {
   app.post("/order/create", UserAuth, async (req, res, next) => {
     try {
       const {
+        paymentMethod,
         customerId,
         accountName,
         email,
@@ -21,9 +22,11 @@ module.exports = (app) => {
         productName,
         productLink,
         productImage,
+        timeCreate,
       } = req.body;
 
       const { data } = await service.CreateOrder({
+        paymentMethod,
         customerId,
         accountName,
         email,
@@ -36,6 +39,7 @@ module.exports = (app) => {
         productName,
         productLink,
         productImage,
+        timeCreate,
       });
       return res.json(data);
     } catch (err) {
@@ -96,9 +100,10 @@ module.exports = (app) => {
   });
 
   // Cập nhật đơn hàng đã được thanh toán
-  app.put("/order/payment", UserAuth, async (req, res, next) => {
+  app.post("/order/payment", UserAuth, async (req, res, next) => {
     try {
       const { idOrder } = req.body;
+      console.log("req.body = ", req.body);
       const { data } = await service.UpdatePaymentOrder(idOrder);
       if (data) {
         return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
@@ -124,6 +129,14 @@ module.exports = (app) => {
     }
   });
 
+  app.post("/order/updateStatusOrder", async (req, res, next) => {
+    try {
+      console.log("req.body = ", req.body);
+    } catch (err) {
+      console.log("err api = ", err);
+      next(err);
+    }
+  });
   app.get("/", (req, res, next) => {
     res.send("Order Service");
   });

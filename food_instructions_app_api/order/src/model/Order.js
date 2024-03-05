@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema(
   {
+    paymentMethod: {
+      type: String,
+    },
     customerId: {
       type: Schema.Types.ObjectId,
       ref: "Customer", // Thay "Customer" bằng tên mô hình khách hàng nếu có
@@ -45,8 +48,18 @@ const OrderSchema = new Schema(
     productLink: {
       type: String,
     },
+    timeCreate: {
+      type: String,
+    },
   },
   {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.salt;
+        delete ret.__v;
+      },
+    },
     timestamps: true,
   }
 );

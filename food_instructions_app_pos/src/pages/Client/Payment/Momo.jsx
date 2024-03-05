@@ -22,10 +22,10 @@ const MomoPaymentPage = () => {
 
   const handlePaymentOrder = async () => {
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/payment`,
         {
-          idOrder: paymentInfo.idOrder,
+          idOrder: paymentInfo.idOrder
         },
         {
           headers: {
@@ -158,7 +158,7 @@ const MomoPaymentPage = () => {
               />
               <TextField
                 label="Amount"
-                value={`$${paymentInfo.totalPrice.toFixed(2)}`}
+                value={`$${paymentInfo.totalAmount.toFixed(2)}`}
                 InputProps={{
                   readOnly: true,
                   style: { marginBottom: "8px", fontSize: "1rem" },
