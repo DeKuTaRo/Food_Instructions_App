@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import "./Chatbot.css";
 import { useState } from "react";
+import { SiChatbot } from "react-icons/si";
 function Chatbot() {
   const [textChat, setTextChat] = useState("");
   const chatbox = document.querySelector(".chatbox");
 
   let userMessage;
-  const API_KEY = "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";
-  //   const inputInitHeight = chatInput.scrollHeight;
+  const API_KEY = "AIzaSyAL3zym14DRJf-uCK2FKx1EIgbl68mr1Jo";
 
   const createChatLi = (message, className) => {
     const chatLi = document.createElement("li");
@@ -21,42 +21,34 @@ function Chatbot() {
   };
 
   const generateResponse = (incomingChatLi) => {
-    const API_URL = "https://api.openai.com/v1/chat/completions";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
     const messageElement = incomingChatLi.querySelector("p");
 
-    const requestOptions = {
+    fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${API_KEY}`,
       },
       body: JSON.stringify({
-        // model: "gpt-3.5-turbo",
-        model: "gpt-4",
-        messages: [
-          // {
-          //   role: "system",
-          //   content: "You are a helpful assistant.",
-          // },
+        contents: [
           {
-            role: "user",
-            content: userMessage,
+            parts: [
+              {
+                text: textChat,
+              },
+            ],
           },
         ],
       }),
-    };
-    fetch(API_URL, requestOptions).then((res) =>
-      res
-        .json()
-        .then((data) => {
-          messageElement.textContent = data.choices[0].message.content;
-        })
-        .catch((error) => {
-          messageElement.classList.add("error");
-          messageElement.textContent = "Oops! Something went wrong. Please try again later.";
-        })
-        .finally(() => chatbox.scrollTo(0, chatbox.scrollHeight))
-    );
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        messageElement.textContent = data.candidates[0].content.parts[0].text;
+      })
+      .catch((error) => {
+        messageElement.classList.add("error");
+        messageElement.textContent = "Oops! Something went wrong. Please try again later.";
+      });
   };
   const [inputHeight, setInputHeight] = useState("auto");
   const handleChat = () => {
@@ -93,14 +85,16 @@ function Chatbot() {
       style={{ margin: "0% 10%" }}>
       <div className="">
         <button className="chatbot-toggler" onClick={() => document.body.classList.toggle("show-chatbot")}>
-          <span className="material-symbols-outlined">mode_comment</span>
-          <span className="material-symbols-outlined">close</span>
+          <span className="material-symbols-outlined">
+            <SiChatbot />
+          </span>
+          <span className="material-symbols-outlined"><SiChatbot /></span>
         </button>
         <div className="chatbot">
           <header>
             <h2>Chatbot</h2>
             <span className="material-symbols-outlined" onClick={() => document.body.classList.remove("show-chatbot")}>
-              close
+              x
             </span>
           </header>
           <ul className="chatbox">
