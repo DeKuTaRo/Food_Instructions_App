@@ -19,6 +19,9 @@ const AccountSchema = new Schema(
     salt: {
       type: String,
     },
+    path: {
+      type: String,
+    },
     role: {
       type: String,
     },

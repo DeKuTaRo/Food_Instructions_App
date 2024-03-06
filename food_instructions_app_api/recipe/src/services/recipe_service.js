@@ -22,9 +22,10 @@ class RecipeService {
 
   async AddCommentsToRecipe(recipeInputs, username) {
     try {
-      const { nameRecipe, imageRecipe, linkRecipe, comments } = recipeInputs;
+      const { nameRecipe, imageRecipe, linkRecipe, comments, pathAvatar } = recipeInputs;
       const commentsResult = await this.repository.AddCommentsRecipe(
         {
+          pathAvatar,
           nameRecipe,
           imageRecipe,
           linkRecipe,
@@ -68,9 +69,10 @@ class RecipeService {
     }
   }
 
-  async AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username }) {
+  async AddReplyToComment({ pathAvatar, timeComment, content, liked, _idComment, idRecipe, username }) {
     try {
       const replyComment = await this.repository.AddReplyComment({
+        pathAvatar,
         timeComment,
         content,
         liked,

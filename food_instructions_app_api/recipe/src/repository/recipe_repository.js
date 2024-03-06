@@ -2,12 +2,13 @@ const { RecipeSchema, CommentSchema } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 const mongoose = require("mongoose");
 class RecipeRepository {
-  async AddCommentsRecipe({ nameRecipe, imageRecipe, linkRecipe, comments }, username) {
+  async AddCommentsRecipe({ pathAvatar, nameRecipe, imageRecipe, linkRecipe, comments }, username) {
     try {
       const checkRecipeExist = await RecipeSchema.findOne({ nameRecipe: nameRecipe });
       comments.listUserLikeComment = [];
       comments.nameRecipe = nameRecipe;
       comments.username = username;
+      comments.pathAvatar = pathAvatar;
       const newComment = new CommentSchema(comments);
       if (checkRecipeExist) {
         checkRecipeExist.comments.push(newComment);
@@ -15,7 +16,13 @@ class RecipeRepository {
         await checkRecipeExist.save();
       } else {
         const totalComments = 1;
-        const recipe = new RecipeSchema({ nameRecipe, imageRecipe, linkRecipe, comments: newComment, totalComments });
+        const recipe = new RecipeSchema({
+          nameRecipe,
+          imageRecipe,
+          linkRecipe,
+          comments: newComment,
+          totalComments,
+        });
         await recipe.save();
       }
       return await newComment.save();
@@ -70,13 +77,14 @@ class RecipeRepository {
     }
   }
 
-  async AddReplyComment({ timeComment, content, liked, _idComment, idRecipe, username }) {
+  async AddReplyComment({ pathAvatar, timeComment, content, liked, _idComment, idRecipe, username }) {
     try {
       const checkExistRecipe = await RecipeSchema.findOne({ _id: idRecipe });
 
       const checkExistComment = await CommentSchema.findOne({ _id: _idComment });
       if (checkExistComment) {
         const replyComment = {
+          pathAvatar: pathAvatar,
           username: username,
           timeComment: timeComment,
           content: content,

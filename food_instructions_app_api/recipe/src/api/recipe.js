@@ -49,7 +49,18 @@ module.exports = (app) => {
   });
 
   app.post("/recipe/replyComments", UserAuth, async (req, res, next) => {
-    const { timeComment, content, liked, rating, _idComment, idRecipe, nameRecipe, imageRecipe, linkRecipe } = req.body;
+    const {
+      pathAvatar,
+      timeComment,
+      content,
+      liked,
+      rating,
+      _idComment,
+      idRecipe,
+      nameRecipe,
+      imageRecipe,
+      linkRecipe,
+    } = req.body;
     const { _id, username } = req.user;
     const comments = {
       content,
@@ -70,7 +81,15 @@ module.exports = (app) => {
       const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
       PublishAccountEvent(dataPayload);
 
-      const { data } = await service.AddReplyToComment({ timeComment, content, liked, _idComment, idRecipe, username });
+      const { data } = await service.AddReplyToComment({
+        pathAvatar,
+        timeComment,
+        content,
+        liked,
+        _idComment,
+        idRecipe,
+        username,
+      });
       if (data) {
         return res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
       }

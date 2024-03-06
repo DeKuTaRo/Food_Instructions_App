@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs");
 
 const { APP_SECRET } = require("../config");
 
@@ -8,13 +10,14 @@ const { AccountModel, AddressModel, CommentModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
-  async CreateAccount({ username, email, password, salt, tokenResetPassword }) {
+  async CreateAccount({ username, email, password, salt, tokenResetPassword, path }) {
     try {
       const account = new AccountModel({
         username,
         email,
         password,
         salt,
+        path,
         isAdmin: false,
         role: "user",
         tokenResetPassword: tokenResetPassword,
@@ -340,6 +343,33 @@ class AccountRepository {
       await checkExistAccount.save();
       return { msg: "Đổi mật khẩu thành công", statusCode: 200 };
     } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reset New Password");
+    }
+  }
+
+  async UpdateProfile(_id, username, email, file) {
+    try {
+
+      const profile = await AccountModel.findById(_id);
+      if (profile.path) {
+        const imagePath = path.resolve(__dirname, "../../", profile.path);
+
+        fs.unlinkSync(imagePath);
+      }
+      const updateProfile = await AccountModel.findByIdAndUpdate(
+        _id,
+        {
+          username: username,
+          email: email,
+          path: file,
+        },
+        {
+          new: true,
+        }
+      );
+      return updateProfile;
+    } catch (err) {
+      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reset New Password");
     }
   }

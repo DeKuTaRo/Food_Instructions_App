@@ -5,7 +5,6 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    console.log("file = ", file);
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
@@ -109,9 +108,9 @@ module.exports = (app) => {
       const { data } = await service.GetTopics();
       return res.status(200).json(data);
     } catch (err) {
-      next(err)
+      next(err);
     }
-  })
+  });
 
   app.get("/", (req, res, next) => {
     res.send("Topic Service");

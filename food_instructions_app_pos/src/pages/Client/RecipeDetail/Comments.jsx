@@ -12,8 +12,27 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
 import Avatar from "@mui/material/Avatar";
 import CommentIcon from "@mui/icons-material/Comment";
+import AvatarDefault from "../../../images/avatar.png";
 
 const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginStatus, token }) => {
+  const [avatarUser, setAvatarUser] = useState(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAvatarUser(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/${res.data.path}`);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserData();
+  }, [token]);
+
   const [commentsPost, setCommentsPost] = useState("");
   const debouncedComments = useDebounce(commentsPost, 1000);
 
@@ -32,6 +51,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   const isAdmin = localStorage.getItem("isAdmin");
 
   const formData = {
+    pathAvatar: avatarUser,
     nameRecipe: recipeName,
     imageRecipe: recipeImage,
     linkRecipe: label,
@@ -179,6 +199,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
         const response = await axios.post(
           `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
           {
+            pathAvatar: avatarUser,
             timeComment: getCurrentDateTimeInVietnam,
             content: debounceReplyComment,
             liked: 0,
@@ -281,136 +302,135 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           }}>
           <TextField placeholder="Search comment" />
 
-          {listComments && listComments.map((item) => (
-            <Box
-              aria-label="comments"
-              component="div"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "left",
-                gap: "12px",
-              }}
-              key={item._id}>
+          {listComments &&
+            listComments.map((item) => (
               <Box
+                aria-label="comments"
+                component="div"
                 sx={{
                   display: "flex",
-                  gap: "8px",
-                  alignItems: "center",
-                }}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://images.vexels.com/media/users/3/145908/raw/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
-                />
-                <Typography variant="h6">{item.username}</Typography>
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
+                  flexDirection: "column",
                   textAlign: "left",
-                  gap: "8px",
-                }}>
-                <AccessTimeIcon /> <Typography>{item.timeComment}</Typography>
-              </Box>
-              <Typography>{item.content}</Typography>
-              <Box sx={{ display: "flex" }}>
-                {[...Array(5)].map((start, index) => {
-                  const currentRating = index + 1;
-
-                  return (
-                    <label key={index}>
-                      <input type="radio" name="rating" value={currentRating} style={{ display: "none" }} />
-                      <FaStar color={currentRating <= item.rating ? "#ffc107" : "#e4e5e9"} />
-                    </label>
-                  );
-                })}
-              </Box>
-              <Typography
-                sx={{
-                  display: "flex",
-                  textAlign: "left",
-                  gap: "8px",
-                }}>
-                <Button
-                  variant="outlined"
-                  startIcon={<ThumbUpOffAltIcon />}
-                  onClick={() => {
-                    handleSetLikeComment(item._id);
-                  }}>
-                  {likeEachComment[item._id] ? item.liked + 1 : item.liked}
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<QuickreplyIcon />}
-                  onClick={() => handleReplyComment(item._id, isLiked)}>
-                  Reply
-                </Button>
-              </Typography>
-
-              {replyVisible[item._id] && (
-                <>
-                  <TextareaAutosize
-                    aria-label="comments"
-                    minRows={3}
-                    placeholder="Leave your reply here"
-                    style={{
-                      width: "100%",
-                      padding: "1rem",
-                      fontSize: "1rem",
-                      border: "1px solid #ccc",
-                      borderRadius: "1rem",
-                    }}
-                    value={commentReply}
-                    onChange={(e) => setCommentReply(e.target.value)}
-                  />
-                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
-                    <Button
-                      variant="contained"
-                      sx={{ textAlign: "center", marginTop: "1rem" }}
-                      onClick={() => handlePostReplyComments(item._id)}>
-                      Post comment
-                    </Button>
-                  </Box>
-                </>
-              )}
-
-              {item.replies.map((reply) => (
+                  gap: "12px",
+                }}
+                key={item._id}>
                 <Box
-                  key={reply._id}
                   sx={{
-                    backgroundColor: "#fafafa",
-                    padding: "1rem",
-                    marginLeft: "2rem",
-                    borderLeft: "3px solid #000000",
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
                   }}>
-                  <Box sx={{ fontSize: "1.25rem" }}>
-                    {reply.username} {isAdmin === "true" && <Chip label="admin" sx={{ color: "black" }} />}
-                  </Box>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      textAlign: "left",
-                      gap: "0.5rem",
-                      marginTop: "1rem",
-                    }}>
-                    <CommentIcon /> Reply to {item.username}
-                    <AccessTimeIcon /> {reply.timeComment}
-                  </Typography>
-                  <Typography margin={"1rem"}>{reply.content}</Typography>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      textAlign: "left",
-                      gap: "0.5rem",
-                    }}>
-                    <ThumbUpOffAltIcon /> {reply.liked}
-                    <QuickreplyIcon /> Reply
-                  </Typography>
+                  <Avatar alt={username} src={item.pathAvatar ? item.pathAvatar : AvatarDefault} />
+                  <Typography variant="h6">{item.username}</Typography>
                 </Box>
-              ))}
-            </Box>
-          ))}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    textAlign: "left",
+                    gap: "8px",
+                  }}>
+                  <AccessTimeIcon /> <Typography>{item.timeComment}</Typography>
+                </Box>
+                <Typography>{item.content}</Typography>
+                <Box sx={{ display: "flex" }}>
+                  {[...Array(5)].map((start, index) => {
+                    const currentRating = index + 1;
+
+                    return (
+                      <label key={index}>
+                        <input type="radio" name="rating" value={currentRating} style={{ display: "none" }} />
+                        <FaStar color={currentRating <= item.rating ? "#ffc107" : "#e4e5e9"} />
+                      </label>
+                    );
+                  })}
+                </Box>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    textAlign: "left",
+                    gap: "8px",
+                  }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<ThumbUpOffAltIcon />}
+                    onClick={() => {
+                      handleSetLikeComment(item._id);
+                    }}>
+                    {likeEachComment[item._id] ? item.liked + 1 : item.liked}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<QuickreplyIcon />}
+                    onClick={() => handleReplyComment(item._id, isLiked)}>
+                    Reply
+                  </Button>
+                </Typography>
+
+                {replyVisible[item._id] && (
+                  <>
+                    <TextareaAutosize
+                      aria-label="comments"
+                      minRows={3}
+                      placeholder="Leave your reply here"
+                      style={{
+                        width: "100%",
+                        padding: "1rem",
+                        fontSize: "1rem",
+                        border: "1px solid #ccc",
+                        borderRadius: "1rem",
+                      }}
+                      value={commentReply}
+                      onChange={(e) => setCommentReply(e.target.value)}
+                    />
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                      <Button
+                        variant="contained"
+                        sx={{ textAlign: "center", marginTop: "1rem" }}
+                        onClick={() => handlePostReplyComments(item._id)}>
+                        Post comment
+                      </Button>
+                    </Box>
+                  </>
+                )}
+
+                {item.replies.map((reply) => (
+                  <Box
+                    key={reply._id}
+                    sx={{
+                      backgroundColor: "#fafafa",
+                      padding: "1rem",
+                      marginLeft: "2rem",
+                      borderLeft: "3px solid #000000",
+                    }}>
+                    <Box sx={{ fontSize: "1.25rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                      <Avatar alt={username} src={avatarUser ? avatarUser : AvatarDefault} />
+                      {reply.username} {isAdmin === "true" && <Chip label="admin" sx={{ color: "black" }} />}
+                    </Box>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        textAlign: "left",
+                        gap: "0.5rem",
+                        marginTop: "1rem",
+                      }}>
+                      <CommentIcon /> Reply to {item.username}
+                      <AccessTimeIcon /> {reply.timeComment}
+                    </Typography>
+                    <Typography margin={"1rem"}>{reply.content}</Typography>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        textAlign: "left",
+                        gap: "0.5rem",
+                      }}>
+                      <ThumbUpOffAltIcon /> {reply.liked}
+                      <QuickreplyIcon /> Reply
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            ))}
         </Box>
       </Box>
     </>

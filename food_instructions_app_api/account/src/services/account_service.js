@@ -47,7 +47,7 @@ class AccountService {
   }
 
   async SignUp(userInputs) {
-    const { username, email, password } = userInputs;
+    const { username, email, password, path } = userInputs;
     try {
       // create salt
       let salt = await GenerateSalt();
@@ -62,9 +62,10 @@ class AccountService {
         password: userPassword,
         salt,
         tokenResetPassword,
+        path,
       });
 
-      return FormateData({ id: existingCustomer._id, status: true });
+      return FormateData({ id: existingCustomer._id, statusCode: 200, msg: "Tạo tài khoản thành công" });
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
@@ -259,6 +260,16 @@ class AccountService {
     try {
       const resetPassword = await this.repository.ResetPassword(password, token);
       return FormateData(resetPassword);
+    } catch (err) {
+      console.log("err ser : ", err);
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async UpdateProfile(_id, username, email, file) {
+    try {
+      const updateProfile = await this.repository.UpdateProfile(_id, username, email, file);
+      return FormateData(updateProfile);
     } catch (err) {
       console.log("err ser : ", err);
       throw new APIError("Data Not found", err);

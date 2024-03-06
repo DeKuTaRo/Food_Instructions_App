@@ -13,6 +13,7 @@ import NavBar from "../../../components/Client/Navbar";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "./ImageUpload";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -32,7 +33,13 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const [avatar, setAvatar] = useState(null);
+
+  const handleImageChange = (imageValue) => {
+    setAvatar(imageValue);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (confirmPassword !== formData.password) {
       toast.error("Mật khẩu không khớp nhau", {
@@ -47,23 +54,28 @@ function SignUp() {
       });
     } else {
       try {
-        axios.post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/signup`, formData).then((res) => {
-          if (res.data.status) {
-            toast.success("Đăng kí thành công", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-          }
+        const data = new FormData();
+        data.append("username", formData.username);
+        data.append("email", formData.email);
+        data.append("password", formData.password);
+        data.append("file", avatar);
+        const response = await axios.post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/signup`, data);
+
+        if (response.data.statusCode === 200) {
+          toast.success(response.data.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
           navigate("/login-plus");
-        });
+        }
       } catch (err) {
-        toast.error(err, {
+        toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -122,13 +134,24 @@ function SignUp() {
             <Box sx={{ display: "flex", alignItems: "center", width: "88%" }}>
               <Box
                 sx={{
-                  mt: 8,
+                  mt: 2,
                   display: "flex",
                   flexDirection: "column",
                   width: "100vh",
                   margin: "",
                 }}>
                 <form onSubmit={handleSubmit}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "28px",
+                      margin: "12px 12px",
+                      fontSize: "24px",
+                      fontWeight: "bold",
+                    }}>
+                    <ImageUpload onImageUpload={handleImageChange} imageData={avatar} titleImage={formData.username} />
+                  </div>
                   <div
                     style={{
                       display: "flex",

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
+  pathAvatar: String,
   nameRecipe: String,
   username: String,
   content: String,
@@ -11,6 +12,7 @@ const CommentSchema = new Schema({
   timeComment: String,
   replies: [
     {
+      pathAvatar: { type: String },
       username: { type: String },
       timeComment: { type: String },
       content: { type: String },

@@ -42,23 +42,17 @@ function calculateDeliveryTime(databaseDateTimeString, minute) {
   return deliveryTime;
 }
 
-const compareWithCurrentTimeInVietnam = (dateTimeString) => {
-  // Parse the given date time string
-  const [datePart, timePart] = dateTimeString.split(" ");
-  const [day, month, year] = datePart.split("/");
-  const [hour, minute] = timePart.split(":");
-
-  // Create a Date object for the given date time
-  const givenDateTime = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-
-  // Adjust the given date time to Vietnam time zone
-  const givenDateTimeVietnam = new Date(givenDateTime.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+const compareWithCurrentTimeInVietnam = (timeString) => {
+  // Parse the given time string
+  const [hour, minute] = timeString.split(":");
 
   // Get the current time in Vietnam time zone
   const currentDateTimeVietnam = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+  const currentHour = currentDateTimeVietnam.getHours();
+  const currentMinute = currentDateTimeVietnam.getMinutes();
 
-  // Compare the given date time with the current date time in Vietnam time zone
-  return givenDateTimeVietnam.getTime() >= currentDateTimeVietnam.getTime();
+  // Compare the given time with the current time in Vietnam time zone
+  return parseInt(hour) === currentHour && parseInt(minute) === currentMinute;
 };
 
 function isMatchPresentTime(deliveryTime) {
@@ -66,11 +60,12 @@ function isMatchPresentTime(deliveryTime) {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
   console.log("deliveryTime = ", deliveryTime);
   console.log(`now.getHours().toString()`, now.getHours().toString() === deliveryTime.split(":")[0]);
+  console.log(`now.getMinutes().toString() =  `, now.getMinutes().toString());
+  console.log(`deliveryTime.split(":")[1] =  `, deliveryTime.split(":")[1]);
   console.log(`now.getMinutes().toString() `, now.getMinutes().toString() === deliveryTime.split(":")[1]);
   return (
-    (now.getHours().toString() === deliveryTime.split(":")[0] &&
-      now.getMinutes().toString() === deliveryTime.split(":")[1]) ||
-    compareWithCurrentTimeInVietnam(deliveryTime)
+    now.getHours().toString() === deliveryTime.split(":")[0] &&
+    now.getMinutes().toString() === deliveryTime.split(":")[1]
   );
 }
 
@@ -99,7 +94,7 @@ function DeliveryHistoryPage() {
 
     const interval = setInterval(() => {
       getUserData(); // Fetch orders every minute
-    }, 60000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -108,11 +103,15 @@ function DeliveryHistoryPage() {
     const updateOrders = async () => {
       const updatedOrders = await Promise.all(
         orderData.map(async (order) => {
-          const match = isMatchPresentTime(order.timeCreate);
-          console.log("match = ", match);
+          const deliverTime = calculateDeliveryTime(order.timeCreate, 3).toLocaleTimeString("en-US", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          console.log("deliverTimeeeeee = ", deliverTime);
           // If the current time matches the delivery time and the status is "PaymentSucces", update the status
           if (
-            (isMatchPresentTime(order.timeCreate) || compareWithCurrentTimeInVietnam(order.timeCreate)) &&
+            (isMatchPresentTime(deliverTime) || compareWithCurrentTimeInVietnam(deliverTime)) &&
             order.status === "PaymentSucces"
           ) {
             // const updatedOrder = { ...order, status: "Delivery" };
@@ -127,10 +126,9 @@ function DeliveryHistoryPage() {
 
       setOrderData(updatedOrders);
     };
-
     const updateInterval = setInterval(() => {
       updateOrders(); // Fetch orders every minute
-    }, 60000); // Check every minute
+    }, 5000); // Check every minute
     return () => clearInterval(updateInterval);
   }, [orderData]);
 
@@ -187,7 +185,7 @@ function DeliveryHistoryPage() {
 
   const NotPaymentTabContent = () => (
     <div>
-      <Typography variant="h5">Not Payment Orders</Typography>
+      <Typography variant="h5">Đơn hàng chưa thanh toán</Typography>
       {filteredOrders("NotPayment").map((order, index) => (
         <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>
@@ -240,7 +238,7 @@ function DeliveryHistoryPage() {
 
   const PaymentSuccessTabContent = () => (
     <div>
-      <Typography variant="h5">Not Payment Orders</Typography>
+      <Typography variant="h5">Đơn hàng đã đặt</Typography>
       {filteredOrders("PaymentSuccess").map((order, index) => (
         <Paper key={order.id} elevation={3} style={{ padding: "1rem", margin: "1rem 0" }}>
           <Grid container spacing={2}>

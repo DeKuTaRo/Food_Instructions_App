@@ -9,12 +9,13 @@ import {
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
 import { RxAvatar } from "react-icons/rx";
-import React, { useState } from "react";
-import { Link } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Link, Avatar } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import AvatarDefault from "../../images/avatar.png";
 
 function Headers() {
   const [hoverDialogAccount, setHoverDialogAccount] = useState(null);
@@ -22,6 +23,26 @@ function Headers() {
 
   const isLogin = localStorage.getItem("isLogin");
   const showDialogAccount = hoverDialogAccount === "account" ? true : false;
+
+  const token = localStorage.getItem("token");
+  const [avatarUser, setAvatarUser] = useState(null);
+  const [username, setUsername] = useState(null);
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAvatarUser(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/${res.data.path}`);
+        setUsername(res.data.username);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserData();
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.setItem("isLogin", "false");
@@ -44,7 +65,7 @@ function Headers() {
         <Link underline="none" color="inherit" href={"/contact"}>
           <Box sx={{ p: 1, fontSize: "1.5rem" }}>Contact</Box>
         </Link>
-        <Link underline="none" color="inherit"href={"/about"}>
+        <Link underline="none" color="inherit" href={"/about"}>
           <Box sx={{ p: 1, fontSize: "1.5rem" }}>About</Box>
         </Link>
         {isLogin !== "true" && (
@@ -103,8 +124,12 @@ function Headers() {
             sx={{ position: "relative" }}
             onMouseEnter={() => setHoverDialogAccount("account")}
             onMouseLeave={() => setHoverDialogAccount(null)}>
-            <Box sx={{ p: 1, fontSize: "1.5rem" }}>
-              <RxAvatar />
+            <Box sx={{ p: 1 }}>
+              <Avatar
+                src={avatarUser ? avatarUser : AvatarDefault}
+                alt={username}
+                sx={{ cursor: "pointer", width: 30, height: 30 }}
+              />
             </Box>
             <Box
               sx={{
