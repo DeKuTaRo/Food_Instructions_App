@@ -275,6 +275,16 @@ class AccountService {
       throw new APIError("Data Not found", err);
     }
   }
+
+  async ChangePassword(_id, oldPassword, newPassword) {
+    try {
+      const changePassword = await this.repository.ChangePassword(_id, oldPassword, newPassword);
+      return FormateData(changePassword);
+    } catch (err) {
+      console.log("err ser : ", err);
+      throw new APIError("Data Not found", err);
+    }
+  }
 }
 
 module.exports = AccountService;

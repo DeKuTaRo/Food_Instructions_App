@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs");
-
+const { ValidatePassword, GeneratePassword } = require("../utils");
 const { APP_SECRET } = require("../config");
 
 const { AccountModel, AddressModel, CommentModel } = require("../model");
@@ -349,7 +349,6 @@ class AccountRepository {
 
   async UpdateProfile(_id, username, email, file) {
     try {
-
       const profile = await AccountModel.findById(_id);
       if (profile.path) {
         const imagePath = path.resolve(__dirname, "../../", profile.path);
@@ -370,7 +369,35 @@ class AccountRepository {
       return updateProfile;
     } catch (err) {
       console.log("err repo = ", err);
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Reset New Password");
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Profile");
+    }
+  }
+
+  async ChangePassword(_id, oldPassword, newPassword) {
+    try {
+      if (oldPassword === "" || newPassword === "") {
+        return { msg: "Mật khẩu không được để trống", statusCode: 500 };
+      }
+
+      const profile = await AccountModel.findById(_id);
+      const validPassword = await ValidatePassword(oldPassword, profile.password, profile.salt);
+      if (!validPassword) {
+        return { msg: "Mật khẩu đã nhập không chính xác", statusCode: 500 };
+      }
+      const userPassword = await GeneratePassword(newPassword, profile.salt);
+      const updateProfile = await AccountModel.findByIdAndUpdate(
+        _id,
+        {
+          password: userPassword,
+        },
+        {
+          new: true,
+        }
+      );
+      return updateProfile;
+    } catch (err) {
+      console.log("err repo = ", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Change Password");
     }
   }
 }

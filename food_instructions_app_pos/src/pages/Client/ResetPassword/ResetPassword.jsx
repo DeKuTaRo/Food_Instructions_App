@@ -10,7 +10,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function ForgotPassword() {
+function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -147,4 +147,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

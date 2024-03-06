@@ -45,9 +45,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
   const [idRecipe, setIdRecipe] = useState("");
   const [isLiked, setIsLiked] = useState(true);
 
-  const [commentReply, setCommentReply] = useState("");
-  const debounceReplyComment = useDebounce(commentReply, 1000);
-
   const isAdmin = localStorage.getItem("isAdmin");
 
   const formData = {
@@ -183,47 +180,48 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
 
   const handlePostReplyComments = async (_idComment) => {
     handleCheckLoginStatus();
-    if (debounceReplyComment === "") {
-      toast.error("Vui lòng nhập bình luận", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    } else {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
-          {
-            pathAvatar: avatarUser,
-            timeComment: getCurrentDateTimeInVietnam,
-            content: debounceReplyComment,
-            liked: 0,
-            rating: 0,
-            _idComment: _idComment,
-            idRecipe: idRecipe,
-            nameRecipe: recipeName,
-            imageRecipe: recipeImage,
-            linkRecipe: label,
+    const reply = replyInputs[_idComment];
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/replyComments`,
+        {
+          pathAvatar: avatarUser,
+          timeComment: getCurrentDateTimeInVietnam,
+          content: reply,
+          liked: 0,
+          rating: 0,
+          _idComment: _idComment,
+          idRecipe: idRecipe,
+          nameRecipe: recipeName,
+          imageRecipe: recipeImage,
+          linkRecipe: label,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.data.statusCode === 200) {
-          getComments();
         }
-      } catch (err) {
-        console.error(err);
+      );
+      if (response.data.statusCode === 200) {
+        getComments();
       }
+      // Clear the input field after posting
+      const newInputs = [...replyInputs];
+      newInputs[_idComment] = "";
+      setReplyInputs(newInputs);
+      handleReplyComment(_idComment);
+    } catch (err) {
+      console.error(err);
     }
+  };
+  const [replyInputs, setReplyInputs] = useState([]);
+
+  const handleChangeCommentReply = (id, value) => {
+    const newInputs = [...replyInputs];
+    newInputs[id] = value;
+    setReplyInputs(newInputs);
   };
 
   return (
@@ -380,15 +378,15 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                         border: "1px solid #ccc",
                         borderRadius: "1rem",
                       }}
-                      value={commentReply}
-                      onChange={(e) => setCommentReply(e.target.value)}
+                      value={replyInputs[item._id] || ""}
+                      onChange={(e) => handleChangeCommentReply(item._id, e.target.value)}
                     />
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                       <Button
                         variant="contained"
                         sx={{ textAlign: "center", marginTop: "1rem" }}
                         onClick={() => handlePostReplyComments(item._id)}>
-                        Post comment
+                        Post reply
                       </Button>
                     </Box>
                   </>
@@ -424,8 +422,15 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
                         textAlign: "left",
                         gap: "0.5rem",
                       }}>
-                      <ThumbUpOffAltIcon /> {reply.liked}
-                      <QuickreplyIcon /> Reply
+                      <Button variant="outlined" startIcon={<ThumbUpOffAltIcon />}>
+                        {reply.liked}
+                      </Button>{" "}
+                      <Button
+                        variant="contained"
+                        startIcon={<QuickreplyIcon />}
+                        onClick={() => handleReplyComment(item._id, isLiked)}>
+                        Reply
+                      </Button>{" "}
                     </Typography>
                   </Box>
                 ))}
