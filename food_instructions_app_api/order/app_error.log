@@ -158,3 +158,12 @@
 {"level":"error","message":"Wed Feb 28 2024 20:50:57 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
 {"level":"error","message":"Wed Feb 28 2024 22:03:39 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
 {"level":"error","message":"Tue Mar 05 2024 10:23:38 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
+{"level":"error","message":"Wed Mar 06 2024 23:46:39 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Wed Mar 06 2024 23:56:34 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Wed Mar 06 2024 23:58:30 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 01:24:18 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 01:27:39 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 14:43:23 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 14:45:01 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 14:48:38 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}
+{"level":"error","message":"Sat Mar 09 2024 14:52:38 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{\"name\":\"API Error\",\"statusCode\":500,\"isOperational\":true},\"isOperational\":true}","private":true}

@@ -75,7 +75,27 @@ module.exports = (app) => {
         return;
       }
 
-      res.status(200).json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
+      res
+        .status(200)
+        .json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/order/id/:id", UserAuth, async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { data } = await service.GetOrderById(id);
+      console.log("sss", data);
+      if (data) {
+        res.status(200).json(data);
+        return;
+      }
+
+      res
+        .status(200)
+        .json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
     } catch (err) {
       next(err);
     }
@@ -85,11 +105,13 @@ module.exports = (app) => {
   app.put("/order/update/:orderId", UserAuth, async (req, res, next) => {
     try {
       const { orderId } = req.params;
-      const orderUpdates = req.body;
-      const { data } = await service.UpdateOrder(orderId, orderUpdates);
+      const { type } = req.body;
+      const { data } = await service.UpdateOrder(orderId, type);
 
       if (data) {
-        res.status(200).json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
+        res
+          .status(200)
+          .json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
         return;
       }
 
@@ -106,9 +128,14 @@ module.exports = (app) => {
       console.log("req.body = ", req.body);
       const { data } = await service.UpdatePaymentOrder(idOrder);
       if (data) {
-        return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
+        return res
+          .status(200)
+          .json({ msg: "Thanh toán thành công", statusCode: 200 });
       }
-      return res.status(200).json({ msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau", statusCode: 500 });
+      return res.status(200).json({
+        msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau",
+        statusCode: 500,
+      });
     } catch (err) {
       console.log("err api = ", err);
       next(err);
@@ -122,7 +149,10 @@ module.exports = (app) => {
       if (data) {
         return res.status(200).json(data);
       }
-      return res.status(200).json({ msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau", statusCode: 500 });
+      return res.status(200).json({
+        msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau",
+        statusCode: 500,
+      });
     } catch (err) {
       console.log("err api = ", err);
       next(err);

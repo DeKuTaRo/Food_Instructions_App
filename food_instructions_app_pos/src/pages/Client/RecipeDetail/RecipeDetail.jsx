@@ -81,9 +81,6 @@ function RecipeDetail() {
         totalNutrients: recipeDetail.recipe.totalNutrients,
         totalDaily: recipeDetail.recipe.totalDaily,
         calories: recipeDetail.recipe.calories,
-        name: "Cao Thành Tài",
-        phone: "0366812907",
-        address: "Cau Voi",
         token:token,
         link:label,
       };

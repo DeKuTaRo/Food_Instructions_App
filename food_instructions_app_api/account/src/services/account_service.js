@@ -40,7 +40,6 @@ class AccountService {
         }
       }
 
-      return FormateData({ msg: "Không tìm thấy tài khoản ", statusCode: 500 });
     } catch (err) {
       throw new APIError("Data Not found", err);
     }

@@ -14,6 +14,9 @@ import ARecipe from "./Admin/pages/Recipe/Recipe";
 import ARecipeDetail from "./Admin/pages/Recipe/RecipeDetail";
 import ATopic from "./Admin/pages/Topic/Topic";
 import ATopicForm from "./Admin/pages/Topic/TopicForm";
+import AOrder from "./Admin/pages/Order/Order";
+
+
 // Client
 import Home from "./Client/Home/Home";
 import SignUp from "./Client/SignUp/SignUp";
@@ -66,7 +69,7 @@ function Pages() {
         <Route path="/order" element={<Order />} />
         <Route path="/history" element={<History />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
-         <Route path="/topic2/:label" element={<Topic2Detail />} />
+        <Route path="/topic2/:label" element={<Topic2Detail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/momo" element={<Momo />} />
@@ -82,6 +85,7 @@ function Pages() {
         <Route path="/a-recipe/details/:label" element={<ARecipeDetail />} />
         <Route path="/a-topic" element={<ATopic />} />
         <Route path="/a-topic/topics/:id" element={<ATopicForm />} />
+        <Route path="/a-order" element={< AOrder/>} />
       </Routes>
     </AnimatePresence>
   );

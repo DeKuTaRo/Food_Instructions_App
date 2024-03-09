@@ -22,7 +22,7 @@ class OrderService {
       productName,
       productLink,
       productImage,
-      timeCreate
+      timeCreate,
     } = paymentInfo;
     try {
       const newOrder = await this.repository.CreateOrder({
@@ -39,7 +39,7 @@ class OrderService {
         productName,
         productLink,
         productImage,
-        timeCreate
+        timeCreate,
       });
       return FormateData({
         newOrder,
@@ -71,9 +71,18 @@ class OrderService {
     }
   }
 
-  async UpdateOrder(orderId, orderUpdates) {
+  async GetOrderById(id) {
     try {
-      const updatedOrder = await this.repository.UpdateOrder(orderId, orderUpdates);
+      const orders = await this.repository.GetOrderById(id);
+      return FormateData(orders);
+    } catch (err) {
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async UpdateOrder(orderId, type) {
+    try {
+      const updatedOrder = await this.repository.UpdateOrder(orderId, type);
       return FormateData(updatedOrder);
     } catch (err) {
       throw new APIError("Data Not found", err);

@@ -20,7 +20,11 @@ class OrderRepository {
       return FormateData(orders);
     } catch (err) {
       console.log("res", err);
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders");
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Orders"
+      );
     }
   }
 
@@ -29,26 +33,59 @@ class OrderRepository {
       const orders = await OrderSchema.find({ status });
       return FormateData(orders);
     } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders by Status");
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Orders by Status"
+      );
     }
   }
 
-  async UpdateOrderStatus(orderId, newStatus) {
+  async GetOrderById(id) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(orderId, { status: newStatus }, { new: true });
+      const orders = await OrderSchema.findOne({ _id: id });
+      return FormateData(orders);
+    } catch (err) {
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Orders by Status"
+      );
+    }
+  }
+
+  async UpdateOrder(orderId, type) {
+    try {
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(
+        orderId,
+        { status: type },
+        { new: true }
+      );
       return FormateData(updatedOrder);
     } catch (err) {
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Order Status");
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Update Order Status"
+      );
     }
   }
 
   async UpdatePaymentOrder(idOrder) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: "PaymentSuccess" }, { new: true });
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(
+        idOrder,
+        { status: "PaymentSuccess" },
+        { new: true }
+      );
       return updatedOrder;
     } catch (err) {
       console.log("err repo = ", err);
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Payment Order Success");
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Update Payment Order Success"
+      );
     }
   }
 
@@ -58,7 +95,11 @@ class OrderRepository {
       return detailOrder;
     } catch (err) {
       console.log("err repo = ", err);
-      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Detail Order");
+      throw new APIError(
+        "API Error",
+        STATUS_CODES.INTERNAL_ERROR,
+        "Unable to Get Detail Order"
+      );
     }
   }
 }

@@ -40,7 +40,9 @@ function OrderPage() {
   const [customerId, setCustomerId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [nameError, setNameError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
   const [detailAccount, setDetailAccount] = useState({});
   const token = localStorage.getItem("token");
   // Calculate total price
@@ -61,6 +63,7 @@ function OrderPage() {
         setCustomerId(response.data._id);
         setCustomerName(response.data.username);
         setEmail(response.data.email);
+
       } catch (err) {
         console.log(err);
       } finally {
@@ -70,6 +73,28 @@ function OrderPage() {
     getAccountDetail();
   }, [orderData.token]);
   const totalPrice = orderData ? orderData.calories * quantity : 0;
+
+
+    const handleNameChange = (event) => {
+    const value = event.target.value;
+    setCustomerName(value);
+    setNameError(value.trim() === ''); // Check if the name is empty
+  };
+
+  const handlePhoneChange = (event) => {
+    const value = event.target.value;
+    setPhoneNumber(value);
+    setPhoneError(value.trim() === ''); // Check if the phone is empty
+  };
+
+  const handleAddressChange = (event) => {
+    const value = event.target.value;
+    setAddress(value);
+    setAddressError(value.trim() === ''); // Check if the address is empty
+  };
+
+
+
 
   // Function to handle quantity changes
   const handleDecrease = () => {
@@ -86,6 +111,7 @@ function OrderPage() {
 
   // Thêm hàm xác nhận mua hàng
   const handleConfirmPurchase = () => {
+    console.log(accountName,phoneNumber,address)
     setConfirmDialogOpen(true);
   };
 
@@ -117,29 +143,16 @@ function OrderPage() {
         data.append("productImage", orderData.recipeImage);
         data.append("productLink", orderData.link);
         data.append("timeCreate", getCurrentDateTimeInVietnam);
+        data.append("address", address);
         const response = await axios.post(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/create`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
-        const paymentInfo = {
-          paymentMethod: paymentMethod,
-          customerId: customerId,
-          accountName: accountName,
-          customerName: customerName,
-          email: email,
-          phone: phoneNumber,
-          quantity,
-          totalAmount: totalPrice,
-          status: "NotPayment",
-          productName: orderData.recipeName,
-          productImage:orderData.recipeImage,
-          productLink: orderData.link, // Đây là link của trang thông tin sản phẩm
-          address: address || detailAccount.address,
-          idOrder: response.data.newOrder._id,
-        };
-        navigate("/momo", { state: { paymentInfo } });
+       
+        const idOrder=response.data.newOrder._id
+        navigate("/momo", { state: {idOrder} });
         if (response.data.statusCode === 200) {
           toast.success(response.data.msg, {
             position: "top-right",
@@ -206,30 +219,35 @@ function OrderPage() {
         </Typography>
 
         {/* User Information */}
-        <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
-          <Typography variant="h6">User Information</Typography>
-          <TextField
-            label="Name"
-            value={orderData.name}
-            InputProps={{
-              readOnly: true,
-              style: { background: "lightgray", pointerEvents: "none" },
-            }}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Phone"
-            value={orderData.phone || ""}
-            InputProps={{
-              readOnly: true,
-              style: { background: "lightgray", pointerEvents: "none" },
-            }}
-            fullWidth
-            margin="normal"
-          />
-          <TextField label="Address" value={detailAccount.address || ""} fullWidth margin="normal" />
-        </Paper>
+         <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
+        <Typography variant="h6">User Information</Typography>
+        <TextField
+          label="Name"
+          fullWidth
+          margin="normal"
+          defaultValue=""
+          onChange={handleNameChange}
+          error={nameError}
+          helperText={nameError && "Name cannot be empty"}
+        />
+        <TextField
+          label="Phone"
+          fullWidth
+          margin="normal"
+          onChange={handlePhoneChange}
+          error={phoneError}
+          helperText={phoneError && "Phone cannot be empty"}
+        />
+        <TextField
+          label="Address"
+          fullWidth
+          margin="normal"
+          onChange={handleAddressChange}
+          error={addressError}
+          helperText={addressError && "Address cannot be empty"}
+        />
+      </Paper>
+
 
         {/* Product Information */}
         <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
@@ -365,10 +383,19 @@ function OrderPage() {
               </Box>
 
               <Box mt={2}>
-                <Button variant="contained" color="primary" onClick={handleConfirmPurchase}>
-                  Confirm Purchase
-                </Button>
-              </Box>
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={handleConfirmPurchase}
+    disabled={
+   loading || // Disable if still loading
+    (paymentMethod !== "momo" && paymentMethod !== "bank") || // Disable if paymentMethod is not momo or bank
+    !customerName || !phoneNumber || !address // Disable if required data is empty
+  }
+  >
+    Confirm Purchase
+  </Button>
+</Box>
             </Grid>
           </Grid>
         </Paper>
