@@ -17,7 +17,7 @@ import {
   FormControl,
   RadioGroup,
   FormControlLabel,
-  Radio,
+  Radio,Card
 } from "@mui/material";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
@@ -90,8 +90,7 @@ function DeliveryHistoryPage() {
   const [loading, setLoading] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
-  const [orderIdToContinue, setOrderIdToContinue] = useState(null);
-  const[address,setAddress]=useState(null)
+  const [idOrder, setOrderIdToContinue] = useState(null);
 
   const getUserData = async () => {
     try {
@@ -215,18 +214,19 @@ function DeliveryHistoryPage() {
     setOpenCancelDialog(false);
     setCancelOrderId(null);
   };
-  const handleReorder = (orderId) => {
+  const handleReorder = (orderLink) => {
     // Add logic to handle reorder, for example, redirect to the ordering page
     navigate(
-      "/recipe/https%3A%2F%2Fapi.edamam.com%2Fapi%2Frecipes%2Fv2%2F8275bb28647abcedef0baaf2dcf34f8b%3Ftype%3Dpublic%26app_id%3D38a85a3c%26app_key%3Da76067e30a5ceab738d9b7cb91a404fe"
+      `/recipe/${orderLink}`
     );
     // You can redirect or perform other actions here
   };
 
-  const handleContinueOrder = (idOrder) => {
-   
-    // Pass the selectedOrder to the Momo payment page
-  navigate("/momo", { state: {idOrder} });  };
+const handleContinueOrder = (idOrder) => {
+  setOrderIdToContinue(idOrder);
+  setOpenPaymentModal(true);
+};
+
 
   const handlePaymentMethodChange = (event) => {
     setSelectedPaymentMethod(event.target.value);
@@ -237,7 +237,7 @@ function DeliveryHistoryPage() {
     // For example, redirect to the selected payment method page
     const redirectPath =
       selectedPaymentMethod === "momo" ? "/momo" : "/banking";
-    navigate(redirectPath, { state: { orderData } });
+    navigate(redirectPath, { state: { idOrder } });
     setOpenPaymentModal(false);
     setOrderIdToContinue(null);
   };
@@ -250,349 +250,417 @@ function DeliveryHistoryPage() {
 
   const filteredOrders = (status) =>
     orderData.filter((order) => order.status === status);
-  const NotPaymentTabContent = () => (
-    <div>
-      <Typography variant="h5">Đơn hàng chưa thanh toán</Typography>
-      {filteredOrders("NotPayment").map((order, index) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt={order.productName}
-                height="240"
-                image={order.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Paper
-                elevation={3}
-                style={{ padding: "1rem", margin: "1rem 0" }}
+ 
+
+const NotPaymentTabContent = () => (
+  <div>
+    <Typography variant="h4" component="strong" style={{ marginBottom: "3rem" }}>
+      Unpaid Orders
+    </Typography>
+    {filteredOrders("NotPayment").map((order, index) => (
+        <Card key={order.id} elevation={3} style={{ marginBottom: "2rem" }}>
+        <Grid container spacing={2}>
+
+          <Grid item xs={4}>
+      <Link to={`/order-detail/${order._id}`}>  
+            
+            <CardMedia
+              component="img"
+              alt={order.customerName}
+              height="100%"
+              image={order.productImage}
+              style={{ borderRadius: "8px", width: "100%" }}
+            />
+            </Link>
+          </Grid>
+          <Grid item xs={8} style={{ padding: "1rem",display:"flex",alignItems:"center", justifyContent:"center" }}>
+            <div>
+              <Typography variant="h5" component="strong">
+                 #{index + 1} {order.productName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order ID: {order._id}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Name: {order.customerName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Phone: {order.phoneNumber}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Quantity: {order.quantity}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order Date: {order.timeCreate}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Status: {order.status}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
+                Address: {order.address}
+              </Typography>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleCancelOrder(order._id, "Cancelled")}
+                style={{ marginRight: "8px", marginTop: "8px" }}
               >
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <CardMedia
-                      component="img"
-                      alt={order.productName}
-                      height="240"
-                      image={order.productImage}
-                      style={{ borderRadius: "8px", width: "100%" }}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <div style={{ padding: "0 1rem" }}>
-                      <Typography variant="h6">Order #{index + 1}</Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Tên: {order.productName}
-                      </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Số lượng: {order.quantity}
-                      </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Ngày đặt: {order.timeCreate}
-                      </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Địa chỉ: {order.address}
-                      </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Trạng thái: Đơn hàng đang được chuẩn bị
-                      </Typography>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Tổng tiền: $
-                        {order.totalAmount
-                          ? order.totalAmount.toFixed(2)
-                          : "N/A"}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() =>
-                          handleCancelOrder(order._id, "Cancelled")
-                        }
-                        style={{ marginRight: "8px" }}
-                      >
-                        Cancel Order
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => handleContinueOrder(order._id)}
-                      >
-                        Complete Order
-                      </Button>
-                    </div>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
+                Cancel Order
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleContinueOrder(order._id)}
+                style={{ marginTop: "8px" }}
+              >
+                Complete Order
+              </Button>
+            </div>
           </Grid>
-        </Paper>
-      ))}
-      <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
-        <DialogTitle>Confirm Order Cancellation</DialogTitle>
-        <DialogContent>
-          Are you sure you want to cancel this order?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseCancelDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleContinueToCompleteOrder} color="secondary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+        </Grid>
+      </Card>
+      
 
-  const PaymentSuccessTabContent = () => (
-    <div>
-      <Typography variant="h5">Not Payment Orders</Typography>
-      {filteredOrders("PaymentSuccess").map((order, index) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt={order.productName}
-                height="240"
-                image={order.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{index + 1}</Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Tên: {order.productName}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Số lượng: {order.quantity}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Ngày đặt: {order.timeCreate}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Trạng thái: Đơn hàng đang được chuẩn bị
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Tổng tiền: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleCancelOrder(order._id, "Cancelled")}
-                  style={{ marginRight: "8px" }}
-                >
-                  Cancel Order
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleContinueOrder(order._id)}
-                >
-                  Complete Order
-                </Button>
-              </div>
-            </Grid>
-          </Grid>
-        </Paper>
-      ))}
-      <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
-        <DialogTitle>Confirm Order Cancellation</DialogTitle>
-        <DialogContent>
-          Are you sure you want to cancel this order?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseCancelDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleContinueToCompleteOrder} color="secondary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+   
+    ))}
+    <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+      <DialogTitle>Confirm Order Cancellation</DialogTitle>
+      <DialogContent>
+        Are you sure you want to cancel this order?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseCancelDialog} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleContinueToCompleteOrder} color="secondary">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+);
 
-  const DeliveredTabContent = () => (
-    <div>
-      <Typography variant="h5">Delivered Orders</Typography>
-      {filteredOrders("Delivered").map((order, index) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt={order.productName}
-                height="240"
-                image={order.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{index + 1}</Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Tên: {order.productName}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Số lượng: {order.quantity}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Ngày đặt: {order.timeCreate}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Ngày giờ nhận hàng: {order.deliveryTime}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorder(order.id)}
-                >
-                  Order Again
-                </Button>
-              </div>
-            </Grid>
-          </Grid>
-        </Paper>
-      ))}
-    </div>
-  );
 
-  const CompletedTabContent = () => (
-    <div>
-      <Typography variant="h5">Orders Placed</Typography>
-      {filteredOrders("Completed").map((order, index) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt={order.productName}
-                height="240"
-                image={order.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{index + 1}</Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Số lượng: {order.quantity}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Date: {order.createdAt}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorder(order.id)}
-                >
-                  Order Again
-                </Button>
-              </div>
-            </Grid>
+
+
+const PaymentSuccessTabContent = () => (
+  <div>
+    <Typography variant="h4" component="strong" style={{ marginBottom: "3rem" }}>
+      Successful Payments
+    </Typography>
+    {filteredOrders("PaymentSuccess").map((order, index) => (
+                            <Card key={order.id} elevation={3} style={{ marginBottom: "2rem" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+                          <Link to={`/order-detail/${order._id}`}> 
+
+            <CardMedia
+              component="img"
+              alt={order.productName}
+              height="100%"
+              image={order.productImage}
+              style={{ borderRadius: "8px", width: "100%" }}
+            />
+            </Link>
           </Grid>
-        </Paper>
-      ))}
-      <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
-        <DialogTitle>Confirm Order Cancellation</DialogTitle>
-        <DialogContent>
-          Are you sure you want to cancel this order?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseCancelDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmCancelOrder} color="secondary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+          <Grid item xs={8} style={{ padding: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div>
+              <Typography variant="h5" component="strong">
+                Order #{index + 1}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order ID: {order._id}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Name: {order.customerName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Phone: {order.productName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Quantity: {order.quantity}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order Date: {order.timeCreate}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Status: {order.status}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
+                Address: {order.address}
+              </Typography>
+            </div>
+          </Grid>
+        </Grid>
+      </Card> 
+
+   
+    ))}
+    <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+      <DialogTitle>Confirm Order Cancellation</DialogTitle>
+      <DialogContent>
+        Are you sure you want to cancel this order?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseCancelDialog} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleContinueToCompleteOrder} color="secondary">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+);
+
+
+
+const DeliveredTabContent = () => (
+ <div>
+
+    <Typography variant="h4" component="strong" style={{ marginBottom: "3rem" }}>
+      Delivered Orders
+    </Typography>
+    {filteredOrders("Delivered").map((order, index) => (
+                        <Card key={order.id} elevation={3} style={{ marginBottom: "2rem" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+                    <Link to={`/order-detail/${order._id}`}>
+
+            <CardMedia
+              component="img"
+              alt={order.customerName}
+              height="100%"
+              image={order.productImage}
+              style={{ borderRadius: "8px", width: "100%" }}
+            />
+            </Link>
+          </Grid>
+          <Grid item xs={8} style={{ padding: "1rem",display:"flex",alignItems:"center", justifyContent:"center" }}>
+            <div>
+              <Typography variant="h5" component="strong">
+                 #{index + 1} {order.productName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order ID: {order._id}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Name: {order.customerName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Phone: {order.phoneNumber}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Quantity: {order.quantity}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order Date: {order.timeCreate}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Status: {order.status}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
+                Address: {order.address}
+              </Typography>
+
+            </div>
+          </Grid>
+        </Grid>
+      </Card>
+       
+
+    
+    ))}
+    <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+      <DialogTitle>Confirm Order Cancellation</DialogTitle>
+      <DialogContent>
+        Are you sure you want to cancel this order?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseCancelDialog} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleContinueToCompleteOrder} color="secondary">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+);
+
+const CompletedTabContent = () => (
+  <div>
+    <Typography variant="h4" component="strong" style={{ marginBottom: "3rem" }}>
+      Completed Orders
+    </Typography>
+    {filteredOrders("Completed").map((order, index) => (
+                      <Card key={order.id} elevation={3} style={{ marginBottom: "2rem" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+                  <Link to={`/order-detail/${order._id}`}>  
+
+            <CardMedia
+              component="img"
+              alt={order.customerName}
+              height="100%"
+              image={order.productImage}
+              style={{ borderRadius: "8px", width: "100%" }}
+            />
+            </Link>
+          </Grid>
+          <Grid item xs={8} style={{ padding: "1rem",display:"flex",alignItems:"center", justifyContent:"center" }}>
+
+            <div>
+              <Typography variant="h5" component="strong">
+                 #{index + 1} {order.productName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order ID: {order._id}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Name: {order.customerName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Phone: {order.phoneNumber}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Quantity: {order.quantity}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order Date: {order.timeCreate}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Status: {order.status}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
+                Address: {order.address}
+              </Typography>
+                          <Button
+                variant="contained"
+                color="success"
+                onClick={() => handleReorder(encodeURIComponent(order.productLink))}
+                style={{ marginTop: "8px" }}
+              >
+                Order Again
+              </Button>
+
+            </div>
+          </Grid>
+        </Grid>
+      </Card>
+
+    ))}
+    <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+      <DialogTitle>Confirm Order Cancellation</DialogTitle>
+      <DialogContent>
+        Are you sure you want to cancel this order?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseCancelDialog} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleContinueToCompleteOrder} color="secondary">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+);
+
+
 
   const CancelledTabContent = () => (
-    <div>
-      <Typography variant="h5">Cancelled Orders</Typography>
-      {filteredOrders("Cancelled").map((order, index) => (
-        <Paper
-          key={order.id}
-          elevation={3}
-          style={{ padding: "1rem", margin: "1rem 0" }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <CardMedia
-                component="img"
-                alt={order.productName}
-                height="240"
-                image={order.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <div style={{ padding: "0 1rem" }}>
-                <Typography variant="h6">Order #{index + 1}</Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Số lượng: {order.quantity}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Date: {order.date}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Total: $
-                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleReorder(order.id)}
-                >
-                  Order Again
-                </Button>
-              </div>
-            </Grid>
+ <div>
+    <Typography variant="h4" component="strong" style={{ marginBottom: "3rem" }}>
+      Cancelled Orders
+    </Typography>
+    {filteredOrders("Cancelled").map((order, index) => (
+    <Card key={order.id} elevation={3} style={{ marginBottom: "2rem" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+                        <Link to={`/order-detail/${order._id}`}>  
+            
+            <CardMedia
+              component="img"
+              alt={order.customerName}
+              height="100%"
+              image={order.productImage}
+              style={{ borderRadius: "8px", width: "100%" }}
+            />
+            </Link>
           </Grid>
-        </Paper>
-      ))}
-    </div>
+          <Grid item xs={8} style={{ padding: "1rem",display:"flex",alignItems:"center", justifyContent:"center" }}>
+            <div>
+              <Typography variant="h5" component="strong">
+                 #{index + 1} {order.productName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order ID: {order._id}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Name: {order.customerName}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Phone: {order.phoneNumber}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Quantity: {order.quantity}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Order Date: {order.timeCreate}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Status: {order.status}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary">
+                Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+              </Typography>
+              <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
+                Address: {order.address}
+              </Typography>
+                          <Button
+                variant="contained"
+                color="success"
+                onClick={() => handleReorder(order.link)}
+                style={{ marginTop: "8px" }}
+              >
+                Order Again
+              </Button>
+
+            </div>
+          </Grid>
+        </Grid>
+      </Card>
+
+  
+    ))}
+    <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+      <DialogTitle>Confirm Order Cancellation</DialogTitle>
+      <DialogContent>
+        Are you sure you want to cancel this order?
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseCancelDialog} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleContinueToCompleteOrder} color="secondary">
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </div>
   );
 
   const tabsContent = [

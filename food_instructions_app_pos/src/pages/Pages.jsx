@@ -37,6 +37,8 @@ import ResetPassword from "./Client/ResetPassword/ResetPassword";
 //Order
 import Order from "../pages/Client/Order/Order";
 import History from "../pages/Client/Order/History";
+import OrderDetail from "../pages/Client/Order/OrderDetail";
+
 //payment
 import Momo from "../pages/Client/Payment/Momo";
 import Banking from "../pages/Client/Payment/Banking";
@@ -67,6 +69,8 @@ function Pages() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order" element={<Order />} />
+         <Route path="/order-detail/:orderId" element={<OrderDetail />} />
+
         <Route path="/history" element={<History />} />
         <Route path="/topic/:label" element={<TopicDetail />} />
         <Route path="/topic2/:label" element={<Topic2Detail />} />

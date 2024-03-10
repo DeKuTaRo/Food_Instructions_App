@@ -128,6 +128,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                     <TableCell>Order ID</TableCell>
                     <TableCell>Customer Name</TableCell>
                     <TableCell>Phone Number</TableCell>
+                                        <TableCell>Address</TableCell>
+
                     <TableCell>Product Name</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Total Amount</TableCell>
@@ -142,6 +144,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                       <TableCell>{order._id}</TableCell>
                       <TableCell>{order.customerName}</TableCell>
                       <TableCell>{order.phoneNumber}</TableCell>
+                                            <TableCell>{order.address}</TableCell>
+
                       <TableCell>{order.productName}</TableCell>
                       <TableCell>{order.quantity}</TableCell>
                       <TableCell>{order.totalAmount.toFixed(2)}</TableCell>
