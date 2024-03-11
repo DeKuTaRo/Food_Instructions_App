@@ -216,7 +216,7 @@ useEffect(() => {
               />
               <TextField
                 label="Amount"
-                value={`$${totalAmount.toFixed(2)}`}
+                value={`$${orderData.totalAmount.toFixed(2)}`}
                 InputProps={{
                   readOnly: true,
                   style: { marginBottom: "8px", fontSize: "1rem" },
