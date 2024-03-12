@@ -8,40 +8,67 @@ module.exports = (app) => {
   // Tạo đơn hàng
   app.post("/order/create", UserAuth, async (req, res, next) => {
     try {
+      const { _id, username } = req.user;
+
       const {
-        paymentMethod,
-        customerId,
-        accountName,
-        email,
         customerName,
         phoneNumber,
         address,
-        quantity,
-        totalAmount,
         status,
+        quantity,
         productName,
-        productLink,
         productImage,
+        productLink,
+        instructions,
+        totalAmount,
         timeCreate,
       } = req.body;
 
       const { data } = await service.CreateOrder({
-        paymentMethod,
-        customerId,
-        accountName,
-        email,
+        _id,
+        username,
         customerName,
         phoneNumber,
         address,
-        quantity,
-        totalAmount,
         status,
+        quantity,
         productName,
-        productLink,
         productImage,
+        productLink,
+        instructions,
+        totalAmount,
         timeCreate,
       });
-      return res.json(data);
+      if (data) {
+        return res.status(200).json({ msg: "Tạo hóa đơn thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Tạo hóa đơn thất bại", statusCode: 500 });
+    } catch (err) {
+      console.log(`err api`, err);
+      next(err);
+    }
+  });
+
+  app.post("/order/creates", UserAuth, async (req, res, next) => {
+    try {
+      const { _id, username } = req.user;
+      const { customerName, phoneNumber, address, status, orders, totalAmount, timeCreate } = req.body;
+
+      const { data } = await service.CreateOrders({
+        _id,
+        username,
+        customerName,
+        phoneNumber,
+        address,
+        status,
+        orders: JSON.parse(orders),
+        totalAmount,
+        timeCreate,
+      });
+      if (data) {
+        return res.status(200).json({ msg: "Tạo hóa đơn thành công", statusCode: 200 });
+      }
+      return res.status(200).json({ msg: "Tạo hóa đơn thất bại", statusCode: 500 });
     } catch (err) {
       console.log(`err api`, err);
       next(err);
@@ -75,9 +102,7 @@ module.exports = (app) => {
         return;
       }
 
-      res
-        .status(200)
-        .json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
+      res.status(200).json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
     } catch (err) {
       next(err);
     }
@@ -93,9 +118,7 @@ module.exports = (app) => {
         return;
       }
 
-      res
-        .status(200)
-        .json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
+      res.status(200).json({ msg: "Có lỗi xảy ra khi lấy đơn hàng theo trạng thái" });
     } catch (err) {
       next(err);
     }
@@ -109,9 +132,7 @@ module.exports = (app) => {
       const { data } = await service.UpdateOrder(orderId, type);
 
       if (data) {
-        res
-          .status(200)
-          .json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
+        res.status(200).json({ statusCode: 200, msg: "Đơn hàng được cập nhật thành công" });
         return;
       }
 
@@ -128,9 +149,7 @@ module.exports = (app) => {
       console.log("req.body = ", req.body);
       const { data } = await service.UpdatePaymentOrder(idOrder);
       if (data) {
-        return res
-          .status(200)
-          .json({ msg: "Thanh toán thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
       }
       return res.status(200).json({
         msg: "Lỗi thanh toán đơn hàng, vui lòng thử lại sau",

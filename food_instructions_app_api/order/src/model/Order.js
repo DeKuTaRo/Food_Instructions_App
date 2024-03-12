@@ -4,12 +4,8 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema(
   {
-    paymentMethod: {
+    accountId: {
       type: String,
-    },
-    customerId: {
-      type: Schema.Types.ObjectId,
-      ref: "Customer", // Thay "Customer" bằng tên mô hình khách hàng nếu có
     },
     accountName: {
       type: String,
@@ -38,16 +34,17 @@ const OrderSchema = new Schema(
       enum: ["NotPayment", "PaymentSuccess", "Delivered", "Completed", "Cancelled"],
       default: "NotPayment",
     },
-    // Thêm các trường mới cho đơn hàng
-    productName: {
-      type: String,
-    },
-    productImage: {
-      type: String,
-    },
-    productLink: {
-      type: String,
-    },
+    orders: [
+      {
+        productName: { type: String },
+        productImage: { type: String },
+        productLink: { type: String },
+        quantity: { type: Number },
+        instructions: {
+          type: Object,
+        },
+      },
+    ],
     timeCreate: {
       type: String,
     },

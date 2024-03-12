@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-} from "@mui/material";
+import { Card, CardContent, Typography, Button, Grid, Paper, TextField } from "@mui/material";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
@@ -18,44 +10,32 @@ import { toast } from "react-toastify";
 
 import momoQRCodeImage from "../../../images/QRmomo.png";
 
-function MomoPaymentPage (){
+function MomoPaymentPage() {
   const location = useLocation();
   const orderId = location.state || {};
   const momoQRCodeImageSrc = momoQRCodeImage;
   const token = localStorage.getItem("token");
   const [orderData, setOrderData] = useState([]);
-  const totalAmount=212;
   const navigate = useNavigate();
-  console.log("order",orderId.idOrder)
-  
- 
-useEffect(() => {
-  const getUserData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8004/order/id/${orderId.idOrder}`,
-        {
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8004/order/id/${orderId.idOrder}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      console.log("API Response:", res);
-      setOrderData(res.data.data); // Assuming your order data is in the 'data' property of the response
-    } catch (err) {
-      console.log(err);
-    }
-  };
+        });
+        console.log("API Response:", res);
+        setOrderData(res.data.data); // Assuming your order data is in the 'data' property of the response
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  // Call the function here
-  getUserData();
-}, []);
-
-
-
-
-
-
+    // Call the function here
+    getUserData();
+  }, []);
 
   const handlePaymentOrder = async () => {
     try {
@@ -116,41 +96,29 @@ useEffect(() => {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%" }}
-    >
+      style={{ margin: "0% 10%" }}>
       <Headers />
       <NavBar />
 
       {/* Title */}
-      <Typography
-        variant="h3"
-        style={{ marginTop: "20px", textAlign: "center" }}
-      >
+      <Typography variant="h3" style={{ marginTop: "20px", textAlign: "center" }}>
         Payment to Continue Ordering
       </Typography>
 
-      <Grid
-        container
-        spacing={3}
-        style={{ marginTop: "20px", textAlign: "center", height: "100%" }}
-      >
+      <Grid container spacing={3} style={{ marginTop: "20px", textAlign: "center", height: "100%" }}>
         <Grid item xs={12}>
           <Paper elevation={3}>
             <CardContent>
-              <Typography variant="h6">
-                Additional Transfer Information
-              </Typography>
+              <Typography variant="h6">Additional Transfer Information</Typography>
 
               <Typography variant="h6" style={{}}>
-                You can choose one of the following methods for the bank
-                transfer
+                You can choose one of the following methods for the bank transfer
               </Typography>
               <Typography variant="h6" style={{}}>
                 You must enter the content below correctly
               </Typography>
               <Typography variant="h6" style={{}}>
-                Once you have paid, please follow the order, we will always
-                update as quickly as possible
+                Once you have paid, please follow the order, we will always update as quickly as possible
               </Typography>
             </CardContent>
           </Paper>
@@ -164,17 +132,10 @@ useEffect(() => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Typography variant="h5">QR Code</Typography>
-              <img
-                src={momoQRCodeImageSrc}
-                alt="Momo QR Code"
-                style={{ margin: "20px auto", width: "80%" }}
-              />
-              <Typography variant="subtitle1">
-                Scan to make the payment
-              </Typography>
+              <img src={momoQRCodeImageSrc} alt="Momo QR Code" style={{ margin: "20px auto", width: "80%" }} />
+              <Typography variant="subtitle1">Scan to make the payment</Typography>
             </CardContent>
           </Paper>
         </Grid>
@@ -187,8 +148,7 @@ useEffect(() => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Typography variant="h5" marginBottom={3}>
                 Bank Transfer Information
               </Typography>
@@ -216,7 +176,7 @@ useEffect(() => {
               />
               <TextField
                 label="Amount"
-                value={`$${orderData.totalAmount.toFixed(2)}`}
+                value={`$${orderData.totalAmount && orderData.totalAmount.toFixed(2)}`}
                 InputProps={{
                   readOnly: true,
                   style: { marginBottom: "8px", fontSize: "1rem" },
@@ -242,12 +202,7 @@ useEffect(() => {
       </Grid>
 
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={handlePaymentOrder}
-        >
+        <Button variant="contained" color="primary" size="large" onClick={handlePaymentOrder}>
           Purchase history
         </Button>
       </div>
@@ -255,6 +210,6 @@ useEffect(() => {
       <Footer />
     </motion.div>
   );
-};
+}
 
 export default MomoPaymentPage;

@@ -186,9 +186,9 @@ class AccountService {
     }
   }
 
-  async AddToCart(accountId, nameRecipe, imageRecipe, linkRecipe) {
+  async AddToCart(accountId, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines) {
     try {
-      const cartLists = await this.repository.AddCartItem(accountId, nameRecipe, imageRecipe, linkRecipe);
+      const cartLists = await this.repository.AddCartItem(accountId, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines);
       return FormateData(cartLists);
     } catch (err) {
       throw new APIError("Data Not found", err);
@@ -284,6 +284,7 @@ class AccountService {
       throw new APIError("Data Not found", err);
     }
   }
+
 }
 
 module.exports = AccountService;

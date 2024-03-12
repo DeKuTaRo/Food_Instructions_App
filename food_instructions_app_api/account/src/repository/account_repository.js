@@ -173,26 +173,39 @@ class AccountRepository {
     }
   }
 
-  async AddCartItem(accountId, nameRecipe, imageRecipe, linkRecipe) {
+  async AddCartItem(
+    accountId,
+    username,
+    nameRecipe,
+    imageRecipe,
+    linkRecipe,
+    check,
+    totalAmount,
+    quantity,
+    ingredientLines
+  ) {
     const recipe = {
+      accountName: username,
       nameRecipe,
       imageRecipe,
       linkRecipe,
-      unit: 1,
+      quantity: quantity,
+      check: check,
+      totalAmount: totalAmount,
+      ingredientLines: ingredientLines,
     };
     try {
       const account = await AccountModel.findById(accountId);
-
       const checkNameExist = account.cart.findIndex((item) => item.nameRecipe === nameRecipe);
-
       if (checkNameExist !== -1) {
-        account.cart[checkNameExist].unit += 1;
+        account.cart[checkNameExist].quantity += 1;
       } else {
         account.cart.push(recipe);
       }
       await account.save();
       return account.cart;
     } catch (err) {
+      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Add to Cart");
     }
   }

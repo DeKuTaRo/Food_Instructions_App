@@ -78,11 +78,9 @@ function RecipeDetail() {
         recipeImage,
         ingredientLines: recipeDetail.recipe.ingredientLines,
         numberOfPeople,
-        totalNutrients: recipeDetail.recipe.totalNutrients,
-        totalDaily: recipeDetail.recipe.totalDaily,
         calories: recipeDetail.recipe.calories,
-        token:token,
-        link:label,
+        token: token,
+        link: label,
       };
       // Navigate to the order page with the orderData as state
       navigate("/order", { state: { orderData } });
@@ -203,6 +201,10 @@ function RecipeDetail() {
           nameRecipe: recipeName,
           imageRecipe: recipeImage,
           linkRecipe: label,
+          check: false,
+          totalAmount: recipeDetail.recipe.calories,
+          quantity: 1,
+          ingredientLines: recipeDetail.recipe.ingredientLines,
         },
         {
           headers: {

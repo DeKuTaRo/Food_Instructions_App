@@ -1,141 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
-import { Link } from "react-router-dom";
 import {
   Grid,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  CardActions,
   Typography,
   Box,
   Button,
   TextField,
   Tooltip,
-  styled,
   IconButton,
   Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaPlus, FaMinus } from "react-icons/fa";
 import { MdClearAll } from "react-icons/md";
-import { FaTrash } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
-import { FaMinus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-const fadeIn = {
-  "0%": { opacity: 0 },
-  "100%": { opacity: 1 },
-};
-
-const fadeInAnimation = styled("div")({
-  animation: `${fadeIn} 0.5s ease-in-out`,
-});
-
-const StyledCardMedia = styled(CardMedia)({
-  height: "100px",
-  width: "100px",
-  objectFit: "cover",
-  "@media (max-width: 600px)": {
-    height: "80px",
-    width: "80px",
-  },
-});
-
-function SearchedCard({ recipe, handleRemoveFromCart }) {
-  const [count, setCount] = useState(recipe.unit);
-  const [openDialog, setOpenDialog] = useState(false);
-  const handleIncreaseCount = () => {
-    setCount(count + 1);
-  };
-
-  const handleDecreaseCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    } else {
-      setOpenDialog(true);
-    }
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      initial={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      style={{ boxShadow: "5px 5px lightgray" }}>
-      <Card>
-        <CardActionArea
-          component={fadeInAnimation}
-          style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-          <Link to={`/recipe/${encodeURIComponent(recipe.linkRecipe)}`}>
-            <StyledCardMedia component="img" alt={recipe.nameRecipe} height="140" image={recipe.imageRecipe} />
-            <CardContent>
-              <Typography variant="h6">{recipe.nameRecipe}</Typography>
-            </CardContent>
-          </Link>
-        </CardActionArea>
-        <CardActions disableSpacing>
-          <Tooltip title="Remove from cart" arrow disableInteractive>
-            <IconButton aria-label="Remove from cart" onClick={() => handleRemoveFromCart(recipe._id)}>
-              <FaTrash />
-            </IconButton>
-          </Tooltip>
-          <IconButton aria-label="increase count" onClick={() => handleDecreaseCount()}>
-            <FaMinus />
-          </IconButton>
-          <TextField value={count} sx={{ width: "100px" }} />
-          <IconButton aria-label="decrease count" onClick={() => handleIncreaseCount()}>
-            <FaPlus />
-          </IconButton>
-        </CardActions>
-      </Card>
-      <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth={true} maxWidth="sm">
-        <DialogTitle sx={{ fontSize: "1.5rem" }}>Bạn có chắc muốn bỏ món ăn này khỏi giỏ hàng ?</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ fontSize: "1.5rem", margin: "1rem 0" }}>{recipe.nameRecipe}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Grid container>
-            <Grid item xs={6}>
-              <Button
-                onClick={handleCloseDialog}
-                color="error"
-                variant="contained"
-                sx={{ width: "100%", textAlign: "center" }}>
-                Có
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                onClick={handleCloseDialog}
-                color="primary"
-                variant="outlined"
-                sx={{ width: "100%", textAlign: "center" }}>
-                Không
-              </Button>
-            </Grid>
-          </Grid>
-        </DialogActions>
-      </Dialog>
-    </motion.div>
-  );
-}
+import DeleteIcon from "@mui/icons-material/Delete";
+import { toast } from "react-toastify";
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -206,15 +98,53 @@ function Cart() {
       console.log(err);
     }
   };
+  const navigate = useNavigate();
 
-  const handleAddToOrders = () => {
+  const handleAddToOrders = async () => {
     console.log("adđ to carts");
+    try {
+      const orders = searchResults.filter((obj) => obj.check === true);
+      if (orders.length === 0) {
+        toast.error("Vui lòng chọn món ăn", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      const orderDataFromCart = {
+        orders,
+        token: token,
+      };
+      // Navigate to the order page with the orderData as state
+      navigate("/order", { state: { orderDataFromCart } });
+    } catch (err) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lai sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   };
 
-  const [isChecked, setChecked] = useState(false);
+  const handleCheckAll = (event) => {
+    const isChecked = event.target.checked;
+    const updatedData = searchResults.map((item) => ({ ...item, check: isChecked }));
+    setSearchResults(updatedData);
+  };
 
-  const handleCheckboxChange = (event) => {
-    setChecked(event.target.checked);
+  const handleSingleCheck = (id) => {
+    const updatedData = searchResults.map((item) => (item._id === id ? { ...item, check: !item.check } : item));
+    setSearchResults(updatedData);
   };
 
   return (
@@ -270,7 +200,12 @@ function Cart() {
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
+                      <Checkbox
+                        checked={searchResults.every((item) => item.check)}
+                        onChange={handleCheckAll}
+                        name="checkAll"
+                        label="Check All"
+                      />
                     </TableCell>
                     <TableCell>Image</TableCell>
                     <TableCell>Product</TableCell>
@@ -282,7 +217,7 @@ function Cart() {
                   {searchResults.map((item, index) => (
                     <TableRow key={item._id}>
                       <TableCell>
-                        <Checkbox />
+                        <Checkbox checked={item.check} onChange={() => handleSingleCheck(item._id)} />
                       </TableCell>
                       <TableCell>
                         <img
@@ -298,14 +233,17 @@ function Cart() {
                         <IconButton aria-label="increase count">
                           <FaMinus />
                         </IconButton>
-                        <TextField value={item.unit} sx={{ width: "100px" }} />
+                        <TextField value={item.quantity} sx={{ width: "100px" }} />
                         <IconButton aria-label="decrease count">
                           <FaPlus />
                         </IconButton>
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Remove from cart" arrow disableInteractive>
-                          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={() => handleRemoveFromCart(item._id)}>
+                          <Button
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleRemoveFromCart(item._id)}>
                             Delete
                           </Button>
                         </Tooltip>
@@ -321,10 +259,12 @@ function Cart() {
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box>
-          <Typography><Checkbox /> Chọn tất cả (100)</Typography>
+          <Typography>
+            <Checkbox /> Chọn tất cả (100)
+          </Typography>
           <Typography>Tổng sản phẩm ( 10 )</Typography>
         </Box>
-        <Button variant="outlined" onClick={handleAddToOrders()}>
+        <Button variant="outlined" onClick={handleAddToOrders}>
           Mua hàng
         </Button>
       </Box>

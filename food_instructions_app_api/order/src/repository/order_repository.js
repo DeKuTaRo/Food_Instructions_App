@@ -5,11 +5,76 @@ const { APIError, STATUS_CODES } = require("../utils/app-errors");
 class OrderRepository {
   async CreateOrder(orderDetails) {
     try {
-      const newOrder = new OrderSchema(orderDetails);
-      const savedOrder = await newOrder.save();
-      return savedOrder;
+      const {
+        _id,
+        username,
+        customerName,
+        phoneNumber,
+        address,
+        status,
+        quantity,
+        productName,
+        productImage,
+        productLink,
+        instructions,
+        totalAmount,
+        timeCreate,
+      } = orderDetails;
+
+      const orders = [];
+      orders.push({
+        productName,
+        productImage,
+        productLink,
+        quantity,
+        instructions,
+      });
+
+      const newOrder = new OrderSchema({
+        accountId: _id,
+        accountName: username,
+        customerName,
+        phoneNumber,
+        address,
+        status,
+        orders,
+        totalAmount,
+        timeCreate,
+      });
+      return await newOrder.save();
     } catch (err) {
-      console.log(`err respon `, err);
+      console.log(`err repo `, err);
+      throw new Error("Unable to create order");
+    }
+  }
+
+  async CreateOrders(orderDetails) {
+    try {
+      const { _id, username, customerName, phoneNumber, address, status, orders, totalAmount, timeCreate } =
+        orderDetails;
+
+      const newOrders = orders.map((item) => ({
+        productName: item.nameRecipe,
+        productImage: item.imageRecipe,
+        productLink: item.linkRecipe,
+        quantity: item.quantity,
+        instructions: item.ingredientLines,
+      }));
+
+      const newOrder = new OrderSchema({
+        accountId: _id,
+        accountName: username,
+        customerName,
+        phoneNumber,
+        address,
+        status,
+        orders: newOrders,
+        totalAmount,
+        timeCreate,
+      });
+      return await newOrder.save();
+    } catch (err) {
+      console.log(`err repo `, err);
       throw new Error("Unable to create order");
     }
   }
@@ -20,11 +85,7 @@ class OrderRepository {
       return FormateData(orders);
     } catch (err) {
       console.log("res", err);
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Orders"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders");
     }
   }
 
@@ -33,11 +94,7 @@ class OrderRepository {
       const orders = await OrderSchema.find({ status });
       return FormateData(orders);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Orders by Status"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders by Status");
     }
   }
 
@@ -46,46 +103,26 @@ class OrderRepository {
       const orders = await OrderSchema.findOne({ _id: id });
       return FormateData(orders);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Orders by Status"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders by Status");
     }
   }
 
   async UpdateOrder(orderId, type) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(
-        orderId,
-        { status: type },
-        { new: true }
-      );
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(orderId, { status: type }, { new: true });
       return FormateData(updatedOrder);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Update Order Status"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Order Status");
     }
   }
 
   async UpdatePaymentOrder(idOrder) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(
-        idOrder,
-        { status: "PaymentSuccess" },
-        { new: true }
-      );
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: "PaymentSuccess" }, { new: true });
       return updatedOrder;
     } catch (err) {
       console.log("err repo = ", err);
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Update Payment Order Success"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Payment Order Success");
     }
   }
 
@@ -95,11 +132,7 @@ class OrderRepository {
       return detailOrder;
     } catch (err) {
       console.log("err repo = ", err);
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Get Detail Order"
-      );
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Detail Order");
     }
   }
 }

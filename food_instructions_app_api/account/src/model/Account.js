@@ -47,10 +47,14 @@ const AccountSchema = new Schema(
     ],
     cart: [
       {
+        accountName: { type: String },
         nameRecipe: { type: String },
         imageRecipe: { type: String },
         linkRecipe: { type: String },
-        unit: { type: Number },
+        quantity: { type: Number },
+        check: { type: Boolean },
+        totalAmount: { type: Number },
+        ingredientLines: { type: Object },
       },
     ],
   },

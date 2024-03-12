@@ -44,13 +44,3 @@ module.exports.FormateData = (data) => {
     throw new Error("Data Not found!");
   }
 };
-
-module.exports.SetRequestUser = async (req, data) => {
-  try {
-    req.user = data;
-    console.log("req = ", req);
-    return true;
-  } catch (err) {
-    return false;
-  }
-};

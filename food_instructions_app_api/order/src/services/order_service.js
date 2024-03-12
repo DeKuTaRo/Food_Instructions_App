@@ -9,36 +9,57 @@ class OrderService {
 
   async CreateOrder(paymentInfo) {
     const {
-      paymentMethod,
-      customerId,
-      accountName,
-      email,
+      _id,
+      username,
       customerName,
       phoneNumber,
       address,
-      quantity,
-      totalAmount,
       status,
+      quantity,
       productName,
-      productLink,
       productImage,
+      productLink,
+      instructions,
+      totalAmount,
       timeCreate,
     } = paymentInfo;
     try {
       const newOrder = await this.repository.CreateOrder({
-        paymentMethod,
-        customerId,
-        accountName,
-        email,
+        _id,
+        username,
         customerName,
         phoneNumber,
         address,
-        quantity,
-        totalAmount,
         status,
+        quantity,
         productName,
-        productLink,
         productImage,
+        productLink,
+        instructions,
+        totalAmount,
+        timeCreate,
+      });
+      return FormateData({
+        newOrder,
+      });
+    } catch (err) {
+      console.log(`err service`, err);
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async CreateOrders(paymentInfo) {
+    const { _id, username, customerName, phoneNumber, address, status, orders, totalAmount, timeCreate } = paymentInfo;
+    try {
+      const newOrder = await this.repository.CreateOrders({
+        _id,
+        username,
+        customerName,
+        phoneNumber,
+        address,
+        status,
+        orders,
+        totalAmount,
         timeCreate,
       });
       return FormateData({
