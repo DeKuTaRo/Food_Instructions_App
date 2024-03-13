@@ -9,7 +9,7 @@ import soup from "../../../images/soup.jpg";
 import preserve from "../../../images/preserve.jpg";
 const topicDetails = {
   Sandwiches: {
-    title: "Sandwiches",
+    title: "Sandwitches",
     description:
       "Sandwiches are a popular and versatile food item that typically consists of one or more layers of bread with various fillings between them. The bread acts as a vessel to hold together the ingredients and provides a convenient way to consume a combination of flavors and textures. Sandwiches can be found in various cuisines around the world, and they come in countless variations, catering to different tastes and preferences.",
     history: `The sandwich has a long history and dates back to ancient times. Here are some key events in the history of the sandwich:
@@ -149,7 +149,7 @@ Specialty Treats: Tiramisu, trifle, panna cotta.`,
   },
 
   Drinks: {
-    title: "Drink",
+    title: "Drinks",
     description: `Beverages encompass a wide array of refreshing and invigorating options to quench your thirst`,
     history: `Essential water sustains life.
 Tea's ancient roots in China.

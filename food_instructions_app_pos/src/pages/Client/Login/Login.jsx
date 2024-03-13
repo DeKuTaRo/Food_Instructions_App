@@ -97,7 +97,7 @@ function LoginClient() {
           <Box sx={{ pl: 3, width: "80%" }}>
             <Box sx={{ color: "black", fontSize: "2.8rem", fontWeight: 700, margin: "28px 0px" }}>Login</Box>
             <div style={{ fontSize: "24px" }}>
-              <p>Browse Just One Cookbook with NO Ads! Learn more about JOC PLUS here.</p>
+              <p>"Travel to Food" greetings to you.</p>
               <p>Enter your username and password below.</p>
             </div>
 

@@ -10,6 +10,8 @@ import Link from "@mui/material/Link";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
+import Footer from "../../../components/Client/Footer";
+
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -141,7 +143,14 @@ function SignUp() {
                   margin: "",
                 }}>
                 <form onSubmit={handleSubmit}>
-                  <div
+                  <div  style={{
+                      display: "flex",
+                      alignItems: "center",
+                     
+                      justifyContent:"center",
+                      
+                    }}>
+                    <div
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -149,9 +158,14 @@ function SignUp() {
                       margin: "12px 12px",
                       fontSize: "24px",
                       fontWeight: "bold",
+                      justifyContent:"center",
+                      width:"30%"
+                      
                     }}>
-                    <ImageUpload onImageUpload={handleImageChange} imageData={avatar} titleImage={formData.username} />
+                    <ImageUpload onImageUpload={handleImageChange} imageData={avatar} titleImage={formData.username} style={{width:"50%"}} />
                   </div>
+                  </div>
+                  
                   <div
                     style={{
                       display: "flex",
@@ -277,6 +291,7 @@ function SignUp() {
           </Box>
         </Box>
       </div>
+      <Footer/>
     </motion.div>
   );
 }
