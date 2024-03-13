@@ -1,33 +1,35 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { SiChatbot } from "react-icons/si";
-import axios from "axios";
-
 import "./Chatbot.css";
-
+import { useState } from "react";
+import { SiChatbot } from "react-icons/si";
 function Chatbot() {
   const [textChat, setTextChat] = useState("");
-  const [inputHeight, setInputHeight] = useState("auto");
+  const chatbox = document.querySelector(".chatbox");
 
-  const createChatLi = (message, className) => (
-    <li className={`chat ${className}`}>
-      {className === "outgoing" ? (
-        <p>{message}</p>
-      ) : (
-        <>
-          <span className="material-symbols-outlined">smart_toy</span>
-          <p>{message}</p>
-        </>
-      )}
-    </li>
-  );
+  let userMessage;
+  const API_KEY = "AIzaSyAL3zym14DRJf-uCK2FKx1EIgbl68mr1Jo";
 
-  const generateResponse = async () => {
-    const API_KEY = "AIzaSyAL3zym14DRJf-uCK2FKx1EIgbl68mr1Jo";
+  const createChatLi = (message, className) => {
+    const chatLi = document.createElement("li");
+    chatLi.classList.add("chat", className);
+    let chatContent =
+      className === "outgoing" ? `<p></p>` : `<span className="material-symbols-outlined">smart_toy</span><p></p>`;
+
+    chatLi.innerHTML = chatContent;
+    chatLi.querySelector("p").textContent = message;
+    return chatLi;
+  };
+
+  const generateResponse = (incomingChatLi) => {
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-  
-    try {
-      const response = await axios.post(API_URL, {
+    const messageElement = incomingChatLi.querySelector("p");
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         contents: [
           {
             parts: [
@@ -37,52 +39,43 @@ function Chatbot() {
             ],
           },
         ],
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        messageElement.textContent = data.candidates[0].content.parts[0].text;
+      })
+      .catch((error) => {
+        messageElement.classList.add("error");
+        messageElement.textContent = "Oops! Something went wrong. Please try again later.";
       });
-  
-      return response.data.candidates[0].content.parts[0].text;
-    } catch (error) {
-      return "Oops! Something went wrong. Please try again later.";
-    }
   };
-
-  const handleChat = async () => {
-    const userMessage = textChat.trim();
+  const [inputHeight, setInputHeight] = useState("auto");
+  const handleChat = () => {
+    userMessage = textChat.trim();
     if (!userMessage) return;
     setTextChat("");
     setInputHeight("auto");
-
-    // Append user message to the chatbot
-    const chatbox = document.querySelector(".chatbox");
+    // append user message to the chatbot
     chatbox.appendChild(createChatLi(userMessage, "outgoing"));
     chatbox.scrollTo(0, chatbox.scrollHeight);
-
-    setTimeout(async () => {
+    setTimeout(() => {
       const incomingChatLi = createChatLi("Thinking...", "incoming");
       chatbox.appendChild(incomingChatLi);
-      const response = await generateResponse();
-      chatbox.removeChild(incomingChatLi);
-      chatbox.appendChild(createChatLi(response, "incoming"));
-      chatbox.scrollTo(0, chatbox.scrollHeight);
+      generateResponse(incomingChatLi);
     }, 600);
   };
-
   const handleInputChange = (event) => {
     const { scrollHeight } = event.target;
     setInputHeight(`${scrollHeight}px`);
     setTextChat(event.target.value);
   };
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey && window.innerWidth > 800) {
       e.preventDefault();
       handleChat();
     }
   };
-
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -90,7 +83,7 @@ function Chatbot() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       style={{ margin: "0% 10%" }}>
-      <div className="">
+      <div>
         <button className="chatbot-toggler" onClick={() => document.body.classList.toggle("show-chatbot")}>
           <span className="material-symbols-outlined">
             <SiChatbot />
