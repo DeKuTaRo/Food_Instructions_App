@@ -146,6 +146,10 @@ function RecipeDetail() {
           nameRecipe: recipeName,
           imageRecipe: recipeImage,
           linkRecipe: label,
+          check: false,
+          totalAmount: recipeDetail.recipe.calories,
+          quantity: 1,
+          ingredientLines: recipeDetail.recipe.ingredientLines,
         },
         {
           headers: {

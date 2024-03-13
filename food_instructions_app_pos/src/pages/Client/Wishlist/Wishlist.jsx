@@ -46,14 +46,18 @@ const StyledCardMedia = styled(CardMedia)({
 });
 
 function SearchedCard({ recipe, token, handleRemoveFromWishlist }) {
-  const handleAddToCart = async (name, image, link) => {
+  const handleAddToCart = async (name, image, link, quantity, check, totalAmount, ingredientLines) => {
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/addToCart`,
         {
           nameRecipe: name,
           imageRecipe: image,
           linkRecipe: link,
+          check: check,
+          totalAmount: totalAmount,
+          quantity: quantity,
+          ingredientLines: ingredientLines,
         },
         {
           headers: {
@@ -62,8 +66,40 @@ function SearchedCard({ recipe, token, handleRemoveFromWishlist }) {
           },
         }
       );
+      if (response.data.statusCode === 200) {
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else if (response.data.statusCode === 500) {
+        toast.error(response.data.msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
     } catch (err) {
-      console.log(err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -87,7 +123,18 @@ function SearchedCard({ recipe, token, handleRemoveFromWishlist }) {
         </CardActionArea>
         <CardActions>
           <Tooltip title="Add to cart" arrow disableInteractive sx={{ textAlign: "right" }}>
-            <IconButton onClick={() => handleAddToCart(recipe.nameRecipe, recipe.imageRecipe, recipe.linkRecipe)}>
+            <IconButton
+              onClick={() =>
+                handleAddToCart(
+                  recipe.nameRecipe,
+                  recipe.imageRecipe,
+                  recipe.linkRecipe,
+                  recipe.quantity,
+                  recipe.check,
+                  recipe.totalAmount,
+                  recipe.ingredientLines
+                )
+              }>
               <FaCartPlus />
             </IconButton>
           </Tooltip>

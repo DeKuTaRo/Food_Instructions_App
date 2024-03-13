@@ -39,7 +39,6 @@ class AccountService {
           });
         }
       }
-
     } catch (err) {
       throw new APIError("Data Not found", err);
     }
@@ -140,8 +139,8 @@ class AccountService {
 
   async AddToWishlist(recipeInputs) {
     try {
-      const { _id, nameRecipe, imageRecipe, linkRecipe } = recipeInputs;
-      const wishlistResult = await this.repository.AddWishlistItem({ _id, nameRecipe, imageRecipe, linkRecipe });
+      const { _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines } = recipeInputs;
+      const wishlistResult = await this.repository.AddWishlistItem({  _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines });
       return FormateData(wishlistResult);
     } catch (err) {
       throw new APIError("Data Not found", err);
@@ -186,9 +185,29 @@ class AccountService {
     }
   }
 
-  async AddToCart(accountId, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines) {
+  async AddToCart(
+    accountId,
+    username,
+    nameRecipe,
+    imageRecipe,
+    linkRecipe,
+    check,
+    totalAmount,
+    quantity,
+    ingredientLines
+  ) {
     try {
-      const cartLists = await this.repository.AddCartItem(accountId, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines);
+      const cartLists = await this.repository.AddCartItem(
+        accountId,
+        username,
+        nameRecipe,
+        imageRecipe,
+        linkRecipe,
+        check,
+        totalAmount,
+        quantity,
+        ingredientLines
+      );
       return FormateData(cartLists);
     } catch (err) {
       throw new APIError("Data Not found", err);
@@ -284,7 +303,6 @@ class AccountService {
       throw new APIError("Data Not found", err);
     }
   }
-
 }
 
 module.exports = AccountService;

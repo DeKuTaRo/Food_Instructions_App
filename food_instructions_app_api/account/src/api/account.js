@@ -120,9 +120,19 @@ module.exports = (app) => {
 
   app.post("/account/addToWishList", UserAuth, async (req, res, next) => {
     try {
-      const { _id } = req.user;
-      const { nameRecipe, imageRecipe, linkRecipe } = req.body;
-      const { data } = await service.AddToWishlist({ _id, nameRecipe, imageRecipe, linkRecipe });
+      const { _id, username } = req.user;
+      const { nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines } = req.body;
+      const { data } = await service.AddToWishlist({
+        _id,
+        username,
+        nameRecipe,
+        imageRecipe,
+        linkRecipe,
+        check,
+        totalAmount,
+        quantity,
+        ingredientLines,
+      });
       if (data) {
         return res.status(200).json({ msg: "Thêm yêu thích thành công", statusCode: 200 });
       }

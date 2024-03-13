@@ -32,9 +32,14 @@ const AccountSchema = new Schema(
     address: [{ type: Schema.Types.ObjectId, ref: "address", require: true }],
     wishlist: [
       {
+        accountName: { type: String },
         nameRecipe: { type: String },
         imageRecipe: { type: String },
         linkRecipe: { type: String },
+        quantity: { type: Number },
+        check: { type: Boolean },
+        totalAmount: { type: Number },
+        ingredientLines: { type: Object },
       },
     ],
     comments: [{ type: Object, ref: "comment", required: true }],

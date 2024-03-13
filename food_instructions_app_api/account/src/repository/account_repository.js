@@ -130,11 +130,16 @@ class AccountRepository {
     }
   }
 
-  async AddWishlistItem({ _id, nameRecipe, imageRecipe, linkRecipe }) {
+  async AddWishlistItem({  _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines }) {
     const recipe = {
+      accountName: username,
       nameRecipe,
       imageRecipe,
       linkRecipe,
+      quantity,
+      check,
+      totalAmount,
+      ingredientLines
     };
 
     try {
