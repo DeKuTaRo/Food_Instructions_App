@@ -45,6 +45,7 @@ import Banking from "../pages/Client/Payment/Banking";
 
 import NotFound from "./NotFound";
 import NotPermission from "./NotPermission";
+import Thankyou from "./Thankyou";
 function Pages() {
   const location = useLocation();
   return (
@@ -55,6 +56,7 @@ function Pages() {
 
         <Route path="*" element={<NotFound />} />
         <Route path="/not_permission" element={<NotPermission />} />
+        <Route path="/thankyou" element={<Thankyou />} />
 
         {/* Client page */}
         <Route path="/" element={<Home />} />

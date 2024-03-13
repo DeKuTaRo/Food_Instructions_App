@@ -12,7 +12,7 @@ import momoQRCodeImage from "../../../images/QRmomo.png";
 
 function MomoPaymentPage() {
   const location = useLocation();
-  const orderId = location.state || {};
+  const idOrder = location.state || {};
   const momoQRCodeImageSrc = momoQRCodeImage;
   const token = localStorage.getItem("token");
   const [orderData, setOrderData] = useState([]);
@@ -21,7 +21,7 @@ function MomoPaymentPage() {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8004/order/id/${orderId.idOrder}`, {
+        const res = await axios.get(`http://localhost:8004/order/id/${idOrder.idOrder}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,6 +90,18 @@ function MomoPaymentPage() {
     }
   };
 
+  const handlePaymentWithMomo = async () => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/paymentMoMo`, {
+        priceGlobal: orderData.totalAmount.toFixed(0),
+        orderId: idOrder.idOrder,
+      });
+      console.log("res = ", response);
+    } catch (err) {
+      console.log("err = ", err);
+    }
+  };
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -154,7 +166,7 @@ function MomoPaymentPage() {
               </Typography>
               <TextField
                 label="Account Holder"
-                value="CAO THANH TAI"
+                value={`${orderData.customerName}`}
                 InputProps={{
                   readOnly: true,
                   style: { marginBottom: "8px", fontSize: "1rem" },
@@ -165,7 +177,7 @@ function MomoPaymentPage() {
               />
               <TextField
                 label="Account Number"
-                value="0366812907"
+                value={`${orderData.phoneNumber}`}
                 InputProps={{
                   readOnly: true,
                   style: { marginBottom: "8px", fontSize: "1rem" },
@@ -187,7 +199,7 @@ function MomoPaymentPage() {
               />
               <TextField
                 label="Contents of the transfer"
-                value={`${orderData.productName}-${orderData.customerName}-${orderData.phoneNumber}-${orderData.quantity}--${orderData._id}`}
+                value={`${orderData.customerName}-${orderData.timeCreate}--${orderData._id}`}
                 InputProps={{
                   readOnly: true,
                   style: { fontSize: "1rem" },
@@ -205,6 +217,7 @@ function MomoPaymentPage() {
         <Button variant="contained" color="primary" size="large" onClick={handlePaymentOrder}>
           Purchase history
         </Button>
+        <Button onClick={handlePaymentWithMomo}>Momo</Button>
       </div>
 
       <Footer />

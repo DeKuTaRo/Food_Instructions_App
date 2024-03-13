@@ -36,8 +36,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"; 
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"; 
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function OrderPage() {
   const location = useLocation();
@@ -182,6 +182,7 @@ function OrderPage() {
           },
         });
 
+        console.log("response =", response);
         if (response.data.statusCode === 200) {
           toast.success(response.data.msg, {
             position: "top-right",
@@ -193,6 +194,8 @@ function OrderPage() {
             progress: undefined,
             theme: "dark",
           });
+          const idOrder = response.data.idOrder;
+          navigate("/momo", { state: { idOrder } });
         } else {
           toast.error(response.data.msg, {
             position: "top-right",
@@ -206,7 +209,7 @@ function OrderPage() {
           });
         }
       } catch (err) {
-        toast.error("Có lỗi xảy ra,  vui lòng thử lại sau", {
+        toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
