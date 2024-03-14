@@ -53,6 +53,7 @@ function Cart() {
       handleGetCart();
     }
   };
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState({});
@@ -75,7 +76,16 @@ function Cart() {
       });
       setSearchResults(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } finally {
       setLoading(false);
     }
@@ -95,13 +105,20 @@ function Cart() {
         handleGetCart();
       }
     } catch (err) {
-      console.log(err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
-  const navigate = useNavigate();
 
   const handleAddToOrders = async () => {
-    console.log("adđ to carts");
     try {
       const orders = searchResults.filter((obj) => obj.check === true);
       if (orders.length === 0) {
@@ -120,7 +137,6 @@ function Cart() {
         orders,
         token: token,
       };
-      // Navigate to the order page with the orderData as state
       navigate("/order", { state: { orderDataFromCart } });
     } catch (err) {
       toast.error("Có lỗi xảy ra, vui lòng thử lai sau", {
@@ -259,10 +275,7 @@ function Cart() {
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box>
-          <Typography>
-            <Checkbox /> Chọn tất cả (100)
-          </Typography>
-          <Typography>Tổng sản phẩm ( 10 )</Typography>
+          <Typography>Tổng sản phẩm ( {searchResults.length} )</Typography>
         </Box>
         <Button variant="outlined" onClick={handleAddToOrders}>
           Mua hàng

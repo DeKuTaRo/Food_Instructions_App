@@ -195,7 +195,16 @@ function Wishlist() {
       });
       setSearchResults(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } finally {
       setLoading(false);
     }
@@ -215,7 +224,16 @@ function Wishlist() {
         handleGetWishlist();
       }
     } catch (err) {
-      console.log(err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 

@@ -1,11 +1,13 @@
-import * as React from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 
+import { Toolbar, Typography, Box, Button } from "@mui/material";
 import Container from "@mui/material/Container";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const defaultTheme = createTheme();
 
@@ -18,6 +20,66 @@ export default function NotFound() {
     transform: "translate(-50%, -50%) rotate(0)",
     transformOrigin: "80% 30%",
     animation: "wiggle .2s infinite",
+  };
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  const handleCompleteOrder = async (typePage) => {
+    const params = new URLSearchParams(window.location.search);
+
+    let partnerCode = params.get("partnerCode");
+    let orderId = params.get("orderId");
+    let requestId = params.get("requestId");
+    let amount = params.get("amount");
+    let orderInfo = params.get("orderInfo");
+    let orderType = params.get("orderType");
+    let transId = params.get("transId");
+    let resultCode = params.get("resultCode");
+    let message = params.get("message");
+    let payType = params.get("payType");
+    let responseTime = params.get("responseTime");
+    let extraData = params.get("extraData");
+    let signature = params.get("signature");
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/payment`,
+        {
+          partnerCode,
+          orderId,
+          requestId,
+          amount,
+          orderInfo,
+          orderType,
+          transId,
+          resultCode,
+          message,
+          payType,
+          responseTime,
+          extraData,
+          signature,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        navigate(`${typePage === "homePage" ? "/" : "/history"}`);
+      }
+    } catch (err) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -89,6 +151,14 @@ export default function NotFound() {
               variant="h2">
               Payment success
             </Typography>
+            <Box sx={{ textAlign: "center" }}>
+              <Button variant="contained" sx={{ margin: "1rem" }} onClick={() => handleCompleteOrder("homePage")}>
+                Home page
+              </Button>
+              <Button variant="contained" sx={{ margin: "1rem" }} onClick={() => handleCompleteOrder("historyPage")}>
+                History page
+              </Button>
+            </Box>
           </Container>
         </Box>
       </Box>

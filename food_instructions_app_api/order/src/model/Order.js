@@ -48,6 +48,42 @@ const OrderSchema = new Schema(
     timeCreate: {
       type: String,
     },
+    partnerCode: {
+      type: String,
+    },
+    requestId: {
+      type: String,
+    },
+    amount: {
+      type: String,
+    },
+    orderInfo: {
+      type: String,
+    },
+    orderType: {
+      type: String,
+    },
+    transId: {
+      type: String,
+    },
+    resultCode: {
+      type: String,
+    },
+    message: {
+      type: String,
+    },
+    payType: {
+      type: String,
+    },
+    responseTime: {
+      type: String,
+    },
+    extraData: {
+      type: String,
+    },
+    signature: {
+      type: String,
+    },
   },
   {
     toJSON: {

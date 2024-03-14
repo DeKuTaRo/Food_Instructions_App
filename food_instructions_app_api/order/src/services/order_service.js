@@ -120,12 +120,39 @@ class OrderService {
     return FormateData(payload);
   }
 
-  async UpdatePaymentOrder(idOrder) {
+  async UpdatePaymentOrder(
+    partnerCode,
+    orderId,
+    requestId,
+    amount,
+    orderInfo,
+    orderType,
+    transId,
+    resultCode,
+    message,
+    payType,
+    responseTime,
+    extraData,
+    signature
+  ) {
     try {
-      const payment = await this.repository.UpdatePaymentOrder(idOrder);
+      const payment = await this.repository.UpdatePaymentOrder(
+        partnerCode,
+        orderId,
+        requestId,
+        amount,
+        orderInfo,
+        orderType,
+        transId,
+        resultCode,
+        message,
+        payType,
+        responseTime,
+        extraData,
+        signature
+      );
       return FormateData(payment);
     } catch (err) {
-      console.log("err ser = ", err);
       throw new APIError("Data Not found", err);
     }
   }
@@ -135,7 +162,15 @@ class OrderService {
       const detailOrder = await this.repository.GetDetailOrder(idOrder);
       return FormateData(detailOrder);
     } catch (err) {
-      console.log("err ser = ", err);
+      throw new APIError("Data Not found", err);
+    }
+  }
+
+  async UpdateStatus(idOrder, type) {
+    try {
+      const orders = await this.repository.UpdateStatus(idOrder, type);
+      return FormateData(orders);
+    } catch (err) {
       throw new APIError("Data Not found", err);
     }
   }

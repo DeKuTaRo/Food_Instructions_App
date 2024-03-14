@@ -5,8 +5,6 @@ import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
-import momo from "../../../images/momo.png";
-import bank from "../../../images/bank.jpg";
 import {
   Paper,
   Typography,
@@ -15,9 +13,6 @@ import {
   Grid,
   Button,
   TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
   Link,
   Card,
   CardMedia,
@@ -98,8 +93,6 @@ function OrderPage() {
     setQuantity((prev) => prev + 1);
   };
 
-  const [paymentMethod, setPaymentMethod] = useState("momo"); // Thêm state cho phương thức thanh toán
-
   const handleConfirmPayment = async () => {
     if (orderData) {
       try {
@@ -122,8 +115,6 @@ function OrderPage() {
           },
         });
 
-        // const idOrder = response.data.newOrder._id;
-        // navigate("/momo", { state: { idOrder } });
         if (response.data.statusCode === 200) {
           toast.success(response.data.msg, {
             position: "top-right",
@@ -135,6 +126,8 @@ function OrderPage() {
             progress: undefined,
             theme: "dark",
           });
+          const idOrder = response.data.idOrder;
+          navigate("/momo", { state: { idOrder } });
         } else {
           toast.error(response.data.msg, {
             position: "top-right",
@@ -158,7 +151,6 @@ function OrderPage() {
           progress: undefined,
           theme: "dark",
         });
-        // }yển hướng đến trang thanh toán Momo và truyền thông tin qua URL
       }
     } else if (ordersFromCart.length === 1) {
       try {
@@ -182,7 +174,6 @@ function OrderPage() {
           },
         });
 
-        console.log("response =", response);
         if (response.data.statusCode === 200) {
           toast.success(response.data.msg, {
             position: "top-right",
@@ -256,6 +247,8 @@ function OrderPage() {
             progress: undefined,
             theme: "dark",
           });
+          const idOrder = response.data.idOrder;
+          navigate("/momo", { state: { idOrder } });
         } else {
           toast.error(response.data.msg, {
             position: "top-right",
@@ -294,9 +287,7 @@ function OrderPage() {
     sliderRef.current.swiper.slideNext();
   }, []);
 
-  // Function to handle quantity change for a specific item
   const handleQuantityChange = (itemId, newQuantity) => {
-    // Update the state by mapping over the items array and updating the quantity of the specific item
     setOrdersFromCart((prevItems) =>
       prevItems.map((item) => {
         if (item._id === itemId) {
@@ -331,7 +322,6 @@ function OrderPage() {
     );
   };
 
-  console.log("orderData = ", orderData);
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -489,68 +479,31 @@ function OrderPage() {
               </Grid>
             </Paper>
 
-            <Paper elevation={3} style={{ padding: "1rem", marginBottom: "2rem" }}>
-              <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <Box mt={2}>
-                    <Typography variant="h6">Payment Method</Typography>
-                    <RadioGroup
-                      aria-label="payment-method"
-                      name="payment-method"
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}>
-                      <FormControlLabel
-                        value="momo"
-                        control={<Radio />}
-                        label={
-                          <>
-                            <img src={momo} alt="Momo Icon" style={{ marginRight: "8px", height: "24px" }} />
-                            Momo
-                          </>
-                        }
-                      />
-                      <FormControlLabel
-                        value="bank"
-                        control={<Radio />}
-                        label={
-                          <>
-                            <img
-                              src={bank}
-                              alt="Internet Banking Icon"
-                              style={{ marginRight: "8px", height: "24px" }}
-                            />
-                            Internet Banking
-                          </>
-                        }
-                      />
-                    </RadioGroup>
-                  </Box>
-                </Grid>
+            <Paper
+              elevation={3}
+              style={{
+                padding: "1rem",
+                marginBottom: "2rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              <Typography variant="h6">
+                Total Price
+                {orderData
+                  ? ` $${(orderData.calories * quantityOrderData).toFixed(2)}`
+                  : ` $${(ordersFromCart[0].totalAmount * quantity).toFixed(2)}`}
+              </Typography>
 
-                {/* Total Price */}
-                <Grid item xs={6}>
-                  <Box mt={2}>
-                    <Typography variant="h6">Total Price</Typography>
-                    {orderData ? (
-                      <Typography>{`$${(orderData.calories * quantityOrderData).toFixed(2)}`}</Typography>
-                    ) : (
-                      <Typography>{`$${(ordersFromCart[0].totalAmount * quantity).toFixed(2)}`}</Typography>
-                    )}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleConfirmPayment}
-                      disabled={
-                        (paymentMethod !== "momo" && paymentMethod !== "bank") || // Disable if paymentMethod is not momo or bank
-                        !customerName ||
-                        !phoneNumber ||
-                        !address // Disable if required data is empty
-                      }>
-                      Confirm Purchase
-                    </Button>
-                  </Box>
-                </Grid>
-              </Grid>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleConfirmPayment}
+                disabled={
+                  !customerName || !phoneNumber || !address // Disable if required data is empty
+                }>
+                Confirm Purchase
+              </Button>
             </Paper>
           </>
         ) : (
@@ -662,10 +615,19 @@ function OrderPage() {
                 <ChevronRightIcon />
               </Button>
             </Box>
-            <Box mt={2} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+
+            <Paper
+              elevation={3}
+              style={{
+                padding: "1rem",
+                marginBottom: "2rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
               <Typography variant="h6">
                 Total Price{" "}
-                {`$${ordersFromCart
+                {` $${ordersFromCart
                   .reduce((accumulator, currentItem) => {
                     return accumulator + currentItem.totalAmount * currentItem.quantity;
                   }, 0)
@@ -677,14 +639,11 @@ function OrderPage() {
                 color="primary"
                 onClick={handleConfirmPayment}
                 disabled={
-                  (paymentMethod !== "momo" && paymentMethod !== "bank") || // Disable if paymentMethod is not momo or bank
-                  !customerName ||
-                  !phoneNumber ||
-                  !address // Disable if required data is empty
+                  !customerName || !phoneNumber || !address // Disable if required data is empty
                 }>
                 Confirm Purchase
               </Button>
-            </Box>
+            </Paper>
           </>
         )}
       </div>

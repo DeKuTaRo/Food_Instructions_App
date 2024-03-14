@@ -40,7 +40,6 @@ module.exports = (app) => {
         totalAmount,
         timeCreate,
       });
-      console.log("data = ", data);
       if (data) {
         return res.status(200).json({ msg: "Tạo hóa đơn thành công", statusCode: 200, idOrder: data.newOrder._id });
       }
@@ -68,7 +67,7 @@ module.exports = (app) => {
         timeCreate,
       });
       if (data) {
-        return res.status(200).json({ msg: "Tạo hóa đơn thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Tạo hóa đơn thành công", statusCode: 200, idOrder: data.newOrder._id });
       }
       return res.status(200).json({ msg: "Tạo hóa đơn thất bại", statusCode: 500 });
     } catch (err) {
@@ -147,8 +146,36 @@ module.exports = (app) => {
   // Cập nhật đơn hàng đã được thanh toán
   app.post("/order/payment", UserAuth, async (req, res, next) => {
     try {
-      const { idOrder } = req.body;
-      const { data } = await service.UpdatePaymentOrder(idOrder);
+      const {
+        partnerCode,
+        orderId,
+        requestId,
+        amount,
+        orderInfo,
+        orderType,
+        transId,
+        resultCode,
+        message,
+        payType,
+        responseTime,
+        extraData,
+        signature,
+      } = req.body;
+      const { data } = await service.UpdatePaymentOrder(
+        partnerCode,
+        orderId,
+        requestId,
+        amount,
+        orderInfo,
+        orderType,
+        transId,
+        resultCode,
+        message,
+        payType,
+        responseTime,
+        extraData,
+        signature
+      );
       if (data) {
         return res.status(200).json({ msg: "Thanh toán thành công", statusCode: 200 });
       }
@@ -157,7 +184,6 @@ module.exports = (app) => {
         statusCode: 500,
       });
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });
@@ -174,47 +200,25 @@ module.exports = (app) => {
         statusCode: 500,
       });
     } catch (err) {
-      console.log("err api = ", err);
-      next(err);
-    }
-  });
-
-  app.post("/order/updateStatusOrder", async (req, res, next) => {
-    try {
-      console.log("req.body = ", req.body);
-    } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });
 
   app.post("/order/paymentMoMo", async (req, res, next) => {
     try {
-      const { priceGlobal, orderId } = req.body;
-      // const { priceGlobal } = req.body;
+      const { priceGlobal, orderId, orderInfo } = req.body;
       var partnerCode = "MOMO";
       var accessKey = "F8BBA842ECF85";
       var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-      // chuỗi ngẫu nhiên để phân biệt cái request
-      var requestId = partnerCode + new Date().getTime() + "id";
-      // mã đặt đơn
-      // var orderId = new Date().getTime() + ":0123456778";
-      //
-      var orderInfo = "Thanh toán qua ví MoMo";
-      // cung cấp họ về một cái pages sau khi thanh toán sẽ trở về trang nớ
-      var redirectUrl = "http://localhost:3000/thankyou";
-      // Trang thank you
-      var ipnUrl = "http://localhost:3000/thankyou";
-      // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
-      // số tiền
-      var amount = priceGlobal * 100;
-      // var requestType = "payWithATM";
-      // show cái thông tin thẻ, cái dưới quét mã, cái trên điền form
-      var requestType = "captureWallet";
-      var extraData = ""; //pass empty value if your merchant does not have stores
 
-      //before sign HMAC SHA256 with format
-      //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
+      var requestId = partnerCode + new Date().getTime() + "id";
+
+      var redirectUrl = "http://localhost:3000/thankyou";
+      var ipnUrl = "http://localhost:3000/thankyou";
+      var amount = priceGlobal * 100;
+      var requestType = "payWithATM";
+      var extraData = "";
+
       var rawSignature =
         "accessKey=" +
         accessKey +
@@ -236,37 +240,26 @@ module.exports = (app) => {
         requestId +
         "&requestType=" +
         requestType;
-      // thư viện node js , model tích họp ,liên quan đến mã hóa, giải mã và bảo mật, cung cấp chức năng và phương thức sử lý dữ liệu liên quan đến mật mã
-      console.log("rawSignature = ", rawSignature);
 
-      var signature = crypto
-        // thuật toán tạo ra mới với tham số là secretkey
-        .createHmac("sha256", secretkey)
-        // thêm biến rawSignature vào băm
-        .update(rawSignature)
-        // tạo chữ kí và chuyển sang mã hex
-        .digest("hex");
+      var signature = crypto.createHmac("sha256", secretkey).update(rawSignature).digest("hex");
 
-      console.log("signature = ", signature);
-      //json object send to MoMo endpoint, gửi cái aip của momo
       const requestBody = JSON.stringify({
         partnerCode: partnerCode,
-        // accessKey: accessKey,
+        partnerName: "Food Instructions App",
+        storeId: "Website cung cấp nguyên liệu và hướng dẫn nấu ăn",
         requestId: requestId,
         amount: amount,
         orderId: orderId,
         orderInfo: orderInfo,
         redirectUrl: redirectUrl,
         ipnUrl: ipnUrl,
-        extraData: extraData,
         requestType: requestType,
-        signature: signature,
+        extraData: extraData,
         lang: "en",
+        signature: signature,
       });
 
-      //Create the HTTPS objects, tạo sever, https để call cái aip khác, call tới momo
       const https = require("https");
-      // yêu cầu truyền đi
       const options = {
         hostname: "test-payment.momo.vn",
         port: 443,
@@ -277,14 +270,11 @@ module.exports = (app) => {
           "Content-Length": Buffer.byteLength(requestBody),
         },
       };
-      //Send the request and get the response
       const reqq = https.request(options, (resMom) => {
         console.log(`Status: ${resMom.statusCode}`);
         console.log(`Headers: ${JSON.stringify(resMom.headers)}`);
         resMom.setEncoding("utf8");
-        // trả về body là khi mình call momo
         resMom.on("data", (body) => {
-          // url dẫn đến tranh toán của momo
           console.log(JSON.parse(body));
           return res.json(JSON.parse(body));
         });
@@ -296,12 +286,24 @@ module.exports = (app) => {
       reqq.on("error", (e) => {
         console.log(`problem with request: ${e.message}`);
       });
-      // write data to request body
       console.log("Sending....");
       reqq.write(requestBody);
       reqq.end();
     } catch (err) {
-      console.log("err api = ", err);
+    }
+  });
+
+  app.post("/order/updateStatus", UserAuth, async (req, res, next) => {
+    try {
+      const { idOrder, type } = req.body;
+      const { data } = await service.UpdateStatus(idOrder, type);
+
+      if (data) {
+        return res.json(data);
+      }
+
+      res.status(200).json({ msg: "Có lỗi xảy ra khi cập nhật đơn hàng" });
+    } catch (err) {
     }
   });
 

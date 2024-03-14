@@ -71,6 +71,19 @@ class OrderRepository {
         orders: newOrders,
         totalAmount,
         timeCreate,
+        partnerCode: "",
+        orderId: "",
+        requestId: "",
+        amount: "",
+        orderInfo: "",
+        orderType: "",
+        transId: "",
+        resultCode: "",
+        message: "",
+        payType: "",
+        responseTime: "",
+        extraData: "",
+        signature: "",
       });
       return await newOrder.save();
     } catch (err) {
@@ -116,12 +129,43 @@ class OrderRepository {
     }
   }
 
-  async UpdatePaymentOrder(idOrder) {
+  async UpdatePaymentOrder(
+    partnerCode,
+    orderId,
+    requestId,
+    amount,
+    orderInfo,
+    orderType,
+    transId,
+    resultCode,
+    message,
+    payType,
+    responseTime,
+    extraData,
+    signature
+  ) {
     try {
-      const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: "PaymentSuccess" }, { new: true });
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(
+        orderId,
+        {
+          partnerCode: partnerCode,
+          requestId: requestId,
+          amount: amount,
+          orderInfo: orderInfo,
+          orderType: orderType,
+          transId: transId,
+          resultCode: resultCode,
+          message: message,
+          payType: payType,
+          responseTime: responseTime,
+          extraData: extraData,
+          signature: signature,
+          status: "PaymentSuccess",
+        },
+        { new: true }
+      );
       return updatedOrder;
     } catch (err) {
-      console.log("err repo = ", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Update Payment Order Success");
     }
   }
@@ -131,7 +175,16 @@ class OrderRepository {
       const detailOrder = await OrderSchema.find({ _id: ObjectId(idOrder) });
       return detailOrder;
     } catch (err) {
-      console.log("err repo = ", err);
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Detail Order");
+    }
+  }
+
+  async UpdateStatus(idOrder, type) {
+    try {
+      const updatedOrder = await OrderSchema.findByIdAndUpdate(idOrder, { status: type }, { new: true });
+      await updatedOrder.save();
+      return await OrderSchema.find();
+    } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Detail Order");
     }
   }

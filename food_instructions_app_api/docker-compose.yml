@@ -1,0 +1,77 @@
+version: "4"
+services:
+  nosql-db:
+    image: mongo
+    ports:
+      - "27018:27017"
+    container_name: nosql-db
+    volumes:
+      - ./db/:/data/db
+      
+  account:
+    build:
+      dockerfile: Dockerfile
+      context: ./account
+    container_name: account
+    ports:
+      - "8001:8001"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/account/node_modules
+
+  recipe:
+    build:
+      dockerfile: Dockerfile
+      context: ./recipe
+    container_name: recipe
+    ports:
+      - "8002:8002"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/recipe/node_modules
+
+  topic:
+    build:
+      dockerfile: Dockerfile
+      context: ./topic
+    container_name: topic
+    ports:
+      - "8003:8003"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/topic/node_modules
+
+  order:
+    build:
+      dockerfile: Dockerfile
+      context: ./order
+    container_name: order
+    ports:
+      - "8004:8004"
+    restart: always
+    depends_on:
+      - "nosql-db"
+    volumes:
+      - .:/app
+      - /app/order/node_modules
+
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - account
+      - recipe
+      - topic
+      - order
+    ports:
+      - "80:80"
