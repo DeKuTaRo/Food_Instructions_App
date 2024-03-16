@@ -1,26 +1,54 @@
-import * as React from "react";
-import Link from "@mui/material/Link";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import Title from "./Title";
+import Link from "@mui/material/Link";
+import DatePicker from "react-datepicker"; // Import DatePicker component
+import "react-datepicker/dist/react-datepicker.css"; // Import CSS for DatePicker
 
-function preventDefault(event) {
-  event.preventDefault();
-}
+export default function Deposits({ orderData }) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-export default function Deposits() {
+  // Kiểm tra xem orderData có tồn tại và là một mảng trước khi sử dụng filter và reduce
+  const filteredOrders = Array.isArray(orderData)
+    ? orderData.filter(
+        (order) =>
+          new Date(order.timeCreate).toDateString() ===
+          selectedDate.toDateString()
+      )
+    : [];
+
+  // Tính tổng thu nhập trong ngày
+  const totalIncome = filteredOrders.reduce(
+    (total, order) => total + order.totalAmount,
+    0
+  );
+
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
+
+  const preventDefault = (event) => {
+    event.preventDefault();
+    // Xử lý khi click vào "View balance"
+  };
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Typography component="div" variant="h6">
+        Recent Deposits
+      </Typography>
       <Typography component="p" variant="h4">
-        $3,024.00
+        ${totalIncome.toFixed(2)}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
+        on {formatDate(selectedDate)}
       </Typography>
+
       <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
+        <DatePicker // DatePicker component để chọn ngày hiển thị
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+        />
       </div>
     </React.Fragment>
   );

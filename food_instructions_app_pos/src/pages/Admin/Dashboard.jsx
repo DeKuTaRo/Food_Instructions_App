@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -9,31 +10,43 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-
 import Chart from "./Chart";
+import PieChart from "./PieChart"; // Import your PieChart component
+import axios from "axios";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
 import { HeaderWithSidebar } from "../../components/Admin/HeaderWithSidebar";
 import withAuthorization from "./utils/auth";
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>
-      {""}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 function Dashboard() {
+  const [orderData, setOrderData] = useState([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const getAllOrder = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setOrderData(res.data.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAllOrder();
+
+    const interval = setInterval(() => {
+      getAllOrder();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [token]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -48,7 +61,8 @@ function Dashboard() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}>
+          }}
+        >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
@@ -60,8 +74,9 @@ function Dashboard() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
-                  <Chart />
+                  }}
+                >
+                  <Chart orderData={orderData} />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -72,8 +87,23 @@ function Dashboard() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
-                  <Deposits />
+                  }}
+                >
+                  <Deposits orderData={orderData} />
+                </Paper>
+              </Grid>
+              {/* Pie Chart */}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 450,
+                    width:1000,
+                  }}
+                >
+                  <PieChart orderData={orderData} />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
@@ -83,7 +113,6 @@ function Dashboard() {
                 </Paper>
               </Grid>
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>
