@@ -7,6 +7,33 @@ Run nodejs folder backend
 cd food_instructions_app_api
 docker-compose up
 
+Tài khoản testing momo
+STT : 1
+Status : Card successful
+Name : NGUYEN VAN A
+Number : 9704000000000018
+Card Expdate : 03/07
+
+STT : 2
+Status : Card Lock
+Name : NGUYEN VAN A
+Number : 9704000000000026
+Card Expdate : 03/07
+
+STT : 1
+Status : Not sufficient funds
+Name : NGUYEN VAN A
+Number : 9704000000000034
+Card Expdate : 03/07
+
+STT : 1
+Status : Card limit
+Name : NGUYEN VAN A
+Number : 9704000000000042
+Card Expdate : 03/07
+
+Static OTP for test: OTP
+
 Run reactjs folder frontend
 cd food_instructions_app_pos
 npm i
