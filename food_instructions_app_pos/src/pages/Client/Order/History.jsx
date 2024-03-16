@@ -19,8 +19,17 @@ function calculateDeliveryTime(databaseDateTimeString, minute) {
   const databaseDateTime = new Date(year, month, day, hours, minutes);
 
   const deliveryTime = new Date(databaseDateTime.getTime() + minute * 60000);
-
-  return deliveryTime;
+  let result = "";
+  const delivery = deliveryTime.toLocaleTimeString("en-US", {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  if (delivery.split(":")[0] === "24") {
+    result = "00:" + delivery.split(":")[1];
+    return result;
+  }
+  return delivery;
 }
 
 function isMatchPresentTime(deliveryTime) {
@@ -67,11 +76,7 @@ function DeliveryHistoryPage() {
     const updateOrdersDelivered = async () => {
       const updatedOrders = await Promise.all(
         filteredOrders("PaymentSuccess").map(async (order) => {
-          const deliverTime = calculateDeliveryTime(order.timeCreate, 3).toLocaleTimeString("en-US", {
-            hour12: false,
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          const deliverTime = calculateDeliveryTime(order.timeCreate, 3);
           if (isMatchPresentTime(deliverTime)) {
             const response = await axios.post(
               `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/updateStatus`,
@@ -103,11 +108,7 @@ function DeliveryHistoryPage() {
     const updateOrdersComplete = async () => {
       const updatedOrders = await Promise.all(
         filteredOrders("Delivered").map(async (order) => {
-          const deliverTime = calculateDeliveryTime(order.timeCreate, 6).toLocaleTimeString("en-US", {
-            hour12: false,
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          const deliverTime = calculateDeliveryTime(order.timeCreate, 6);
           if (isMatchPresentTime(deliverTime)) {
             const response = await axios.post(
               `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/updateStatus`,
@@ -129,8 +130,8 @@ function DeliveryHistoryPage() {
       setOrderData(updatedOrders);
     };
     const updateInterval = setInterval(() => {
-      updateOrdersComplete(); 
-    }, 5000); 
+      updateOrdersComplete();
+    }, 5000);
     return () => clearInterval(updateInterval);
   }, [orderData]);
 
@@ -187,7 +188,7 @@ function DeliveryHistoryPage() {
   };
 
   const handleContinueOrder = (idOrder) => {
-    console.log("cotinue order + ", idOrder);
+    navigate("/momo", { state: { idOrder } });
   };
 
   const filteredOrders = (status) => orderData.filter((order) => order.status === status);
@@ -363,13 +364,7 @@ function DeliveryHistoryPage() {
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Estimate time complete:{" "}
-                    {order.timeCreate.split(" ")[0] +
-                      " " +
-                      calculateDeliveryTime(order.timeCreate, 3).toLocaleTimeString("en-US", {
-                        hour12: false,
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 3)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
@@ -427,13 +422,7 @@ function DeliveryHistoryPage() {
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Time complete order:{" "}
-                    {order.timeCreate.split(" ")[0] +
-                      " " +
-                      calculateDeliveryTime(order.timeCreate, 6).toLocaleTimeString("en-US", {
-                        hour12: false,
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 6)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
