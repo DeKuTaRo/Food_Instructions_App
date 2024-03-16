@@ -14,6 +14,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
+
 const Profile = () => {
   const imageRef = useRef(null);
 
@@ -331,6 +333,7 @@ const Profile = () => {
           </Box>
         </Box>
       </div>
+      <Chatbot />
     </motion.div>
   );
 };

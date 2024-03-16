@@ -13,6 +13,7 @@ import {
   CardMedia,
   Grid,
 } from "@mui/material";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 const Contact = () => {
   const infor = [
@@ -84,6 +85,7 @@ const Contact = () => {
         </Grid>
       </Container>
       <Topics />
+      <Chatbot />
       <Footer />
     </motion.div>
   );

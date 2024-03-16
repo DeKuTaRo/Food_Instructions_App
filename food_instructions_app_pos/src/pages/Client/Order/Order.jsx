@@ -33,6 +33,7 @@ import "swiper/css/scrollbar";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 function OrderPage() {
   const location = useLocation();
@@ -647,7 +648,7 @@ function OrderPage() {
           </>
         )}
       </div>
-
+      <Chatbot />
       <Footer />
     </motion.div>
   );

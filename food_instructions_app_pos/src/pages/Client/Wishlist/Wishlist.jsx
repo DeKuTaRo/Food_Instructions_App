@@ -25,6 +25,7 @@ import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import { toast } from "react-toastify";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 const fadeIn = {
   "0%": { opacity: 0 },
@@ -295,6 +296,7 @@ function Wishlist() {
           </>
         )}
       </div>
+      <Chatbot />
     </motion.div>
   );
 }

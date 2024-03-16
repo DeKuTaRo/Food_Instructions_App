@@ -67,36 +67,17 @@ function NavBar() {
         <Box> Travel to Food </Box>
       </Link>
       <List sx={{ display: "flex" }}>
-        <ListItem onMouseEnter={() => setHoverMenuHeader("header1")} onMouseLeave={() => setHoverMenuHeader(null)}>
-          <HeaderListItem
-            isHovered={hoverMenuHeader === "header1" ? true : false}
-            title="Recipes"
-            listItems={[
-              { content: "Filter", href: "/" },
-              { content: "Index", href: "/" },
-              { content: "Latest", href: "/" },
-              { content: "Popular", href: "/" },
-            ]}
-          />
-        </ListItem>
         <ListItem onMouseEnter={() => setHoverMenuHeader("header2")} onMouseLeave={() => setHoverMenuHeader(null)}>
           <HeaderListItem
             isHovered={hoverMenuHeader === "header2" ? true : false}
             title="Course"
             listItems={[
-              { content: "Breakfast", href: "/topic2/Breakfast" },   
+              { content: "Breakfast", href: "/topic2/Breakfast" },
               { content: "Lunch", href: "/topic2/Lunch" },
               { content: "Dinner", href: "/topic2/Dinner" },
               { content: "Snack", href: "/topic2/Snack" },
               { content: "Teatime", href: "/topic2/Teatime" },
             ]}
-          />
-        </ListItem>
-        <ListItem onMouseEnter={() => setHoverMenuHeader("header3")} onMouseLeave={() => setHoverMenuHeader(null)}>
-          <HeaderListItem
-            isHovered={hoverMenuHeader === "header3" ? true : false}
-            title="Nutrition"
-            listItems={[{ content: "Facts", href: "/nutrition-facts" }]}
           />
         </ListItem>
       </List>

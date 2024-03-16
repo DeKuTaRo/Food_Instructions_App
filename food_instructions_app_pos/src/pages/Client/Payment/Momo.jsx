@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 function MomoPaymentPage() {
   const location = useLocation();
@@ -143,7 +144,7 @@ function MomoPaymentPage() {
           Complete order
         </Button>
       </div>
-
+      <Chatbot />
       <Footer />
     </motion.div>
   );

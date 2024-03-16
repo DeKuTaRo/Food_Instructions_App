@@ -8,6 +8,7 @@ import Topics from "../../../components/Client/Topics";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 import inforTopic from "./Topic2Data";
 
@@ -161,6 +162,7 @@ useEffect(() => {
         ))}
       </Grid>
       <Topics />
+      <Chatbot />
       <Footer />
     </motion.div>
   );

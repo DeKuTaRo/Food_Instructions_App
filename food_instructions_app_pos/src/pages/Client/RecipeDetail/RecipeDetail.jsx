@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 import {
   Breadcrumbs,
@@ -400,6 +401,8 @@ function RecipeDetail() {
           </>
         )}
       </div>
+      <Chatbot />
+
       <Footer />
     </motion.div>
   );

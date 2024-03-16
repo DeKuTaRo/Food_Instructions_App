@@ -8,6 +8,7 @@ import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 function calculateDeliveryTime(databaseDateTimeString, minute) {
   const parts = databaseDateTimeString.split(/[\s/,:]+/);
@@ -537,7 +538,7 @@ function DeliveryHistoryPage() {
 
         {tabsContent[tabValue]}
       </div>
-
+      <Chatbot />
       <Footer />
     </motion.div>
   );

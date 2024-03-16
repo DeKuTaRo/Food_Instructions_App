@@ -28,6 +28,7 @@ import NavBar from "../../../components/Client/Navbar";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -281,6 +282,7 @@ function Cart() {
           Mua hàng
         </Button>
       </Box>
+      <Chatbot />
     </motion.div>
   );
 }

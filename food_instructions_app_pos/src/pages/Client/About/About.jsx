@@ -9,8 +9,9 @@ import Topics from "../../../components/Client/Topics";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
-
 import Footer from "../../../components/Client/Footer";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
+
 const About = () => {
   return (
     <motion.div
@@ -141,6 +142,7 @@ const About = () => {
         </Grid>
       </Container>
       <Topics />
+      <Chatbot />
       <Footer />
     </motion.div>
   );

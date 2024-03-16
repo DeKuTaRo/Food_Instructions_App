@@ -9,7 +9,7 @@ import NavBar from "../../../components/Client/Navbar";
 import FoodTypes from "../../../components/Client/TypeOfFood"
 import Footer from "../../../components/Client/Footer";
 import React from "react";
-import Chatbot from "../Chatbot/Chatbot";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
 function Home() {
   return (
