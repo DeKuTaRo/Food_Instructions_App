@@ -44,9 +44,9 @@ module.exports = (app) => {
 
   app.post("/account/login", async (req, res, next) => {
     try {
-      const { username, password, role } = req.body;
+      const { username, password } = req.body;
 
-      const { data } = await service.SignIn({ username, password, role });
+      const { data } = await service.SignIn({ username, password });
 
       return res.json(data);
     } catch (err) {

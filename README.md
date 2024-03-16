@@ -5,9 +5,7 @@ npx create-react-app food_instructions_app_pos
 
 Run nodejs folder backend
 cd food_instructions_app_api
-cd to service you want to run (Ex.. account : cd account)
-npm i
-npm run dev
+docker-compose up
 
 Run reactjs folder frontend
 cd food_instructions_app_pos

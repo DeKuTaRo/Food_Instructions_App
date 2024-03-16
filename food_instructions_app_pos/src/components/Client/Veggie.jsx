@@ -54,7 +54,6 @@ function Veggie() {
 
     return () => clearInterval(autoChangeInterval);
   }, [hiddenRecipes, displayedRecipes]);
-  console.log(recipes)
   return (
     <Box sx={{ margin: "3rem 0rem" }}>
       <Grid container spacing={2}>

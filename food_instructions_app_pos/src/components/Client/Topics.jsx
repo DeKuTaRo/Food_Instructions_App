@@ -6,7 +6,7 @@ import { FaRainbow } from "react-icons/fa";
 import { Link } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Box, Grid, Typography, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import axios from "axios";
 // import Swiper core and required modules
 import { Autoplay } from "swiper/modules";
@@ -19,16 +19,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-import sandwiches from "../../images/sandwiches.jpg";
-import bread from "../../images/bread.jpeg";
-import salad from "../../images/salad.jpg";
-import desserts from "../../images/dessert.jpg";
-import cereals from "../../images/cereals.jpg";
-import drink from "../../images/drink.jpg";
-import soup from "../../images/soup.jpg";
-import preserve from "../../images/preserve.jpg";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"; // Import Material-UI icon for previous button
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"; // Import Material-UI icon for next button
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"; 
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function Topics() {
   const [topics, setTopics] = useState([{ topics: [] }]);
@@ -37,7 +29,6 @@ function Topics() {
     try {
       const response = await axios.get(`${process.env.REACT_APP_URL_TOPIC_SERVICE}/topic/getAllData`);
       setTopics(response.data.topics);
-      console.log("response = ", response);
     } catch (err) {
       console.log("err = ", err);
     }

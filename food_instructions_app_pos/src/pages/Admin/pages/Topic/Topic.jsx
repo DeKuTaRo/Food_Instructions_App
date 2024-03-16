@@ -53,7 +53,7 @@ function ATopic() {
       });
       setAllTopicData(response.data);
     } catch (err) {
-      toast.success("Có lỗi xảy ra", {
+      toast.error("Có lỗi xảy ra", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

@@ -41,7 +41,7 @@ function Headers() {
         console.log(err);
       }
     };
-    getUserData();
+    isLogin === "true" && getUserData();
   }, [token]);
 
   const handleLogout = () => {

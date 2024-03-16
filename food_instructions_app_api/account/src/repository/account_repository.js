@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const path = require("path");
@@ -10,7 +10,7 @@ const { AccountModel, AddressModel, CommentModel } = require("../model");
 const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors");
 
 class AccountRepository {
-  async CreateAccount({ username, email, password, salt, tokenResetPassword, path }) {
+  async CreateAccount({ username, email, password, salt, tokenResetPassword, path, isAdmin, role }) {
     try {
       const account = new AccountModel({
         username,
@@ -18,8 +18,8 @@ class AccountRepository {
         password,
         salt,
         path,
-        isAdmin: false,
-        role: "user",
+        isAdmin: isAdmin,
+        role: role,
         tokenResetPassword: tokenResetPassword,
         address: [],
         wishlist: [],
@@ -81,9 +81,9 @@ class AccountRepository {
     }
   }
 
-  async FindAccount({ username, role }) {
+  async FindAccount({ username }) {
     try {
-      const existingAccount = await AccountModel.findOne({ username: username, role: role });
+      const existingAccount = await AccountModel.findOne({ username: username });
       return existingAccount;
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Find Customer");
@@ -130,7 +130,17 @@ class AccountRepository {
     }
   }
 
-  async AddWishlistItem({  _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines }) {
+  async AddWishlistItem({
+    _id,
+    username,
+    nameRecipe,
+    imageRecipe,
+    linkRecipe,
+    check,
+    totalAmount,
+    quantity,
+    ingredientLines,
+  }) {
     const recipe = {
       accountName: username,
       nameRecipe,
@@ -139,7 +149,7 @@ class AccountRepository {
       quantity,
       check,
       totalAmount,
-      ingredientLines
+      ingredientLines,
     };
 
     try {
@@ -356,7 +366,7 @@ class AccountRepository {
         return { error: "Không tìm thấy địa chỉ email hợp lệ", statusCode: 500 };
       }
 
-      const newPassword = await bcrypt.hash(password, checkExistAccount.salt);
+      const newPassword = await bcrypt.hashSync(password, checkExistAccount.salt);
       checkExistAccount.password = newPassword;
       await checkExistAccount.save();
       return { msg: "Đổi mật khẩu thành công", statusCode: 200 };

@@ -4,10 +4,10 @@ services:
     image: mongo
     ports:
       - "27018:27017"
-    container_name: nosql-db
+    container_name: food_instructions_app_api
     volumes:
       - ./db/:/data/db
-      
+
   account:
     build:
       dockerfile: Dockerfile

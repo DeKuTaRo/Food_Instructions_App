@@ -22,7 +22,6 @@ function Login() {
   const formData = {
     username: username,
     password: password,
-    role: username === "admin" ? "admin" : "user",
   };
 
   const handleSubmit = async (e) => {

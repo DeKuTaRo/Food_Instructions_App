@@ -1,15 +1,15 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const { APP_SECRET } = require("../config");
 
 //Utility functions
 module.exports.GenerateSalt = async () => {
-  return await bcrypt.genSalt();
+  return await bcrypt.genSaltSync(10);
 };
 
 module.exports.GeneratePassword = async (password, salt) => {
-  return await bcrypt.hash(password, salt);
+  return await bcrypt.hashSync(password, salt);
 };
 
 module.exports.ValidatePassword = async (enteredPassword, savedPassword, salt) => {
@@ -20,7 +20,6 @@ module.exports.GenerateSignature = async (payload) => {
   try {
     return await jwt.sign(payload, APP_SECRET, { expiresIn: "10m" });
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
@@ -28,7 +27,7 @@ module.exports.GenerateSignature = async (payload) => {
 module.exports.ValidateSignature = async (req) => {
   try {
     const signature = req.get("Authorization");
-    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET, { ignoreExpiration: true });
+    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET);
     req.user = payload;
     return true;
   } catch (error) {

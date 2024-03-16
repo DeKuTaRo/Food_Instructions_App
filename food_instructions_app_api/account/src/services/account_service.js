@@ -16,18 +16,16 @@ class AccountService {
   }
 
   async SignIn(userInputs) {
-    const { username, password, role } = userInputs;
+    const { username, password } = userInputs;
     try {
-      const existingAccount = await this.repository.FindAccount({ username, role });
+      const existingAccount = await this.repository.FindAccount({ username });
       if (existingAccount) {
         const validPassword = await ValidatePassword(password, existingAccount.password, existingAccount.salt);
-        const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
 
         const token = await GenerateSignature({
           _id: existingAccount._id,
           username: existingAccount.username,
           email: existingAccount.email,
-          iat: fixedIssuedAt,
         });
 
         if (validPassword) {
@@ -50,6 +48,9 @@ class AccountService {
       // create salt
       let salt = await GenerateSalt();
 
+      let isAdmin = username === process.env.USERNAME_ADMIN && password === process.env.PASSWORD_ADMIN ? true : false;
+      let role = username === process.env.USERNAME_ADMIN && password === process.env.PASSWORD_ADMIN ? "admin" : "user";
+
       let userPassword = await GeneratePassword(password, salt);
       const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
       const tokenResetPassword = await GenerateSignature({ email: email, iat: fixedIssuedAt });
@@ -61,10 +62,13 @@ class AccountService {
         salt,
         tokenResetPassword,
         path,
+        isAdmin,
+        role,
       });
 
       return FormateData({ id: existingCustomer._id, statusCode: 200, msg: "Tạo tài khoản thành công" });
     } catch (err) {
+      console.log("err service = ", err);
       throw new APIError("Data Not found", err);
     }
   }
@@ -139,8 +143,19 @@ class AccountService {
 
   async AddToWishlist(recipeInputs) {
     try {
-      const { _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines } = recipeInputs;
-      const wishlistResult = await this.repository.AddWishlistItem({  _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines });
+      const { _id, username, nameRecipe, imageRecipe, linkRecipe, check, totalAmount, quantity, ingredientLines } =
+        recipeInputs;
+      const wishlistResult = await this.repository.AddWishlistItem({
+        _id,
+        username,
+        nameRecipe,
+        imageRecipe,
+        linkRecipe,
+        check,
+        totalAmount,
+        quantity,
+        ingredientLines,
+      });
       return FormateData(wishlistResult);
     } catch (err) {
       throw new APIError("Data Not found", err);
