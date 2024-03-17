@@ -8,6 +8,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import { RxAvatar } from "react-icons/rx";
 import { mainListItems, secondaryListItems } from "../../pages/Admin/listItems";
+import React, { useEffect } from "react";
+import axios from "axios";
+import DialogExpired from "../Client/DialogExpired";
 
 const drawerWidth = 240;
 
@@ -156,13 +159,43 @@ function Sidebar({ open, toggleDrawer }) {
 
 export function HeaderWithSidebar({ title }) {
   const [open, setOpen] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false)
+  const navigate = useNavigate();
+
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+  const isLogin = localStorage.getItem("isLogin");
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.data.statusCode === 403) {
+          setOpenDialog(true);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    isLogin === "true" && getUserData();
+  }, [token]);
+  const handleClose = () => {
+    setOpenDialog(false);
+    localStorage.setItem("isLogin", "false");
+    localStorage.removeItem("token");
+    navigate("/login");
   };
   return (
     <>
       <HeaderContent title={title} open={open} toggleDrawer={toggleDrawer} />
       <Sidebar open={open} toggleDrawer={toggleDrawer} />
+      <DialogExpired onClose={handleClose} open={openDialog} />
     </>
   );
 }

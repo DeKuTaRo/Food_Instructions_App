@@ -12,14 +12,12 @@ module.exports = (app) => {
     try {
       const { data } = await service.AddCommentsToRecipe(recipeInputs, username);
       // get payload // to send account service
-      const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, data, "ADD_COMMENTS_TO_RECIPES");
-      PublishAccountEvent(dataPayload);
+      // const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, data, "ADD_COMMENTS_TO_RECIPES");
+      // PublishAccountEvent(dataPayload);
       if (data) {
-        res.status(200).json({ statusCode: 200, msg: "Comment successfully added" });
-        return;
+        return res.status(200).json({ statusCode: 200, msg: "Comment successfully added" });
       }
-      res.status(200).json({ msg: "An error occurred, please try again later" });
-      return;
+      return res.status(200).json({ msg: "An error occurred, please try again later" });
     } catch (err) {
       next(err);
     }
@@ -77,8 +75,8 @@ module.exports = (app) => {
         return res.status(200).json({ msg: "Comment is required" });
       }
       // get payload // to send account service
-      const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
-      PublishAccountEvent(dataPayload);
+      // const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
+      // PublishAccountEvent(dataPayload);
 
       const { data } = await service.AddReplyToComment({
         pathAvatar,
@@ -107,8 +105,9 @@ module.exports = (app) => {
       const { data } = await service.RemoveComment(_idComment, idRecipe);
 
       // get payload to send account service
-      const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
-      PublishAccountEvent(dataPayload);
+      // const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
+      // console.log("dataPayload: ", dataPayload);
+      // PublishAccountEvent(dataPayload);
       if (data) {
         return res.status(200).json({ statusCode: 200, msg: "Delete succesfully" });
       }
@@ -126,10 +125,10 @@ module.exports = (app) => {
       const { data } = await service.RemoveReplyComment(_idReplyComment, _idComment, idRecipe);
 
       // get payload to send account service
-      const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
-      PublishAccountEvent(dataPayload);
+      // const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
+      // PublishAccountEvent(dataPayload);
       if (data) {
-        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Delete succesfully" });
       }
       return res.status(200).json({ msg: "Có lỗi xảy ra" });
     } catch (err) {

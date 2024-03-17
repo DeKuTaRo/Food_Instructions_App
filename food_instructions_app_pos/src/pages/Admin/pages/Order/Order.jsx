@@ -20,11 +20,8 @@ import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { motion } from "framer-motion";
 import { HeaderWithSidebar } from "../../../../components/Admin/HeaderWithSidebar";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { styled } from "@mui/system";
-
-
-
 
 const defaultTheme = createTheme();
 
@@ -51,7 +48,7 @@ function AdminOrderManagement() {
     }
   };
 
-const StyledTabs = styled(Tabs)(({ theme }) => ({
+  const StyledTabs = styled(Tabs)(({ theme }) => ({
     "& .MuiTabs-indicator": {
       backgroundColor: theme.palette.success.main, // Set the indicator color
     },
@@ -62,8 +59,6 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
       color: theme.palette.success.main, // Set the text color of the selected tab
     },
   }));
-
-
 
   useEffect(() => {
     getUserData();
@@ -79,32 +74,33 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     try {
       setLoading(true);
 
-      await axios.put(
-        `http://localhost:8004/order/update/${orderId}`,
-        {
-          type,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      await axios
+        .put(
+          `http://localhost:8004/order/update/${orderId}`,
+          {
+            type,
           },
-        }
-      ).then((res) => {
-        if (res.data.statusCode === 200) {
-          toast.success(res.data.msg, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          })}}
-         
-          );
-           getUserData()
-      
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.statusCode === 200) {
+            toast.success(res.data.msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+          }
+        });
+      getUserData();
     } catch (error) {
       console.error("Error marking order as delivered:", error);
     } finally {
@@ -112,8 +108,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     }
   };
 
-  const filteredOrders = (status) =>
-    orders.filter((order) => order.status === status);
+  const filteredOrders = (status) => orders.filter((order) => order.status === status);
 
   const ManagerNotPayment = () => (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
@@ -128,7 +123,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                     <TableCell>Order ID</TableCell>
                     <TableCell>Customer Name</TableCell>
                     <TableCell>Phone Number</TableCell>
-                                        <TableCell>Address</TableCell>
+                    <TableCell>Address</TableCell>
 
                     <TableCell>Product Name</TableCell>
                     <TableCell>Quantity</TableCell>
@@ -144,7 +139,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                       <TableCell>{order._id}</TableCell>
                       <TableCell>{order.customerName}</TableCell>
                       <TableCell>{order.phoneNumber}</TableCell>
-                                            <TableCell>{order.address}</TableCell>
+                      <TableCell>{order.address}</TableCell>
 
                       <TableCell>{order.productName}</TableCell>
                       <TableCell>{order.quantity}</TableCell>
@@ -154,14 +149,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() =>
-                            handleUpdateSuccessPayment(
-                              order._id,
-                              "PaymentSuccess"
-                            )
-                          }
-                          disabled={loading}
-                        >
+                          onClick={() => handleUpdateSuccessPayment(order._id, "PaymentSuccess")}
+                          disabled={loading}>
                           Mark as Payment Success
                         </Button>
                       </TableCell>
@@ -212,11 +201,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() =>
-                            handleUpdateSuccessPayment(order._id, "Delivered")
-                          }
-                          disabled={loading}
-                        >
+                          onClick={() => handleUpdateSuccessPayment(order._id, "Delivered")}
+                          disabled={loading}>
                           Mark as Delivered
                         </Button>
                       </TableCell>
@@ -266,11 +252,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() =>
-                            handleUpdateSuccessPayment(order._id, "Completed")
-                          }
-                          disabled={loading}
-                        >
+                          onClick={() => handleUpdateSuccessPayment(order._id, "Completed")}
+                          disabled={loading}>
                           Mark as Completed
                         </Button>
                       </TableCell>
@@ -320,11 +303,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() =>
-                            handleUpdateSuccessPayment(order._id, "Cancelled")
-                          }
-                          disabled={loading}
-                        >
+                          onClick={() => handleUpdateSuccessPayment(order._id, "Cancelled")}
+                          disabled={loading}>
                           Mark as Cancelled
                         </Button>
                       </TableCell>
@@ -388,13 +368,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
     <ManagerCancelled />,
   ];
 
-   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      initial={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+  return (
+    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
@@ -403,41 +378,36 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
             component="main"
             sx={{
               backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
+                theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
               flexGrow: 1,
               height: "100vh",
               overflow: "auto",
-            }}
-          >
+            }}>
             <Toolbar />
             <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-                <React.Fragment  sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <div style={{ textAlign: "center" }}>
-                    <StyledTabs
-                      value={tabValue}
-                      onChange={handleChangeTab}
-                      indicatorColor="primary"
-                      textColor="primary"
-                      centered
-                    >
-                      <StyledTab sx={{fontWeight:"600" , fontStyle:"1.2rem"}} label="Not Payment" />
-                      <StyledTab sx={{fontWeight:"600" , fontStyle:"1.2rem"}} label="Payment Success" />
-                      <StyledTab sx={{fontWeight:"600" , fontStyle:"1.2rem"}} label="Delivered" />
-                      <StyledTab sx={{fontWeight:"600" , fontStyle:"1.2rem"}} label="Completed" />
-                      <StyledTab sx={{fontWeight:"600" , fontStyle:"1.2rem"}} label="Cancelled" />
-                    </StyledTabs>
-                    {tabsContent[tabValue]}
-                  </div>
-                </React.Fragment>
+              <React.Fragment sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+                <div style={{ textAlign: "center" }}>
+                  <StyledTabs
+                    value={tabValue}
+                    onChange={handleChangeTab}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered>
+                    <StyledTab sx={{ fontWeight: "600", fontStyle: "1.2rem" }} label="Not Payment" />
+                    <StyledTab sx={{ fontWeight: "600", fontStyle: "1.2rem" }} label="Payment Success" />
+                    <StyledTab sx={{ fontWeight: "600", fontStyle: "1.2rem" }} label="Delivered" />
+                    <StyledTab sx={{ fontWeight: "600", fontStyle: "1.2rem" }} label="Completed" />
+                    <StyledTab sx={{ fontWeight: "600", fontStyle: "1.2rem" }} label="Cancelled" />
+                  </StyledTabs>
+                  {tabsContent[tabValue]}
+                </div>
+              </React.Fragment>
             </Container>
           </Box>
         </Box>
       </ThemeProvider>
     </motion.div>
   );
-};
-
+}
 
 export default AdminOrderManagement;

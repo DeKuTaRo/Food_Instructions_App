@@ -19,7 +19,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"; 
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function Topics() {
@@ -63,37 +63,32 @@ function Topics() {
         <FaRainbow /> <Typography sx={{ fontWeight: "bold", margin: "1rem 0" }}>BROWSE POPULAR topicS</Typography>
         <Swiper ref={sliderRef} modules={[Autoplay]} spaceBetween={20} slidesPerView={5} loop={true}>
           {topics.map((topic, index) => (
-            <>
-              <SwiperSlide>
-                <Link
-                  href={`/topic/${topic.title}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                  key={topic._id}>
-                  <Card
-                    sx={{
-                      backgroundColor: "white",
-                      display: "flex",
-                      flexDirection: "column",
-                      transition: "box-shadow 0.3s", // Add transition for smooth effect
-                      "&:hover": {
-                        boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)", // Adjust the shadow on hover
-                      },
-                    }}>
-                    <CardMedia
-                      component="img"
-                      alt={topic.title}
-                      image={`${process.env.REACT_APP_URL_TOPIC_SERVICE}/${topic.mainImage}`}
-                      height={140}
-                    />
-                    <CardContent sx={{ color: "black", textAlign: "center" }}>
-                      <Typography variant="inherit" component="span">
-                        {topic.title}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </SwiperSlide>
-            </>
+            <SwiperSlide>
+              <Link key={index} href={`/topic/${topic.title}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <Card
+                  sx={{
+                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "box-shadow 0.3s", // Add transition for smooth effect
+                    "&:hover": {
+                      boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)", // Adjust the shadow on hover
+                    },
+                  }}>
+                  <CardMedia
+                    component="img"
+                    alt={topic.title}
+                    image={`${process.env.REACT_APP_URL_TOPIC_SERVICE}/${topic.mainImage}`}
+                    height={140}
+                  />
+                  <CardContent sx={{ color: "black", textAlign: "center" }}>
+                    <Typography variant="inherit" component="span">
+                      {topic.title}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
+            </SwiperSlide>
           ))}
         </Swiper>
         <Button

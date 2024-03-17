@@ -32,7 +32,6 @@ export default function Orders() {
 
     fetchOrders();
   }, []);
-  console.log(orderData)
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>

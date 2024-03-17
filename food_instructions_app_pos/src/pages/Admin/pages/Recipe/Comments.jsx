@@ -523,46 +523,11 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
                     </Button>
                     <Button
                       variant="contained"
-                      startIcon={<QuickreplyIcon />}
-                      onClick={() => handleReplyComment(reply._id, isLiked)}>
-                      Reply
-                    </Button>
-                    <Button
-                      variant="contained"
                       startIcon={<DeleteIcon />}
                       onClick={() => handleDeleteReplyComment(reply._id, item._id)}>
                       Delete
                     </Button>
                   </Typography>
-
-                  {/* Box show reply comment */}
-                  {replyVisible[reply._id] && (
-                    <>
-                      <TextareaAutosize
-                        aria-label="comments"
-                        minRows={3}
-                        placeholder="Leave your reply here"
-                        style={{
-                          width: "100%",
-                          padding: "1rem",
-                          fontSize: "1rem",
-                          border: "1px solid #ccc",
-                          borderRadius: "1rem",
-                        }}
-                        value={commentReply}
-                        onChange={(e) => setCommentReply(e.target.value)}
-                        // onChange={(e) => handleChangeCommentReply(index, e.target.value)}
-                      />
-                      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
-                        <Button
-                          variant="contained"
-                          sx={{ textAlign: "center", marginTop: "1rem" }}
-                          onClick={() => handlePostReplyComments(item._id)}>
-                          Post reply
-                        </Button>
-                      </Box>
-                    </>
-                  )}
                 </Box>
               ))}
             </Box>

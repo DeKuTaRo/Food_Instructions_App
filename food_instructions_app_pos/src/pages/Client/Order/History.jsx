@@ -301,13 +301,7 @@ function DeliveryHistoryPage() {
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Estimate time delivery:{" "}
-                    {order.timeCreate.split(" ")[0] +
-                      " " +
-                      calculateDeliveryTime(order.timeCreate, 3).toLocaleTimeString("en-US", {
-                        hour12: false,
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 3)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Total Amount: ${order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}

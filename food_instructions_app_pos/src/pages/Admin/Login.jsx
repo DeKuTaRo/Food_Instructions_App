@@ -30,6 +30,7 @@ function Login() {
       axios
         .post(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/account/login`, formData)
         .then((res) => {
+          console.log("res = ", res);
           localStorage.setItem("isAdmin", res.data.isAdmin);
           if (res.data.isAdmin === true) {
             toast.success("Login  successfully", {
@@ -43,6 +44,8 @@ function Login() {
               theme: "dark",
             });
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("isLogin", "true");
+
             navigate("/dashboard");
           } else {
             toast.error("Username or password is incorrect", {

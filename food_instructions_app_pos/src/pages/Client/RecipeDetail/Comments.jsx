@@ -95,6 +95,17 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             progress: undefined,
             theme: "dark",
           });
+        } else {
+          toast.error(response.data.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         }
       } catch (err) {
         toast.error("An error occurred, please try again later", {

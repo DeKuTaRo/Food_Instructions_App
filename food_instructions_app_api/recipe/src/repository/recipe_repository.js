@@ -118,7 +118,7 @@ class RecipeRepository {
         {
           $set: {
             comments: updateComments,
-            totalComments: checkExistRecipe.totalComments - (1 + updateComments.length),
+            totalComments: checkExistRecipe.totalComments - (1 + deleteComment.replies.length),
           },
         },
         { new: true }

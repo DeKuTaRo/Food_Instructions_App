@@ -251,6 +251,7 @@ class AccountService {
   }
 
   async SubscribeEvents(payload) {
+    console.log("payload = ", payload);
     const { event, data, comment, userId, commentId } = payload.data;
     switch (event) {
       case "ADD_COMMENTS_TO_RECIPES":
