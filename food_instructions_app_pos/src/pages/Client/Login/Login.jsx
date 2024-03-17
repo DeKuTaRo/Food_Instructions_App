@@ -62,7 +62,7 @@ function LoginClient() {
         }
       });
     } catch (err) {
-      toast.error("Có lỗi xảy ra khi đăng nhập", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

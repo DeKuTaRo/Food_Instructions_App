@@ -77,7 +77,7 @@ function Cart() {
       });
       setSearchResults(response.data);
     } catch (error) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -106,7 +106,7 @@ function Cart() {
         handleGetCart();
       }
     } catch (err) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -123,7 +123,7 @@ function Cart() {
     try {
       const orders = searchResults.filter((obj) => obj.check === true);
       if (orders.length === 0) {
-        toast.error("Vui lòng chọn món ăn", {
+        toast.error("Please choose your recipe", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -140,7 +140,7 @@ function Cart() {
       };
       navigate("/order", { state: { orderDataFromCart } });
     } catch (err) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lai sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

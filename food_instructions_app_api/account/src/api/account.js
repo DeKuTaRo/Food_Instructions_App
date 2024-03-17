@@ -27,7 +27,6 @@ module.exports = (app) => {
       const { data } = await service.SignUp({ username, email, password, path });
       return res.json(data);
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });
@@ -54,25 +53,6 @@ module.exports = (app) => {
     }
   });
 
-  app.post("/address", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-
-      const { street, postalCode, city, country } = req.body;
-
-      const { data } = await service.AddNewAddress(_id, {
-        street,
-        postalCode,
-        city,
-        country,
-      });
-
-      return res.json(data);
-    } catch (err) {
-      next(err);
-    }
-  });
-
   app.get("/account/profile", UserAuth, async (req, res, next) => {
     try {
       const { _id } = req.user;
@@ -83,16 +63,6 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/shoping-details", UserAuth, async (req, res, next) => {
-    try {
-      const { _id } = req.user;
-      const { data } = await service.GetShopingDetails(_id);
-
-      return res.json(data);
-    } catch (err) {
-      next(err);
-    }
-  });
 
   app.get("/", (req, res, next) => {
     res.send("Account Service");
@@ -134,9 +104,9 @@ module.exports = (app) => {
         ingredientLines,
       });
       if (data) {
-        return res.status(200).json({ msg: "Thêm yêu thích thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Add to wishlist successfully", statusCode: 200 });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra, vui lòng thử lại sau", statusCode: 500 });
+      return res.status(200).json({ msg: "An error occurred, please try again later", statusCode: 500 });
     } catch (err) {
       next(err);
     }
@@ -169,9 +139,9 @@ module.exports = (app) => {
         ingredientLines
       );
       if (data) {
-        return res.status(200).json({ msg: "Thêm vào giỏ hàng thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Add to cart successfully", statusCode: 200 });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra, vui lòng thử lại sau", statusCode: 500 });
+      return res.status(200).json({ msg: "An error occurred, please try again later", statusCode: 500 });
     } catch (err) {
       next(err);
     }
@@ -194,9 +164,9 @@ module.exports = (app) => {
       const idRecipe = req.query.idRecipe;
       const { data } = await service.RemoveWishlist(_id, idRecipe);
       if (data) {
-        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Delete succesfully" });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return res.status(200).json({ msg: "An error occurred, please try again later" });
     } catch (err) {
       next(err);
     }
@@ -208,9 +178,9 @@ module.exports = (app) => {
       const idRecipe = req.query.idRecipe;
       const { data } = await service.RemoveCart(_id, idRecipe);
       if (data) {
-        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Delete successfully" });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return res.status(200).json({ msg: "An error occurred, please try again later" });
     } catch (err) {
       next(err);
     }
@@ -247,9 +217,9 @@ module.exports = (app) => {
 
       const { data } = await service.UpdateProfile(_id, username, email, file);
       if (data) {
-        return res.status(200).json({ msg: "Cập nhật thông tin thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Update successfully", statusCode: 200 });
       }
-      return res.status(200).json({ msg: "Cập nhật thông tin thất bại", statusCode: 500 });
+      return res.status(200).json({ msg: "Update failed", statusCode: 500 });
     } catch (err) {
       console.log("err api = ", err);
       next(err);
@@ -263,9 +233,9 @@ module.exports = (app) => {
 
       const { data } = await service.ChangePassword(_id, oldPassword, newPassword);
       if (data) {
-        return res.status(200).json({ msg: "Đổi mật khẩu thành công", statusCode: 200 });
+        return res.status(200).json({ msg: "Change password successfully", statusCode: 200 });
       }
-      return res.status(200).json({ msg: "Đổi mật khẩu thất bại", statusCode: 500 });
+      return res.status(200).json({ msg: "Change password failed", statusCode: 500 });
     } catch (err) {
       console.log("err = ", err);
       next(err);

@@ -8,7 +8,6 @@ import { FaStar } from "react-icons/fa";
 import BoltIcon from "@mui/icons-material/Bolt";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import EditIcon from "@mui/icons-material/Edit";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import QuickreplyIcon from "@mui/icons-material/Quickreply";
@@ -29,7 +28,6 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
   const [isLiked, setIsLiked] = useState(true);
 
   const [commentReply, setCommentReply] = useState("");
-  const debounceReplyComment = useDebounce(commentReply, 1000);
 
   const isAdmin = localStorage.getItem("isAdmin");
 
@@ -83,8 +81,7 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
           setRatingComment(null);
         }
       } catch (err) {
-        console.error(err);
-        toast.error("Có lỗi xảy ra", {
+        toast.error("An error occurred, please try again later", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -144,7 +141,16 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
         getComments();
       }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -216,7 +222,7 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
         });
       }
     } catch (err) {
-      toast.error("Có lỗi xảy ra", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -254,7 +260,16 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
         });
       }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -284,7 +299,16 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
         });
       }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 

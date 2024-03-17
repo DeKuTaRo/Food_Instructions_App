@@ -33,7 +33,7 @@ class AccountService {
             token: token,
             statusCode: 200,
             isAdmin: existingAccount.isAdmin,
-            msg: "Đăng nhập thành công",
+            msg: "Login successfully",
           });
         }
       }
@@ -65,10 +65,8 @@ class AccountService {
         isAdmin,
         role,
       });
-
-      return FormateData({ id: existingCustomer._id, statusCode: 200, msg: "Tạo tài khoản thành công" });
+      return FormateData(existingCustomer);
     } catch (err) {
-      console.log("err service = ", err);
       throw new APIError("Data Not found", err);
     }
   }
@@ -114,19 +112,6 @@ class AccountService {
     try {
       const existingCustomer = await this.repository.FindCustomerById({ id });
       return FormateData(existingCustomer);
-    } catch (err) {
-      throw new APIError("Data Not found", err);
-    }
-  }
-
-  async GetShopingDetails(id) {
-    try {
-      const existingCustomer = await this.repository.FindCustomerById({ id });
-
-      if (existingCustomer) {
-        return FormateData(existingCustomer);
-      }
-      return FormateData({ msg: "Error" });
     } catch (err) {
       throw new APIError("Data Not found", err);
     }

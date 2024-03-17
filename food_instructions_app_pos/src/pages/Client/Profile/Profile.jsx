@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, TextField, Button, Paper, Avatar, InputAdornment } from "@mui/material";
-import { GiKnifeFork } from "react-icons/gi";
+import { Box, Typography, TextField, Button, Paper, Avatar } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { motion } from "framer-motion";
 import Headers from "../../../components/Client/Headers";
@@ -12,7 +11,6 @@ import { Input } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 
@@ -50,7 +48,16 @@ const Profile = () => {
         setAvatarUser(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/${res.data.path}`);
         setUserData(res.data);
       } catch (err) {
-        console.log(err);
+        toast.error("An error occurred, please try again later", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     };
     getUserData();
@@ -111,7 +118,7 @@ const Profile = () => {
         });
       }
     } catch (err) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

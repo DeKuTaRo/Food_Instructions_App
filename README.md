@@ -20,13 +20,13 @@ Name : NGUYEN VAN A
 Number : 9704000000000026
 Card Expdate : 03/07
 
-STT : 1
+STT : 3
 Status : Not sufficient funds
 Name : NGUYEN VAN A
 Number : 9704000000000034
 Card Expdate : 03/07
 
-STT : 1
+STT : 4
 Status : Card limit
 Name : NGUYEN VAN A
 Number : 9704000000000042

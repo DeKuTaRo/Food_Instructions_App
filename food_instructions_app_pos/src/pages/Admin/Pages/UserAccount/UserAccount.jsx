@@ -64,7 +64,7 @@ function UserAccount() {
         }
       );
       if (response.status === 200) {
-        toast.success("Dữ liệu được cập nhật thành công", {
+        toast.success("Update successfully", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -75,7 +75,7 @@ function UserAccount() {
           theme: "dark",
         });
       } else {
-        toast.error("Có lỗi xảy ra", {
+        toast.error("Update failed", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -88,7 +88,7 @@ function UserAccount() {
       }
       setAllAccounts(response.data);
     } catch (err) {
-      toast.error(err, {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

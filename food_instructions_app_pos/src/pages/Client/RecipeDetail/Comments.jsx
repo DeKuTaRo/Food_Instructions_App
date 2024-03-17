@@ -97,8 +97,7 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
           });
         }
       } catch (err) {
-        console.error(err);
-        toast.error("Có lỗi xảy ra", {
+        toast.error("An error occurred, please try again later", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -114,25 +113,27 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
 
   const getComments = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`,
-        {
-          params: {
-            recipeName: recipeName,
-          },
-        }
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        //   "Content-Type": "application/json",
-        // },
-      );
+      const response = await axios.get(`${process.env.REACT_APP_URL_RECIPE_SERVICE}/recipe/getComments`, {
+        params: {
+          recipeName: recipeName,
+        },
+      });
       if (response.data.recipes !== null) {
         setListComments(response.data.recipes.comments);
         setTotalComments(response.data.recipes.totalComments);
         setIdRecipe(response.data.recipes._id);
       }
     } catch (err) {
-      console.log("err get comment = ", err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   useEffect(() => {
@@ -166,7 +167,16 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
         getComments();
       }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -207,13 +217,21 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
       if (response.data.statusCode === 200) {
         getComments();
       }
-      // Clear the input field after posting
       const newInputs = [...replyInputs];
       newInputs[_idComment] = "";
       setReplyInputs(newInputs);
       handleReplyComment(_idComment);
     } catch (err) {
-      console.error(err);
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   const [replyInputs, setReplyInputs] = useState([]);

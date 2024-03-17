@@ -32,7 +32,7 @@ function Login() {
         .then((res) => {
           localStorage.setItem("isAdmin", res.data.isAdmin);
           if (res.data.isAdmin === true) {
-            toast.success("Đăng nhập thành công", {
+            toast.success("Login  successfully", {
               position: "top-right",
               autoClose: 3000,
               hideProgressBar: false,
@@ -45,7 +45,7 @@ function Login() {
             localStorage.setItem("token", res.data.token);
             navigate("/dashboard");
           } else {
-            toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc bạn không có quyền truy cập", {
+            toast.error("Username or password is incorrect", {
               position: "top-right",
               autoClose: 3000,
               hideProgressBar: false,
@@ -58,7 +58,7 @@ function Login() {
           }
         })
         .catch((err) => {
-          toast.error("Có lỗi xảy ra, vui lòng kiểm tra lại kết nối", {
+          toast.error("An error occurred, please try again later", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -69,12 +69,17 @@ function Login() {
             theme: "dark",
           });
         });
-
-      // console.log("Form submitted:", response);
-      // Handle success or any further action here
     } catch (error) {
-      console.error("Error submitting form:", error);
-      // Handle error here
+      toast.error("An error occurred, please try again later", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 

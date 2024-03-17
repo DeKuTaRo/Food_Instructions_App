@@ -15,10 +15,10 @@ module.exports = (app) => {
       const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, data, "ADD_COMMENTS_TO_RECIPES");
       PublishAccountEvent(dataPayload);
       if (data) {
-        res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+        res.status(200).json({ statusCode: 200, msg: "Comment successfully added" });
         return;
       }
-      res.status(200).json({ msg: "Có lỗi xảy ra" });
+      res.status(200).json({ msg: "An error occurred, please try again later" });
       return;
     } catch (err) {
       next(err);
@@ -43,7 +43,6 @@ module.exports = (app) => {
       const { data } = await service.AddLikeToComment({ _id, username }, { _idComment, isLiked, idRecipe });
       res.status(200).json(data);
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });
@@ -75,7 +74,7 @@ module.exports = (app) => {
     };
     try {
       if (content === "") {
-        return res.status(200).json({ msg: "Bình luận không được để trống" });
+        return res.status(200).json({ msg: "Comment is required" });
       }
       // get payload // to send account service
       const dataPayload = await service.GetRecipePayloadAddComment(_id, recipeInputs, "ADD_COMMENTS_TO_RECIPES");
@@ -91,25 +90,14 @@ module.exports = (app) => {
         username,
       });
       if (data) {
-        return res.status(200).json({ statusCode: 200, msg: "Bình luận thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Comment successfully added" });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return res.status(200).json({ msg: "An error occurred, please try again later" });
     } catch (err) {
       console.log("err api = ", err);
       next(err);
     }
   });
-
-  // app.put("/recipe/editComment", UserAuth, async (req, res, next) => {
-
-  //   try {
-  //     const _idComment = req.body._idComment;
-
-  //   } catch (err) {
-  //     console.log("err api : ", err);
-  //     next(err);
-  //   }
-  // });
 
   app.delete("/recipe/removeComment", UserAuth, async (req, res, next) => {
     try {
@@ -122,9 +110,9 @@ module.exports = (app) => {
       const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
       PublishAccountEvent(dataPayload);
       if (data) {
-        return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
+        return res.status(200).json({ statusCode: 200, msg: "Delete succesfully" });
       }
-      return res.status(200).json({ msg: "Có lỗi xảy ra" });
+      return res.status(200).json({ msg: "An error occurred, please try again later" });
     } catch (err) {
       next(err);
     }
@@ -138,8 +126,8 @@ module.exports = (app) => {
       const { data } = await service.RemoveReplyComment(_idReplyComment, _idComment, idRecipe);
 
       // get payload to send account service
-      // const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
-      // PublishAccountEvent(dataPayload);
+      const dataPayload = await service.GetRecipePayloadDeleteComment(_id, _idComment, "DELETE_COMMENTS_FROM_RECIPES");
+      PublishAccountEvent(dataPayload);
       if (data) {
         return res.status(200).json({ statusCode: 200, msg: "Xóa thành công" });
       }

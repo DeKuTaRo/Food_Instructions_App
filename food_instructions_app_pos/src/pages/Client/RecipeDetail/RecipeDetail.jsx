@@ -183,7 +183,7 @@ function RecipeDetail() {
         });
       }
     } catch (err) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -242,7 +242,7 @@ function RecipeDetail() {
         });
       }
     } catch (err) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+      toast.error("An error occurred, please try again later", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

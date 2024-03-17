@@ -12,23 +12,28 @@ const { APIError, BadRequestError, STATUS_CODES } = require("../utils/app-errors
 class AccountRepository {
   async CreateAccount({ username, email, password, salt, tokenResetPassword, path, isAdmin, role }) {
     try {
-      const account = new AccountModel({
-        username,
-        email,
-        password,
-        salt,
-        path,
-        isAdmin: isAdmin,
-        role: role,
-        tokenResetPassword: tokenResetPassword,
-        address: [],
-        wishlist: [],
-        orders: [],
-        cart: [],
-        comments: [],
-      });
-      const accountResult = await account.save();
-      return accountResult;
+      const existingAccount = await AccountModel.findOne({ username: username });
+      if (existingAccount) {
+        return { statusCode: 500, msg: "Username has been used, please try a different one" };
+      } else {
+        const account = new AccountModel({
+          username,
+          email,
+          password,
+          salt,
+          path,
+          isAdmin: isAdmin,
+          role: role,
+          tokenResetPassword: tokenResetPassword,
+          address: [],
+          wishlist: [],
+          orders: [],
+          cart: [],
+          comments: [],
+        });
+        const accountResult = await account.save();
+        return { id: accountResult._id, statusCode: 200, msg: "Created successfully" };
+      }
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Create Account");
     }
@@ -36,7 +41,7 @@ class AccountRepository {
 
   async Accounts() {
     try {
-      return await AccountModel.find();
+      return await AccountModel.find({ isAdmin: false });
     } catch (err) {
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Accounts");
     }

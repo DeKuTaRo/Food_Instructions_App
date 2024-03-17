@@ -18,7 +18,7 @@ module.exports.ValidatePassword = async (enteredPassword, savedPassword, salt) =
 
 module.exports.GenerateSignature = async (payload) => {
   try {
-    return await jwt.sign(payload, APP_SECRET, { expiresIn: "10m" });
+    return await jwt.sign(payload, APP_SECRET, { expiresIn: "5m" });
   } catch (error) {
     return error;
   }
@@ -28,9 +28,25 @@ module.exports.ValidateSignature = async (req) => {
   try {
     const signature = req.get("Authorization");
 
-    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET, { ignoreExpiration: true });
-    req.user = payload;
-    return true;
+    const payload = await jwt.verify(signature.split(" ")[1], APP_SECRET, (err, decoded) => {
+      if (err) {
+        if (err.name === "TokenExpiredError") {
+          console.log("Token expired");
+          // res.json({ msg: "Account is expired, please log in again.", statusCode: 300 });
+          return false;
+        } else {
+          console.log("Token invalid");
+          // res.json({ msg: "Account is invalid, please log in again.", statusCode: 300 });
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
+    if (payload) {
+      req.user = await jwt.verify(signature.split(" ")[1], APP_SECRET);
+    }
+    return payload;
   } catch (error) {
     return false;
   }

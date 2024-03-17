@@ -75,9 +75,20 @@ function SignUp() {
             theme: "dark",
           });
           navigate("/login-plus");
+        } else {
+          toast.error(response.data.msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         }
       } catch (err) {
-        toast.error("Có lỗi xảy ra, vui lòng thử lại sau", {
+        toast.error("An error occurred, please try again later", {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -143,29 +154,33 @@ function SignUp() {
                   margin: "",
                 }}>
                 <form onSubmit={handleSubmit}>
-                  <div  style={{
-                      display: "flex",
-                      alignItems: "center",
-                     
-                      justifyContent:"center",
-                      
-                    }}>
-                    <div
+                  <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "28px",
-                      margin: "12px 12px",
-                      fontSize: "24px",
-                      fontWeight: "bold",
-                      justifyContent:"center",
-                      width:"30%"
-                      
+
+                      justifyContent: "center",
                     }}>
-                    <ImageUpload onImageUpload={handleImageChange} imageData={avatar} titleImage={formData.username} style={{width:"50%"}} />
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "28px",
+                        margin: "12px 12px",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        justifyContent: "center",
+                        width: "30%",
+                      }}>
+                      <ImageUpload
+                        onImageUpload={handleImageChange}
+                        imageData={avatar}
+                        titleImage={formData.username}
+                        style={{ width: "50%" }}
+                      />
+                    </div>
                   </div>
-                  </div>
-                  
+
                   <div
                     style={{
                       display: "flex",
@@ -291,7 +306,7 @@ function SignUp() {
           </Box>
         </Box>
       </div>
-      <Footer/>
+      <Footer />
     </motion.div>
   );
 }

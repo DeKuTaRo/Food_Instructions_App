@@ -8,7 +8,6 @@ import {
   faTwitter,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
-import { RxAvatar } from "react-icons/rx";
 import React, { useState, useEffect } from "react";
 import { Link, Avatar } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
@@ -16,11 +15,19 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import AvatarDefault from "../../images/avatar.png";
+import DialogExpired from "./DialogExpired";
 
 function Headers() {
   const [hoverDialogAccount, setHoverDialogAccount] = useState(null);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
 
+  const handleClose = () => {
+    setOpen(false);
+    localStorage.setItem("isLogin", "false");
+    localStorage.removeItem("token");
+    navigate("/login-plus");
+  };
   const isLogin = localStorage.getItem("isLogin");
   const showDialogAccount = hoverDialogAccount === "account" ? true : false;
 
@@ -35,6 +42,9 @@ function Headers() {
             Authorization: `Bearer ${token}`,
           },
         });
+        if (res.data.statusCode === 403) {
+          setOpen(true);
+        }
         setAvatarUser(`${process.env.REACT_APP_URL_ACCOUNT_SERVICE}/${res.data.path}`);
         setUsername(res.data.username);
       } catch (err) {
@@ -200,6 +210,7 @@ function Headers() {
           </Box>
         )}
       </Box>
+      <DialogExpired onClose={handleClose} open={open} />
     </Box>
   );
 }
