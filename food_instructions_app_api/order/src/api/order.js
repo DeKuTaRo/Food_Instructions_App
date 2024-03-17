@@ -45,7 +45,6 @@ module.exports = (app) => {
       }
       return res.status(200).json({ msg: "Tạo hóa đơn thất bại", statusCode: 500 });
     } catch (err) {
-      console.log(`err api`, err);
       next(err);
     }
   });
@@ -71,7 +70,6 @@ module.exports = (app) => {
       }
       return res.status(200).json({ msg: "Tạo hóa đơn thất bại", statusCode: 500 });
     } catch (err) {
-      console.log(`err api`, err);
       next(err);
     }
   });
@@ -113,7 +111,6 @@ module.exports = (app) => {
     try {
       const { id } = req.params;
       const { data } = await service.GetOrderById(id);
-      console.log("sss", data);
       if (data) {
         res.status(200).json(data);
         return;

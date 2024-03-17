@@ -22,16 +22,26 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CottageIcon from "@mui/icons-material/Cottage";
 import PaidIcon from "@mui/icons-material/Paid";
 import { motion } from "framer-motion";
-
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Chatbot from "../../../components/Client/Chatbot/Chatbot";
 // Import your header, navbar, and footer components
 import Headers from "../../../components/Client/Headers";
 import NavBar from "../../../components/Client/Navbar";
 import Footer from "../../../components/Client/Footer";
-import Chatbot from "../../../components/Client/Chatbot/Chatbot";
+import { toast } from "react-toastify";
 
+const sliderSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 const OrderDetailPage = () => {
   const { orderId } = useParams();
-  const [orderDetails, setOrderDetails] = useState([]);
+  const [orderDetails, setOrderDetails] = useState(null); // Khởi tạo orderDetails với giá trị null
   const token = localStorage.getItem("token");
   const [recipeDetail, setRecipeDetail] = useState({});
   const navigate = useNavigate();
@@ -42,16 +52,26 @@ const OrderDetailPage = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8004/order/id/${orderId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("API Response:", res);
+        const res = await axios.get(
+          `${process.env.REACT_APP_URL_ORDER_SERVICE}/order/id/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setOrderDetails(res.data.data);
       } catch (err) {
-        console.log(err);
-      }
+        toast.error("An error occurred, please try again later", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });      }
     };
 
     getUserData();
@@ -60,26 +80,28 @@ const OrderDetailPage = () => {
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
-        const response = await axios.get(`${encodeURI(orderDetails.productLink)}`);
+        const response = await axios.get(
+          `${encodeURI(orderDetails?.productLink)}` // Sử dụng optional chaining để tránh lỗi nếu orderDetails không tồn tại
+        );
         setRecipeDetail(response.data.recipe);
       } catch (error) {
         console.error(error);
       }
     };
 
-    if (orderDetails.productLink) {
+    if (orderDetails?.productLink) {
+      // Sử dụng optional chaining để tránh lỗi nếu orderDetails không tồn tại
       fetchRecipeDetails();
     }
-  }, [orderDetails.productLink]);
+  }, [orderDetails?.productLink]); // Sử dụng optional chaining để tránh lỗi nếu orderDetails không tồn tại
 
   const handleContinueOrder = (idOrder) => {
     setOrderIdToContinue(idOrder);
     setOpenPaymentModal(true);
   };
   const handleConfirmPayment = () => {
-    // Handle the logic for confirming payment method
-    // For example, redirect to the selected payment method page
-    const redirectPath = selectedPaymentMethod === "momo" ? "/momo" : "/banking";
+    const redirectPath =
+      selectedPaymentMethod === "momo" ? "/momo" : "/banking";
     navigate(redirectPath, { state: { idOrder } });
     setOpenPaymentModal(false);
     setOrderIdToContinue(null);
@@ -93,8 +115,6 @@ const OrderDetailPage = () => {
     setSelectedPaymentMethod(event.target.value);
   };
 
-  console.log("recipe", recipeDetail);
-
   const getStatusIcon = (status) => {
     switch (status) {
       case "NotPayment":
@@ -106,10 +126,14 @@ const OrderDetailPage = () => {
               justifyContent: "end",
               width: "100%",
               flexDirection: "column",
-            }}>
+            }}
+          >
             <div>
               <PaidIcon style={{ color: "red", fontSize: 30 }} />
-              <Typography style={{ color: "red", fontSize: 15 }}> NEED PAYMENT</Typography>
+              <Typography style={{ color: "red", fontSize: 15 }}>
+                {" "}
+                NEED PAYMENT
+              </Typography>
             </div>
 
             <div>
@@ -117,8 +141,9 @@ const OrderDetailPage = () => {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => handleContinueOrder(orderDetails._id)}
-                style={{ marginTop: "8px" }}>
+                onClick={() => handleContinueOrder(orderDetails?._id)} // Sử dụng optional chaining để tránh lỗi nếu orderDetails không tồn tại
+                style={{ marginTop: "8px" }}
+              >
                 Complete Order
               </Button>
             </div>
@@ -127,7 +152,13 @@ const OrderDetailPage = () => {
 
       case "PaymentSuccess":
         return (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <PriceCheckIcon style={{ color: "green", fontSize: 50 }} />
           </div>
         );
@@ -154,7 +185,8 @@ const OrderDetailPage = () => {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ margin: "0% 10%" }}>
+      style={{ margin: "0% 10%" }}
+    >
       {/* Header */}
       <Headers />
 
@@ -168,166 +200,248 @@ const OrderDetailPage = () => {
           maxWidth: "800px",
           margin: "0 auto",
           textAlign: "center",
-        }}>
+        }}
+      >
         <Typography variant="h4" gutterBottom>
           Order Details
         </Typography>
 
-        <Paper elevation={3} style={{ marginLeft: "0px", width: "100%" }}>
-          {/* Status Section */}
+        {orderDetails ? (
+          <Paper elevation={3} style={{ marginLeft: "0px", width: "100%" }}>
+            {/* Status Section */}
 
-          {/* Customer Information Section */}
-          <Grid container spacing={2} style={{ marginTop: "20px", padding: "15px" }}>
-            <Grid item xs={12}>
-              <Typography variant="h5" component="strong">
-                #ID: {orderId}
-              </Typography>
-            </Grid>
+            {/* Customer Information Section */}
             <Grid
-              item
-              xs={12}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <div>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Customer Name: {orderDetails.customerName}
+              container
+              spacing={2}
+              style={{ marginTop: "20px", padding: "15px" }}
+            >
+              <Grid item xs={12}>
+                <Typography variant="h5" component="strong">
+                  #ID: {orderId}
                 </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Phone: {orderDetails.phoneNumber}
-                </Typography>
-              </div>
-            </Grid>
-          </Grid>
-
-          {/* Order Information Section */}
-          <Grid
-            container
-            spacing={2}
-            style={{
-              backgroundColor: "#E0E0E0",
-              padding: "15px",
-              width: "100%",
-              margin: "0px",
-              marginLeft: "0px",
-            }}>
-            <Grid item xs={12} margin={0}>
-              <Typography variant="h5" component="strong">
-                Order Information
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <div>
-                <Typography variant="subtitle1" component="strong">
-                  Product Name: {orderDetails.productName}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Quantity: {orderDetails.quantity}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Order Date: {orderDetails.timeCreate}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Status: {orderDetails.status}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Total Amount: {orderDetails.totalAmount}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Address: {orderDetails.address}
-                </Typography>
-              </div>
-            </Grid>
-          </Grid>
-
-          {/* Ingredients Section */}
-          <Grid container spacing={2} style={{ backgroundColor: "white", width: "100%", margin: "0px" }}>
-            {/* Left Card - Food Image */}
-            <Grid item xs={12} md={6}>
-              <CardMedia
-                component="img"
-                alt={orderDetails.productName}
-                height="100%"
-                image={orderDetails.productImage}
-                style={{ borderRadius: "8px", width: "100%" }}
-              />
-            </Grid>
-
-            {/* Right Card - Ingredient Information */}
-            <Grid
-              item
-              xs={12}
-              md={6}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                margin: "0px",
-                padding: "15px",
-              }}>
-              <div>
-                {/* Display Ingredients here */}
-                <Typography variant="h5">Ingredients:</Typography>
-                {recipeDetail && recipeDetail.ingredientLines ? (
-                  <ul style={{ listStyle: "none", padding: 10 }}>
-                    {recipeDetail.ingredientLines.map((ingredient, index) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <Typography variant="subtitle1" color="textSecondary">
-                    No ingredient information available.
-                  </Typography>
-                )}
-              </div>
-            </Grid>
-          </Grid>
-
-          {/* Payment Method and Total Amount Section */}
-          <Grid
-            container
-            spacing={2}
-            style={{
-              width: "100%",
-              margin: "0px",
-              backgroundColor: "#E0E0E0",
-              padding: "15px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}>
-            <Grid item xs={12} md={6}>
-              <div
+              </Grid>
+              <Grid
+                item
+                xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: "#E0E0E0",
-                  padding: "15px",
-                }}>
-                {getStatusIcon(orderDetails.status)}
-              </div>
+                  justifyContent: "center",
+                }}
+              >
+                <div>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Customer Name: {orderDetails.customerName}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Phone: {orderDetails.phoneNumber}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Order Date: {orderDetails.timeCreate}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Status: {orderDetails.status}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Address: {orderDetails.address}
+                  </Typography>
+                </div>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h5" component="strong">
-                Total Amount <br></br>
-              </Typography>
-              <Typography variant="subtitle1" component="strong">
-                Total Amount: {orderDetails.totalAmount ? orderDetails.totalAmount.toFixed(2) : "N/A"}
-              </Typography>
+
+            {/* Order Information Section */}
+            {/* Order Information Section */}
+            {orderDetails.orders.length === 1 ? (
+              <Paper elevation={3} style={{ width: "100%" }}>
+                <Grid
+                  container
+                  spacing={2}
+                  style={{
+                    backgroundColor: "#E0E0E0",
+                    padding: "15px",
+                    width: "100%",
+                    margin: "0px",
+                    marginLeft: "0px",
+                  }}
+                >
+                  <Grid item xs={12} margin={0}>
+                    <Typography variant="h5" component="strong">
+                      Order Information
+                    </Typography>
+                  </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                      <CardMedia
+                        component="img"
+                        alt={orderDetails.orders[0].productName}
+                        height="100%"
+                        image={orderDetails.orders[0].productImage}
+                        style={{ borderRadius: "8px", width: "100%" }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      md={6}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        margin: "0px",
+                        padding: "15px",
+                      }}
+                    >
+                      <div>
+                        <Typography variant="subtitle1" component="strong">
+                          Product Name: {orderDetails.orders[0].productName}
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                          Quantity: {orderDetails.orders[0].quantity}
+                        </Typography>
+                        {/* Display Ingredients here */}
+                        <Typography variant="h6">Ingredients:</Typography>
+                        {orderDetails.orders[0].instructions ? (
+                          <Typography variant="subtitle1" color="textSecondary">
+                            Ingredients: {orderDetails.orders[0].instructions}
+                          </Typography>
+                        ) : (
+                          <Typography variant="subtitle1" color="textSecondary">
+                            No ingredient information available.
+                          </Typography>
+                        )}
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Paper>
+            ) : (
+              <Slider {...sliderSettings}>
+                {orderDetails.orders.map((order, index) => (
+                  <Paper key={index} elevation={3} style={{ width: "100%" }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      style={{
+                        backgroundColor: "#E0E0E0",
+                        padding: "15px",
+                        width: "100%",
+                        margin: "0px",
+                        marginLeft: "0px",
+                      }}
+                    >
+                      <Grid item xs={12} margin={0}>
+                        <Typography variant="h5" component="strong">
+                          Order Information
+                        </Typography>
+                      </Grid>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                          <CardMedia
+                            component="img"
+                            alt={order.productName}
+                            height="100%"
+                            image={order.productImage}
+                            style={{ borderRadius: "8px", width: "100%" }}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          md={6}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            margin: "0px",
+                            padding: "15px",
+                          }}
+                        >
+                          <div>
+                            <Typography variant="subtitle1" component="strong">
+                              Product Name: {order.productName}
+                            </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              color="textSecondary"
+                            >
+                              Quantity: {order.quantity}
+                            </Typography>
+                            {/* Display Ingredients here */}
+                            <Typography variant="h6">Ingredients:</Typography>
+                            {order.instructions ? (
+                              <Typography
+                                variant="subtitle1"
+                                color="textSecondary"
+                              >
+                                Ingredients: {order.instructions}
+                              </Typography>
+                            ) : (
+                              <Typography
+                                variant="subtitle1"
+                                color="textSecondary"
+                              >
+                                No ingredient information available.
+                              </Typography>
+                            )}
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                ))}
+              </Slider>
+            )}
+
+            {/* Payment Method and Total Amount Section */}
+            <Grid
+              container
+              spacing={2}
+              style={{
+                width: "100%",
+                margin: "0px",
+                backgroundColor: "#E0E0E0",
+                padding: "15px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#E0E0E0",
+                    padding: "15px",
+                  }}
+                >
+                  {getStatusIcon(orderDetails.status)}
+                </div>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h5" component="strong">
+                  Total Amount <br />
+                </Typography>
+                <Typography variant="subtitle1" component="strong">
+                  Total Amount:{" "}
+                  {orderDetails.totalAmount
+                    ? orderDetails.totalAmount.toFixed(2)
+                    : "N/A"}
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
+          </Paper>
+        ) : (
+          <Typography variant="subtitle1" color="textSecondary">
+            No orders available.
+          </Typography>
+        )}
       </div>
 
-      <Dialog open={openPaymentModal} onClose={handleClosePaymentModal} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={openPaymentModal}
+        onClose={handleClosePaymentModal}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Choose Payment Method</DialogTitle>
         <DialogContent>
           <FormControl component="fieldset">
