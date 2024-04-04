@@ -328,7 +328,7 @@ class AccountRepository {
         return { error: "Không tìm thấy địa chỉ email hợp lệ", statusCode: 500 };
       }
       const fixedIssuedAt = 1672531200; // Unix timestamp for January 1, 2024
-      const resetToken = await jwt.sign({ email, iat: fixedIssuedAt }, APP_SECRET, { expiresIn: "10m" });
+      const resetToken = await jwt.sign({ email, iat: fixedIssuedAt }, APP_SECRET, { expiresIn: "5m" });
       await checkExistAccount.save({ validateBeforeSave: false });
 
       const resetURL = `${process.env.URL_REACT_APP}/resetPassword/${resetToken}`;
@@ -337,7 +337,7 @@ class AccountRepository {
       const transporter = nodemailer.createTransport({
         // service: 'gmail',
         host: process.env.EMAIL_HOST,
-        port: 25,
+        port: 2525,
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASSWORD,
@@ -347,7 +347,7 @@ class AccountRepository {
       const emailOptions = {
         from: `food_instructions_app@gmail.com`,
         to: checkExistAccount.email,
-        subject: "Mã đặt lại mật khẩu của bạn có giá trị trong 10 phút",
+        subject: "Mã đặt lại mật khẩu của bạn có giá trị trong 5 phút",
         text: message,
         html: message,
       };

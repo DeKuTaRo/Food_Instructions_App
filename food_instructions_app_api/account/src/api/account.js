@@ -46,7 +46,6 @@ module.exports = (app) => {
       const { username, password } = req.body;
 
       const { data } = await service.SignIn({ username, password });
-
       return res.json(data);
     } catch (err) {
       next(err);
@@ -220,7 +219,6 @@ module.exports = (app) => {
       }
       return res.status(200).json({ msg: "Update failed", statusCode: 500 });
     } catch (err) {
-      console.log("err api = ", err);
       next(err);
     }
   });

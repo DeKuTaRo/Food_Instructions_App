@@ -129,3 +129,7 @@
 {"level":"error","message":"Sun Mar 17 2024 13:04:29 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
 {"level":"error","message":"Sun Mar 17 2024 13:43:02 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
 {"level":"error","message":"Mon Mar 25 2024 15:39:43 GMT+0700 (Indochina Time)-{\"name\":\"Data Not found\",\"statusCode\":{},\"isOperational\":true}","private":true}
+{"level":"error","message":"Thu Apr 04 2024 15:09:29 GMT+0000 (Coordinated Universal Time)-{}","private":true}
+{"level":"error","message":"Thu Apr 04 2024 22:14:02 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Thu Apr 04 2024 22:16:06 GMT+0700 (Indochina Time)-{}","private":true}
+{"level":"error","message":"Thu Apr 04 2024 22:17:22 GMT+0700 (Indochina Time)-{}","private":true}

@@ -180,7 +180,6 @@ class AccountService {
       );
       return FormateData(commentsResult);
     } catch (err) {
-      console.log("err service = ", err);
       throw new APIError("Data Not found", err);
     }
   }
