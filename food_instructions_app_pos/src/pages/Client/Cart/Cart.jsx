@@ -122,7 +122,19 @@ function Cart() {
   const handleAddToOrders = async () => {
     try {
       const orders = searchResults.filter((obj) => obj.check === true);
-      if (orders.length === 0) {
+      const checkOrdersQuantity = orders.some((product) => product.quantity === 0);
+      if (checkOrdersQuantity) {
+        toast.error("Quantity product is not equal to 0", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else if (orders.length === 0) {
         toast.error("Please choose your recipe", {
           position: "top-right",
           autoClose: 3000,
@@ -133,12 +145,13 @@ function Cart() {
           progress: undefined,
           theme: "dark",
         });
+      } else {
+        const orderDataFromCart = {
+          orders,
+          token: token,
+        };
+        navigate("/order", { state: { orderDataFromCart } });
       }
-      const orderDataFromCart = {
-        orders,
-        token: token,
-      };
-      navigate("/order", { state: { orderDataFromCart } });
     } catch (err) {
       toast.error("An error occurred, please try again later", {
         position: "top-right",
@@ -162,6 +175,22 @@ function Cart() {
   const handleSingleCheck = (id) => {
     const updatedData = searchResults.map((item) => (item._id === id ? { ...item, check: !item.check } : item));
     setSearchResults(updatedData);
+  };
+
+  const handleIncreaseQuantity = (productId) => {
+    setSearchResults((prevProducts) =>
+      prevProducts.map((product) =>
+        product._id === productId ? { ...product, quantity: product.quantity + 1 } : product
+      )
+    );
+  };
+
+  const handleDecreaseQuantity = (productId) => {
+    setSearchResults((prevProducts) =>
+      prevProducts.map((product) =>
+        product._id === productId && product.quantity > 0 ? { ...product, quantity: product.quantity - 1 } : product
+      )
+    );
   };
 
   return (
@@ -247,11 +276,16 @@ function Cart() {
                         <Typography>{item.nameRecipe}</Typography>
                       </TableCell>
                       <TableCell>
-                        <IconButton aria-label="increase count">
+                        <IconButton aria-label="increase count" onClick={() => handleDecreaseQuantity(item._id)}>
                           <FaMinus />
                         </IconButton>
-                        <TextField value={item.quantity} sx={{ width: "100px" }} />
-                        <IconButton aria-label="decrease count">
+                        <TextField
+                          type="number"
+                          value={item.quantity}
+                          sx={{ width: "100px" }}
+                          InputProps={{ inputProps: { min: 0 } }}
+                        />
+                        <IconButton aria-label="decrease count" onClick={() => handleIncreaseQuantity(item._id)}>
                           <FaPlus />
                         </IconButton>
                       </TableCell>

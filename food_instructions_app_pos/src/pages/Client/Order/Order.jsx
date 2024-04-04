@@ -492,8 +492,8 @@ function OrderPage() {
               <Typography variant="h6">
                 Total Price
                 {orderData
-                  ? ` $${(orderData.calories * quantityOrderData).toFixed(2)}`
-                  : ` $${(ordersFromCart[0].totalAmount * quantity).toFixed(2)}`}
+                  ? ` ${((orderData.calories * quantityOrderData) / 10).toFixed(3)}đ`
+                  : ` ${((ordersFromCart[0].totalAmount * quantity) / 10).toFixed(3)}đ`}
               </Typography>
 
               <Button
@@ -628,11 +628,11 @@ function OrderPage() {
               }}>
               <Typography variant="h6">
                 Total Price{" "}
-                {` $${ordersFromCart
-                  .reduce((accumulator, currentItem) => {
+                {` ${
+                  (ordersFromCart.reduce((accumulator, currentItem) => {
                     return accumulator + currentItem.totalAmount * currentItem.quantity;
-                  }, 0)
-                  .toFixed(2)}`}
+                  }, 0) / (10)).toFixed(3)
+                }đ`}
               </Typography>
 
               <Button
