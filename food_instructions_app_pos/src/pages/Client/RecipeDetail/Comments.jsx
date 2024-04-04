@@ -327,7 +327,6 @@ const Comments = ({ recipeName, recipeImage, label, username, handleCheckLoginSt
             flexDirection: "column",
             gap: "12px",
           }}>
-          <TextField placeholder="Search comment" />
 
           {listComments &&
             listComments.map((item) => (

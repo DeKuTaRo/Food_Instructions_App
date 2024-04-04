@@ -15,16 +15,18 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/all`, {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/allOrder`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         // Lọc chỉ những đơn hàng đã thanh toán thành công
-        const successfulOrders = res.data.data.data.filter(order =>
-          order.status === "Completed" || order.status === "PaymentSuccess" || order.status === "Delivered"
+        const successfulOrders = res.data.data.data.filter(
+          (order) => order.status === "Completed" || order.status === "PaymentSuccess" || order.status === "Delivered"
         );
-        setOrderData(successfulOrders);
+        if(successfulOrders) {
+          setOrderData(successfulOrders);
+        }
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -60,7 +62,7 @@ export default function Orders() {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={(e) => e.preventDefault()} sx={{ mt: 3 }}>
+      <Link color="primary" href="/a-order" sx={{ mt: 3 }}>
         See more orders
       </Link>
     </React.Fragment>

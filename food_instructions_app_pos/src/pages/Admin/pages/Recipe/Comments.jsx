@@ -386,7 +386,6 @@ const Comments = ({ recipeName, recipeImage, label, token }) => {
             flexDirection: "column",
             gap: "12px",
           }}>
-          <TextField placeholder="Search comment" />
 
           {listComments.map((item) => (
             <Box

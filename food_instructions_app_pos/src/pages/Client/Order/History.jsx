@@ -58,7 +58,9 @@ function DeliveryHistoryPage() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setOrderData(res.data.data.data);
+        if (res) {
+          setOrderData(res.data.data.data);
+        }
       } catch (err) {
         console.log(err);
       }

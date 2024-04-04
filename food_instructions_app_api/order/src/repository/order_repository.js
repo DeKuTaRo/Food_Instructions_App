@@ -92,12 +92,20 @@ class OrderRepository {
     }
   }
 
-  async GetOrders() {
+  async GetOrders(username) {
+    try {
+      const orders = await OrderSchema.find({ accountName: username });
+      return FormateData(orders);
+    } catch (err) {
+      throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders");
+    }
+  }
+
+  async GetAllOrdersAdmin() {
     try {
       const orders = await OrderSchema.find();
       return FormateData(orders);
     } catch (err) {
-      console.log("res", err);
       throw new APIError("API Error", STATUS_CODES.INTERNAL_ERROR, "Unable to Get Orders");
     }
   }

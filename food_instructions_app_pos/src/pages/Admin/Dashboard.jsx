@@ -29,7 +29,7 @@ function Dashboard() {
   useEffect(() => {
     const getAllOrder = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/all`, {
+        const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/allOrder`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -37,12 +37,14 @@ function AdminOrderManagement() {
 
   const getUserData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8004/order/all`, {
+      const res = await axios.get(`${process.env.REACT_APP_URL_ORDER_SERVICE}/order/allOrder`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setOrders(res.data.data.data);
+      if (res) {
+        setOrders(res.data.data.data);
+      }
     } catch (err) {
       console.error(err);
     }

@@ -74,21 +74,33 @@ module.exports = (app) => {
     }
   });
 
-  // Xem tất cả đơn hàng
   app.get("/order/all", UserAuth, async (req, res, next) => {
     try {
-      const data = await service.GetAllOrders(); // Use the correct instance of OrderService
-
+      const { username } = req.user;
+      const data = await service.GetAllOrders(username);
       if (data) {
-        res.status(200).json(data); // Send data within an object for consistency
+        res.status(200).json(data);
       } else {
-        res.status(404).json({ msg: "Không tìm thấy đơn hàng nào." }); // Adjusted response message
+        res.status(404).json({ msg: "Không tìm thấy đơn hàng nào." });
       }
     } catch (err) {
-      console.error("api", err); // Use console.error for error messages
       next(err);
     }
   });
+
+    // Xem tất cả đơn hàng
+    app.get("/order/allOrder", UserAuth, async (req, res, next) => {
+      try {
+        const data = await service.GetAllOrdersAdmin();
+        if (data) {
+          res.status(200).json(data);
+        } else {
+          res.status(404).json({ msg: "Không tìm thấy đơn hàng nào." });
+        }
+      } catch (err) {
+        next(err);
+      }
+    });
 
   // Xem đơn hàng theo trạng thái
   app.get("/order/status/:status", UserAuth, async (req, res, next) => {
@@ -286,8 +298,7 @@ module.exports = (app) => {
       console.log("Sending....");
       reqq.write(requestBody);
       reqq.end();
-    } catch (err) {
-    }
+    } catch (err) {}
   });
 
   app.post("/order/updateStatus", UserAuth, async (req, res, next) => {
@@ -300,8 +311,7 @@ module.exports = (app) => {
       }
 
       res.status(200).json({ msg: "Có lỗi xảy ra khi cập nhật đơn hàng" });
-    } catch (err) {
-    }
+    } catch (err) {}
   });
 
   app.get("/", (req, res, next) => {

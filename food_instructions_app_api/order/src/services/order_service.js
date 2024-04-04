@@ -71,14 +71,24 @@ class OrderService {
     }
   }
 
-  async GetAllOrders() {
+  async GetAllOrders(username) {
     try {
-      const orders = await this.repository.GetOrders();
+      const orders = await this.repository.GetOrders(username);
       const formattedOrders = FormateData(orders);
 
       return formattedOrders;
     } catch (error) {
-      console.error("Error in GetAllOrders service:", error);
+      throw new APIError("Error retrieving orders", error);
+    }
+  }
+
+  async GetAllOrdersAdmin() {
+    try {
+      const orders = await this.repository.GetAllOrdersAdmin();
+      const formattedOrders = FormateData(orders);
+
+      return formattedOrders;
+    } catch (error) {
       throw new APIError("Error retrieving orders", error);
     }
   }
