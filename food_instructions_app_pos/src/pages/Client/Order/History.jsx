@@ -237,7 +237,7 @@ function DeliveryHistoryPage() {
                     Order Time: {order.timeCreate}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Total Amount: ${order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}
+                    Total Amount: {order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}đ
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
                     Address: {order.address}
@@ -309,7 +309,7 @@ function DeliveryHistoryPage() {
                     {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 3)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Total Amount: ${order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}
+                    Total Amount: {order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}đ
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
                     Address: {order.address}
@@ -367,7 +367,7 @@ function DeliveryHistoryPage() {
                     {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 3)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Total Amount: ${order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}
+                    Total Amount: {order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}đ
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
                     Address: {order.address}
@@ -425,7 +425,7 @@ function DeliveryHistoryPage() {
                     {order.timeCreate.split(" ")[0] + " " + calculateDeliveryTime(order.timeCreate, 6)}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Total Amount: ${order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}
+                    Total Amount: {order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}đ
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
                     Address: {order.address}
@@ -486,7 +486,7 @@ function DeliveryHistoryPage() {
                     Order Time: {order.timeCreate}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Total Amount: ${order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}
+                    Total Amount: {order.totalAmount ? (order.totalAmount / 10).toFixed(3) : "N/A"}đ
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary" style={{ marginBottom: "8px" }}>
                     Address: {order.address}
