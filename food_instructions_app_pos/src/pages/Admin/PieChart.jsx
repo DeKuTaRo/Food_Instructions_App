@@ -12,7 +12,9 @@ export default function PieChartComponent({ orderData }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
   // Filter orders for the selected month
-  const ordersForMonth = orderData.filter((order) => new Date(order.timeCreate).getMonth() === selectedMonth.getMonth());
+  const ordersForMonth = orderData.filter(
+    (order) => new Date(order.timeCreate).getMonth() === selectedMonth.getMonth()
+  );
 
   // Calculate revenue by status for the selected month
   const revenueByStatus = ordersForMonth.reduce((acc, order) => {
@@ -40,10 +42,12 @@ export default function PieChartComponent({ orderData }) {
   return (
     <React.Fragment>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Title>Revenue by Status ({selectedMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })})</Title>
+        <Title>
+          Revenue by Status ({selectedMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })})
+        </Title>
         <Paper style={{ padding: 20 }}>
           <Typography variant="h6">Total Revenue</Typography>
-          <Typography variant="h4">{(totalRevenue/10).toFixed(3)}đ</Typography>
+          <Typography variant="h4">{(totalRevenue / 10).toFixed(3)}đ</Typography>
         </Paper>
       </div>
       <div style={{ marginBottom: 20 }}>
@@ -56,21 +60,20 @@ export default function PieChartComponent({ orderData }) {
       </div>
       <ResponsiveContainer width="100%" height={240}>
         <PieChart>
-          <Pie
-            data={data}
-            dataKey="revenue"
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            fill="#8884d8"
-            label
-          >
+          <Pie data={data} dataKey="revenue" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip />
-          <Legend payload={legendData} verticalAlign="bottom" align="center" iconSize={10} wrapperStyle={{ textAlign: "center" }} position="left" />
+          <Legend
+            payload={legendData}
+            verticalAlign="bottom"
+            align="center"
+            iconSize={10}
+            wrapperStyle={{ textAlign: "center" }}
+            position="left"
+          />
         </PieChart>
       </ResponsiveContainer>
     </React.Fragment>

@@ -24,7 +24,7 @@ export default function Orders() {
         const successfulOrders = res.data.data.data.filter(
           (order) => order.status === "Completed" || order.status === "PaymentSuccess" || order.status === "Delivered"
         );
-        if(successfulOrders) {
+        if (successfulOrders) {
           setOrderData(successfulOrders);
         }
       } catch (error) {
@@ -57,7 +57,7 @@ export default function Orders() {
               <TableCell>{row.orders[0].productName}</TableCell>
               <TableCell>{row.address}</TableCell>
               <TableCell>{row.status}</TableCell>
-              <TableCell align="right">{`$${row.totalAmount.toFixed(2)}`}</TableCell>
+              <TableCell align="right">{`${(row.totalAmount / 10).toFixed(3)}đ`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
