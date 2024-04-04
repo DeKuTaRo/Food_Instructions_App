@@ -9,18 +9,11 @@ export default function Deposits({ orderData }) {
 
   // Kiểm tra xem orderData có tồn tại và là một mảng trước khi sử dụng filter và reduce
   const filteredOrders = Array.isArray(orderData)
-    ? orderData.filter(
-        (order) =>
-          new Date(order.timeCreate).toDateString() ===
-          selectedDate.toDateString()
-      )
+    ? orderData.filter((order) => new Date(order.timeCreate).toDateString() === selectedDate.toDateString())
     : [];
 
   // Tính tổng thu nhập trong ngày
-  const totalIncome = filteredOrders.reduce(
-    (total, order) => total + order.totalAmount,
-    0
-  );
+  const totalIncome = filteredOrders.reduce((total, order) => total + order.totalAmount, 0);
 
   const formatDate = (date) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -38,7 +31,7 @@ export default function Deposits({ orderData }) {
         Recent Deposits
       </Typography>
       <Typography component="p" variant="h4">
-        ${totalIncome.toFixed(2)}
+        {(totalIncome / 10).toFixed(3)}đ
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         on {formatDate(selectedDate)}

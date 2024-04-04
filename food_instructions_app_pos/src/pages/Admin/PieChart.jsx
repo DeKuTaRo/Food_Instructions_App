@@ -43,7 +43,7 @@ export default function PieChartComponent({ orderData }) {
         <Title>Revenue by Status ({selectedMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })})</Title>
         <Paper style={{ padding: 20 }}>
           <Typography variant="h6">Total Revenue</Typography>
-          <Typography variant="h4">${totalRevenue.toFixed(2)}</Typography>
+          <Typography variant="h4">{(totalRevenue/10).toFixed(3)}đ</Typography>
         </Paper>
       </div>
       <div style={{ marginBottom: 20 }}>
