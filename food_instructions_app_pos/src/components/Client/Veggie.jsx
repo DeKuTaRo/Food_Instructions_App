@@ -59,7 +59,7 @@ function Veggie() {
       <Grid container spacing={2}>
         {displayedRecipes.map((recipe, index) => (
           <Grid key={index} item xs={3}>
-            <Link href={`/recipe/${recipe.uri}`} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link href={`${recipe.url}`} style={{ textDecoration: "none", color: "inherit" }}>
               <Card
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
@@ -75,8 +75,7 @@ function Veggie() {
                     boxShadow: "0 0 20px 0 rgba(50, 50, 50, .3)",
                     transform: "scale(1.05)", // Hiệu ứng chuyển động scale khi hover
                   },
-                }}
-              >
+                }}>
                 <CardMedia
                   component="img"
                   alt={recipe.label}
@@ -97,13 +96,8 @@ function Veggie() {
                     flex: "1",
                     display: "flex",
                     flexDirection: "column",
-                  }}
-                >
-                  <Typography
-                    variant="inherit"
-                    component="span"
-                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                  >
+                  }}>
+                  <Typography variant="inherit" component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                     {recipe.source}
                   </Typography>
                   <Typography
@@ -116,8 +110,7 @@ function Veggie() {
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
-                    }}
-                  >
+                    }}>
                     {recipe.label}
                   </Typography>
                   <Typography
@@ -128,8 +121,7 @@ function Veggie() {
                       maxHeight: "70px",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                    }}
-                  >
+                    }}>
                     {recipe.dietLabels.join(", ")}
                   </Typography>
                 </CardContent>
